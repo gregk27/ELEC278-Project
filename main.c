@@ -6,14 +6,9 @@
 
 
 int main(){
-    Robot r = {
-        .id = 0,
-        .alliance = RED_ALLIANCE,
-        .can_lowbar = true,
-        .speed=5,
-        .team=2708,
-        .defenses = SOLO_DEFENSES
-    };
+
+    Robot r;
+    parse_csv("./robots.csv", &r, 1);
 
     print_bin(r.defenses, 16);
 

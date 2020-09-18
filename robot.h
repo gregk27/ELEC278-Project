@@ -28,6 +28,11 @@ typedef struct _robot
 } Robot;
 
 bool can_cross(Robot *r, Defence d);
+/*
+Parse a csv file containing robot information
+Returns the number of robots found
+*/
+int parse_csv(char* filename, Robot *bots, int botCount);
 
 
 
