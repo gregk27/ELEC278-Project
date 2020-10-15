@@ -62,7 +62,10 @@ class Fieldpoint {
         Fieldpoint(int x, int y, Alliance a, Type t);
 };
 
-// Class representing the defenses
+/* 
+ * Class representing the defenses
+ * This also holds utility functions for determining defenses
+*/
 class Defense:Fieldpoint {
     private: 
         // Value lost on cross
@@ -70,6 +73,26 @@ class Defense:Fieldpoint {
         // Maximum value of the defense
         static const int MAX_VALUE = CROSS_VALUE*2;
     public:
+        /* 
+        * Bitmask positions for each defense
+        * To get the speed for a particular defense, do
+        * mask >> DEF*4 & 0xF
+        */
+        enum _defenses{
+            // Category A
+            PORTCULLIS      = 0, // Portcullis in first 1/2 byte
+            CHEVAL_DE_FRISE = 1, // Cheval de frise in second 1/2 byte
+            // Category B
+            MOAT            = 2, // Moat in thrid 1/2 byte
+            RAMPARTS        = 3,
+            // Category C
+            DRAWBRIDGE      = 4,
+            SALLY_PORT      = 5,
+            // Category D
+            ROCK_WALL       = 6,
+            ROUGH_TERRAIN   = 7
+        };
+
         /**
          * Called when crossing the defense, subtracts from value
          * Returns points earned
@@ -78,7 +101,7 @@ class Defense:Fieldpoint {
         // Current value of the defense
         int value;
         // Type of defense
-        int defType;
+        enum _defenses defType;
 };
 
 #endif // !FIELDPOINT_H
