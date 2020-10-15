@@ -2,14 +2,21 @@
 #include <stdbool.h>
 #include <iostream>
 #include "robot.h"
+// #include "field/Fieldpoint.h"
 #include "field/field.h"
 
 int main(){
 
-    printf("Hello World");
+    printf("Hello World\n");
 
     Robot *r;
     r = parse_csv("./robots.csv");
+
+    Defense d = Defense(0,0);
+    for(int i=0;i<8;i++){
+        d.defType = (Defense::Defenses) i;
+        printf("%d\n", d.crossTime(r));
+    }
 
     // // print_bin(r.defenses, 16);
 

@@ -29,6 +29,20 @@ Fieldpoint::Fieldpoint(int x, int y, Alliance a, Type t){
     this->type = t;
 }
 
+Defense::Defense():Fieldpoint(){
+    this->defType = LOW_BAR;
+    this->value = MAX_VALUE;
+}
+
+int Defense::crossTime(Robot *r){
+    // If it's the low bar, then it is impossible or 1 second
+    if(this->defType == LOW_BAR){
+        return r->canLowbar;
+    }
+    //Shift the current defense into lower 4 bits, then mask
+    return (r->defenses >> (this->defType*4)) & 0xF;
+}
+
 int Defense::cross(){
     if(this->value > 0){
         this->value -= CROSS_VALUE;
