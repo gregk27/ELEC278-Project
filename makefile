@@ -1,6 +1,6 @@
 
 "main.exe":
-	gcc "main.c" "robot.c" "utils.c" "game.c" "field.c"  -o "main.exe"
+	g++ main.cpp robot.cpp game.cpp field/field.cpp field/Fieldpoint.cpp  field/../game.cpp -o "main.exe"
 
 "arraylist.exe":
-	gcc "arraylist.c"  -o "arraylist.exe"
+	g++ arraylist.cpp arraylist.cpp -o "arraylist.exe"
