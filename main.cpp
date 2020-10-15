@@ -1,12 +1,11 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <iostream>
-#include "robot.h"
-#include "game.h"
-#include "utils.h"
 #include "field/field.h"
 
 int main(){
+
+    printf("Hello World");
 
     // // Robot r;
     // // parse_csv("./robots.csv", &r, 1);
@@ -21,4 +20,5 @@ int main(){
     print_field(true);
 
     // std::cout << "/* message */" << std::endl;
+    return 0;
 }

@@ -3,6 +3,139 @@
 #include <stdbool.h>
 #include "../robot.h"
 
+namespace Field {
+    // All locations in inches from top-left. Field dimensions take from game manual.
+    Fieldpoint RED_TOWER = Fieldpoint(
+        TOWER_OFFSET, 
+        FIELD_WIDTH/2-TOWER_OFFSET,  // Red tower is above the line
+        Alliance::RED, 
+        Fieldpoint::Type::TOWER
+    );
+
+    Fieldpoint BLUE_TOWER = Fieldpoint(
+        FIELD_LENGTH-TOWER_OFFSET, // Place a far end
+        FIELD_WIDTH/2 + TOWER_OFFSET, // Blue tower is below the line
+        Alliance::BLUE,
+        Fieldpoint::Type::TOWER
+    );
+
+    Fieldpoint RED_DEFENSES[5] = {
+        Fieldpoint(
+            DEFENSE_EDGE_OFFSET+DEFENSE_LENGTH/2,
+            FIELD_WIDTH-(0*DEFENSE_WIDTH+DEFENSE_WIDTH/2),
+            Alliance::RED,
+            Fieldpoint::Type::DEFENSE
+        ),
+        Fieldpoint(
+            DEFENSE_EDGE_OFFSET+DEFENSE_LENGTH/2,
+            FIELD_WIDTH-(1*DEFENSE_WIDTH+DEFENSE_WIDTH/2),
+            Alliance::RED,
+            Fieldpoint::Type::DEFENSE
+        ),
+        Fieldpoint(
+            DEFENSE_EDGE_OFFSET+DEFENSE_LENGTH/2,
+            FIELD_WIDTH-(2*DEFENSE_WIDTH+DEFENSE_WIDTH/2),
+            Alliance::RED,
+            Fieldpoint::Type::DEFENSE
+        ),
+        Fieldpoint(
+            DEFENSE_EDGE_OFFSET+DEFENSE_LENGTH/2,
+            FIELD_WIDTH-(3*DEFENSE_WIDTH+DEFENSE_WIDTH/2),
+            Alliance::RED,
+            Fieldpoint::Type::DEFENSE
+        ),
+        Fieldpoint(
+            DEFENSE_EDGE_OFFSET+DEFENSE_LENGTH/2,
+            FIELD_WIDTH-(4*DEFENSE_WIDTH+DEFENSE_WIDTH/2),
+            Alliance::RED,
+            Fieldpoint::Type::DEFENSE
+        )
+    };
+
+    Fieldpoint bluePassage0 = Fieldpoint(
+        0*SECRET_PASSAGE_LENGTH/3,
+        SECRET_PASSAGE_WIDTH/2,
+        Alliance::BLUE,
+        Fieldpoint::Type::RESTRICTED
+    );
+    Fieldpoint bluePassage1 = Fieldpoint(
+        SECRET_PASSAGE_LENGTH/3,
+        SECRET_PASSAGE_WIDTH/2,
+        Alliance::BLUE,
+        Fieldpoint::Type::RESTRICTED
+    );
+    Fieldpoint bluePassage2 = Fieldpoint(
+        2*SECRET_PASSAGE_LENGTH/3,
+        SECRET_PASSAGE_WIDTH/2,
+        Alliance::BLUE,
+        Fieldpoint::Type::RESTRICTED
+    );
+    Fieldpoint bluePassage3 = Fieldpoint(
+        3*SECRET_PASSAGE_LENGTH/3,
+        SECRET_PASSAGE_WIDTH/2,
+        Alliance::BLUE,
+        Fieldpoint::Type::RESTRICTED
+    );
+
+    Fieldpoint BLUE_DEFENSES[5] = {
+        Fieldpoint(
+            FIELD_LENGTH-DEFENSE_EDGE_OFFSET-DEFENSE_LENGTH/2,
+            (0*DEFENSE_WIDTH+DEFENSE_WIDTH/2),
+            Alliance::BLUE,
+            Fieldpoint::Type::DEFENSE
+        ),
+        Fieldpoint(
+            FIELD_LENGTH-DEFENSE_EDGE_OFFSET-DEFENSE_LENGTH/2,
+            (1*DEFENSE_WIDTH+DEFENSE_WIDTH/2),
+            Alliance::BLUE,
+            Fieldpoint::Type::DEFENSE
+        ),
+        Fieldpoint(
+            FIELD_LENGTH-DEFENSE_EDGE_OFFSET-DEFENSE_LENGTH/2,
+            (2*DEFENSE_WIDTH+DEFENSE_WIDTH/2),
+            Alliance::BLUE,
+            Fieldpoint::Type::DEFENSE
+        ),
+        Fieldpoint(
+            FIELD_LENGTH-DEFENSE_EDGE_OFFSET-DEFENSE_LENGTH/2,
+            (3*DEFENSE_WIDTH+DEFENSE_WIDTH/2),
+            Alliance::BLUE,
+            Fieldpoint::Type::DEFENSE
+        ),
+        Fieldpoint(
+            FIELD_LENGTH-DEFENSE_EDGE_OFFSET-DEFENSE_LENGTH/2,
+            (4*DEFENSE_WIDTH+DEFENSE_WIDTH/2),
+            Alliance::BLUE,
+            Fieldpoint::Type::DEFENSE
+        ),
+    };
+
+    Fieldpoint redPassage0 = Fieldpoint(
+        FIELD_LENGTH-0*SECRET_PASSAGE_LENGTH/3,
+        FIELD_WIDTH-SECRET_PASSAGE_WIDTH/2,
+        Alliance::RED,
+        Fieldpoint::Type::RESTRICTED
+    );
+    Fieldpoint redPassage1 = Fieldpoint(
+        FIELD_LENGTH-SECRET_PASSAGE_LENGTH/3,
+        FIELD_WIDTH-SECRET_PASSAGE_WIDTH/2,
+        Alliance::RED,
+        Fieldpoint::Type::RESTRICTED
+    );
+    Fieldpoint redPassage2 = Fieldpoint(
+        FIELD_LENGTH-2*SECRET_PASSAGE_LENGTH/3,
+        FIELD_WIDTH-SECRET_PASSAGE_WIDTH/2,
+        Alliance::RED,
+        Fieldpoint::Type::RESTRICTED
+    );
+    Fieldpoint redPassage3 = Fieldpoint(
+        FIELD_LENGTH-3*SECRET_PASSAGE_LENGTH/3,
+        FIELD_WIDTH-SECRET_PASSAGE_WIDTH/2,
+        Alliance::RED,
+        Fieldpoint::Type::RESTRICTED
+    );
+}
+
 void print_field(bool showdots){
     char out[FIELD_LENGTH/10][FIELD_WIDTH/10][3];
     for(int i=0; i<FIELD_WIDTH/10; i++){

@@ -4,14 +4,14 @@
 Fieldpoint::Fieldpoint(){
     this->x = -1;
     this->y = -1;
-    this->alliance = NO_ALLIANCE;
+    this->alliance = Alliance::NEUTRAL;
     this->type = Type::NODE;
 }
 
 Fieldpoint::Fieldpoint(int x, int y){
     this->x = x;
     this->y = y;
-    this->alliance = NO_ALLIANCE;
+    this->alliance = Alliance::NEUTRAL;
     this->type = Type::NODE;
 }
 

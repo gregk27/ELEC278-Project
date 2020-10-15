@@ -1,6 +1,6 @@
 #ifndef FIELDPOINT_H
 #define FIELDPOINT_H
-#include "../robot.h"
+#include "../game.h"
 
 typedef enum _fieldtype {
     // Generic travel node
