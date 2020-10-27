@@ -3,10 +3,11 @@
 #include <stdbool.h>
 #include <vector>
 #include "../robot.h"
+#include "../utils/LinkedList.h"
 
 
 namespace Field {
-    std::vector<Fieldpoint *> nodes;
+    LinkedList<Fieldpoint *> nodes;
 
     Fieldpoint redTower = Fieldpoint(
         TOWER_OFFSET, 
@@ -143,7 +144,7 @@ namespace Field {
     };
 
     void addNode(Fieldpoint *f){
-        nodes.push_back(f);
+        nodes.push(f);
         f->index = nodes.size()-1;
     }
 

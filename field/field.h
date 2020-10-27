@@ -4,6 +4,7 @@
 #include <vector>
 #include "Fieldpoint.h"
 #include "../game.h"
+#include "../utils/LinkedList.h"
 
 // Dimensions from this drawing: https://i.imgur.com/1d51oAV.png and game manual https://firstfrc.blob.core.windows.net/frc2016manuals/GameManual/FRC-2016-game-manual-02.pdf 
 #define FIELD_WIDTH 320
@@ -27,7 +28,7 @@ void print_field(bool showdots);
 // Namespace with field graph and functions
 namespace Field {
     // Vector with all nodes
-    extern std::vector<Fieldpoint *> nodes;
+    extern LinkedList<Fieldpoint *> nodes;
     
     extern Fieldpoint redTower;
     extern Defense redDefenses[DEFENSE_COUNT];
