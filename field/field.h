@@ -1,6 +1,7 @@
 #ifndef FIELD_H
 #define FIELD_H
 #include <stdbool.h>
+#include <vector>
 #include "Fieldpoint.h"
 #include "../game.h"
 
@@ -14,8 +15,29 @@
 #define DEFENSE_WIDTH 54
 #define DEFENSE_LENGTH 24
 
-#define SECRET_PASSAGE_LENGTH 280 // Distance from driver station to end of passage, technically 287, but rounded down for simplicity + padding
+#define SECRET_PASSAGE_LENGTH 240 // Distance from driver station to end of passage, technically 287, but rounded down for simplicity + padding
 #define SECRET_PASSAGE_WIDTH 54 // Width of secret passage
 
+#define DEFENSE_COUNT 5 // Number of nodes in defense array
+#define PASSAGE_COUNT 4 // Number of nodes in passage array
+
 void print_field(bool showdots);
+
+// All locations in inches from top-left. Field dimensions take from game manual.
+// Namespace with field graph and functions
+namespace Field {
+    // Vector with all nodes
+    extern std::vector<Fieldpoint *> nodes;
+    
+    extern Fieldpoint redTower;
+    extern Defense redDefenses[DEFENSE_COUNT];
+    extern Fieldpoint redPassage[PASSAGE_COUNT];
+
+    extern Fieldpoint blueTower;
+    extern Defense blueDefenses[DEFENSE_COUNT];
+    extern Fieldpoint bluePassage[PASSAGE_COUNT];
+
+    void init();
+}
+
 #endif // !FIELD_H

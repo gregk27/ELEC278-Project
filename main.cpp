@@ -18,6 +18,9 @@ int main(){
         printf("%d\n", d.crossTime(r));
     }
 
+    Field::init();
+    print_field(true);
+
     // // print_bin(r.defenses, 16);
 
     // // printf("%d, %d, %d, %d\n",

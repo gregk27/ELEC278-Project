@@ -37,6 +37,8 @@ class Fieldpoint {
         Type type;
         // Alliance node belongs to, NULL if neutral
         Alliance alliance;
+        // Index of the node in node list and matrix
+        int index;
 
         /**
          * Create a new Fieldpoint, which is automatically a neutral node
@@ -67,7 +69,7 @@ class Fieldpoint {
  * Class representing the defenses
  * This also holds utility functions for determining defenses
 */
-class Defense:Fieldpoint {
+class Defense: public Fieldpoint {
     private: 
         // Value lost on cross
         static const int CROSS_VALUE = 5;
