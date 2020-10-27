@@ -2,12 +2,14 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <vector>
+#include <math.h>
 #include "../robot.h"
 #include "../utils/LinkedList.h"
 
 
 namespace Field {
     LinkedList<Fieldpoint *> nodes;
+    LinkedList<LinkedList<Edge>*> adjacency;
 
     Fieldpoint redTower = Fieldpoint(
         TOWER_OFFSET, 
@@ -144,8 +146,7 @@ namespace Field {
     };
 
     void addNode(Fieldpoint *f){
-        nodes.push(f);
-        f->index = nodes.size()-1;
+        f->index = nodes.push(f);
     }
 
     void addNodes(Fieldpoint f[], int count){
@@ -160,6 +161,25 @@ namespace Field {
         }
     }
 
+    void addEdge(Fieldpoint a, Fieldpoint b){
+        Edge e;
+        e.end = &b;
+        e.distance = sqrt(pow(a.x-b.x, 2)+pow(a.y-b.y, 2));
+        adjacency[a.index]->push(e);
+        e.end = &a;
+        adjacency[b.index]->push(e);
+    }
+
+    void printAdj(){
+        adjacency.forEach([](LinkedList<Edge> *l, int i)->void {
+            printf("%d->", i);
+            l->forEach([](Edge e, int i)->void {
+                printf("%d:%d,", e.end->index, e.distance);
+            });
+            printf("\n");
+        });
+    }
+
     void init(){
         addNode(&redTower);
         addNodes(redDefenses, DEFENSE_COUNT);
@@ -169,6 +189,12 @@ namespace Field {
         addNodes(blueDefenses, DEFENSE_COUNT);
         addNodes(bluePassage, PASSAGE_COUNT);
 
+        // Build up the list
+        nodes.forEach([](Fieldpoint *f, int i)->void {
+            adjacency.push(new LinkedList<Edge>);
+        });
+
+        printAdj();
     }
 }
 

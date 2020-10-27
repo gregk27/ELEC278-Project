@@ -27,8 +27,15 @@ void print_field(bool showdots);
 // All locations in inches from top-left. Field dimensions take from game manual.
 // Namespace with field graph and functions
 namespace Field {
-    // Vector with all nodes
+    typedef struct {
+        Fieldpoint *end;
+        int distance;
+    } Edge;
+
+    // Linkedlist with all nodes
     extern LinkedList<Fieldpoint *> nodes;
+    // Linkedlist ajdacency list
+    extern LinkedList<LinkedList<Edge>*> adjacency; 
     
     extern Fieldpoint redTower;
     extern Defense redDefenses[DEFENSE_COUNT];

@@ -20,7 +20,7 @@ int main(){
     }
 
     Field::init();
-    print_field(true);
+    // print_field(false);
 
     // // print_bin(r.defenses, 16);
 
