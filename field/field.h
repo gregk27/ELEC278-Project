@@ -19,8 +19,12 @@
 #define SECRET_PASSAGE_LENGTH 240 // Distance from driver station to end of passage, technically 287, but rounded down for simplicity + padding
 #define SECRET_PASSAGE_WIDTH 54 // Width of secret passage
 
+#define COURTYARD_OFFSET 72 // Distance from the wall for courtyard nav points
+
 #define DEFENSE_COUNT 5 // Number of nodes in defense array
 #define PASSAGE_COUNT 4 // Number of nodes in passage array
+#define COURTYARD_COUNT 3 // Number of nodes in courtyard array
+#define CENTRE_BALL_COUNT 6 // NUmber of nodes in the centre ball array
 
 void print_field(bool showdots);
 

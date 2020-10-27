@@ -78,6 +78,27 @@ namespace Field {
         )
     };
 
+    Fieldpoint redCourtyard[COURTYARD_COUNT] = {
+        Fieldpoint(
+            COURTYARD_OFFSET,
+            redDefenses[1].y,
+            Alliance::NEUTRAL,
+            Fieldpoint::Type::NODE
+        ),
+        Fieldpoint(
+            COURTYARD_OFFSET*1.5,
+            redTower.y,
+            Alliance::NEUTRAL,
+            Fieldpoint::Type::NODE
+        ),
+        Fieldpoint(
+            COURTYARD_OFFSET,
+            redDefenses[4].y,
+            Alliance::NEUTRAL,
+            Fieldpoint::Type::NODE
+        )
+    };
+
     Fieldpoint blueTower = Fieldpoint(
         FIELD_LENGTH-TOWER_OFFSET, // Place a far end
         FIELD_WIDTH/2 + TOWER_OFFSET, // Blue tower is below the line
@@ -145,6 +166,66 @@ namespace Field {
         )
     };
 
+    Fieldpoint blueCourtyard[COURTYARD_COUNT] = {
+        Fieldpoint(
+            FIELD_LENGTH-COURTYARD_OFFSET,
+            blueDefenses[1].y,
+            Alliance::NEUTRAL,
+            Fieldpoint::Type::NODE
+        ),
+        Fieldpoint(
+            FIELD_LENGTH-COURTYARD_OFFSET*1.5,
+            blueTower.y,
+            Alliance::NEUTRAL,
+            Fieldpoint::Type::NODE
+        ),
+        Fieldpoint(
+            FIELD_LENGTH-COURTYARD_OFFSET,
+            blueDefenses[4].y,
+            Alliance::NEUTRAL,
+            Fieldpoint::Type::NODE
+        )
+    };
+
+    Fieldpoint centreBalls[CENTRE_BALL_COUNT] = {
+        Fieldpoint(
+            FIELD_LENGTH/2,
+            FIELD_WIDTH/7*1,
+            Alliance::NEUTRAL,
+            Fieldpoint::Type::NODE
+        ),
+        Fieldpoint(
+            FIELD_LENGTH/2,
+            FIELD_WIDTH/7*2,
+            Alliance::NEUTRAL,
+            Fieldpoint::Type::NODE
+        ),
+        Fieldpoint(
+            FIELD_LENGTH/2,
+            FIELD_WIDTH/7*3,
+            Alliance::NEUTRAL,
+            Fieldpoint::Type::NODE
+        ),
+        Fieldpoint(
+            FIELD_LENGTH/2,
+            FIELD_WIDTH/7*4,
+            Alliance::NEUTRAL,
+            Fieldpoint::Type::NODE
+        ),
+        Fieldpoint(
+            FIELD_LENGTH/2,
+            FIELD_WIDTH/7*5,
+            Alliance::NEUTRAL,
+            Fieldpoint::Type::NODE
+        ),
+        Fieldpoint(
+            FIELD_LENGTH/2,
+            FIELD_WIDTH/7*6,
+            Alliance::NEUTRAL,
+            Fieldpoint::Type::NODE
+        )
+    };
+
     void addNode(Fieldpoint *f){
         f->index = nodes.push(f);
     }
@@ -184,11 +265,14 @@ namespace Field {
         addNode(&redTower);
         addNodes(redDefenses, DEFENSE_COUNT);
         addNodes(redPassage, PASSAGE_COUNT);
+        addNodes(redCourtyard, COURTYARD_COUNT);
 
         addNode(&blueTower);
         addNodes(blueDefenses, DEFENSE_COUNT);
         addNodes(bluePassage, PASSAGE_COUNT);
+        addNodes(blueCourtyard, COURTYARD_COUNT);
 
+        addNodes(centreBalls, CENTRE_BALL_COUNT);
         // Build up the list
         nodes.forEach([](Fieldpoint *f, int i)->void {
             adjacency.push(new LinkedList<Edge>);
