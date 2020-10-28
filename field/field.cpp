@@ -281,94 +281,98 @@ namespace Field {
         /**
          * RED NODES
          */
-        // Add edges for red courtyard nodes
-        addEdge(redCourtyard[0], redTower);
-        addEdge(redCourtyard[0], redDefenses[0]);
-        addEdge(redCourtyard[0], redCourtyard[1]);
-        addEdge(redCourtyard[0], redCourtyard[2]);
-        addEdge(redCourtyard[1], redDefenses[0]);
-        addEdge(redCourtyard[1], redDefenses[1]);
-        addEdge(redCourtyard[1], redDefenses[2]);
-        addEdge(redCourtyard[1], redDefenses[3]);
-        addEdge(redCourtyard[1], redDefenses[4]);
-        addEdge(redCourtyard[2], redTower);
-        addEdge(redCourtyard[2], redDefenses[3]);
-        addEdge(redCourtyard[2], redDefenses[4]);
-        addEdge(redCourtyard[1], redCourtyard[0]);
-        addEdge(redCourtyard[1], redCourtyard[2]);
+        {
+            // Add edges for red courtyard nodes
+            addEdge(redCourtyard[0], redTower);
+            addEdge(redCourtyard[0], redDefenses[0]);
+            addEdge(redCourtyard[0], redCourtyard[1]);
+            addEdge(redCourtyard[0], redCourtyard[2]);
+            addEdge(redCourtyard[1], redDefenses[0]);
+            addEdge(redCourtyard[1], redDefenses[1]);
+            addEdge(redCourtyard[1], redDefenses[2]);
+            addEdge(redCourtyard[1], redDefenses[3]);
+            addEdge(redCourtyard[1], redDefenses[4]);
+            addEdge(redCourtyard[2], redTower);
+            addEdge(redCourtyard[2], redDefenses[3]);
+            addEdge(redCourtyard[2], redDefenses[4]);
+            addEdge(redCourtyard[1], redCourtyard[0]);
+            addEdge(redCourtyard[1], redCourtyard[2]);
 
-        // Add edges for red defenses and centre field
-        addEdge(redDefenses[0], centreBalls[5]);
-        addEdge(redDefenses[1], centreBalls[5]);
-        addEdge(redDefenses[1], centreBalls[4]);
-        addEdge(redDefenses[1], centreBalls[3]);
-        addEdge(redDefenses[2], centreBalls[3]);
-        addEdge(redDefenses[2], centreBalls[2]);
-        addEdge(redDefenses[3], centreBalls[2]);
-        addEdge(redDefenses[3], centreBalls[1]);
-        addEdge(redDefenses[4], centreBalls[1]);
-        addEdge(redDefenses[4], centreBalls[0]);
+            // Add edges for red defenses and centre field
+            addEdge(redDefenses[0], centreBalls[5]);
+            addEdge(redDefenses[1], centreBalls[5]);
+            addEdge(redDefenses[1], centreBalls[4]);
+            addEdge(redDefenses[1], centreBalls[3]);
+            addEdge(redDefenses[2], centreBalls[3]);
+            addEdge(redDefenses[2], centreBalls[2]);
+            addEdge(redDefenses[3], centreBalls[2]);
+            addEdge(redDefenses[3], centreBalls[1]);
+            addEdge(redDefenses[4], centreBalls[1]);
+            addEdge(redDefenses[4], centreBalls[0]);
 
-        // Add edges for red secret passage
-        addEdge(redPassage[0], redPassage[1]);
-        addEdge(redPassage[1], redPassage[2]);
-        addEdge(redPassage[2], redPassage[3]);
-        addEdge(redPassage[3], centreBalls[5]);
-        addEdge(redPassage[3], centreBalls[4]);
-        addEdge(redPassage[3], centreBalls[3]);
-
+            // Add edges for red secret passage
+            addEdge(redPassage[0], redPassage[1]);
+            addEdge(redPassage[1], redPassage[2]);
+            addEdge(redPassage[2], redPassage[3]);
+            addEdge(redPassage[3], centreBalls[5]);
+            addEdge(redPassage[3], centreBalls[4]);
+            addEdge(redPassage[3], centreBalls[3]);
+        }
 
         /**
          * BLUE NODES
          * CentreBalls are flipped, so indices are 5-redVal
          */
-        // Add edges for blue courtyard nodes
-        addEdge(blueCourtyard[0], blueTower);
-        addEdge(blueCourtyard[0], blueDefenses[0]);
-        addEdge(blueCourtyard[0], blueCourtyard[1]);
-        addEdge(blueCourtyard[0], blueCourtyard[2]);
-        addEdge(blueCourtyard[1], blueDefenses[0]);
-        addEdge(blueCourtyard[1], blueDefenses[1]);
-        addEdge(blueCourtyard[1], blueDefenses[2]);
-        addEdge(blueCourtyard[1], blueDefenses[3]);
-        addEdge(blueCourtyard[1], blueDefenses[4]);
-        addEdge(blueCourtyard[2], blueTower);
-        addEdge(blueCourtyard[2], blueDefenses[3]);
-        addEdge(blueCourtyard[2], blueDefenses[4]);
-        addEdge(blueCourtyard[1], blueCourtyard[0]);
-        addEdge(blueCourtyard[1], blueCourtyard[2]);
+        {
+            // Add edges for blue courtyard nodes
+            addEdge(blueCourtyard[0], blueTower);
+            addEdge(blueCourtyard[0], blueDefenses[0]);
+            addEdge(blueCourtyard[0], blueCourtyard[1]);
+            addEdge(blueCourtyard[0], blueCourtyard[2]);
+            addEdge(blueCourtyard[1], blueDefenses[0]);
+            addEdge(blueCourtyard[1], blueDefenses[1]);
+            addEdge(blueCourtyard[1], blueDefenses[2]);
+            addEdge(blueCourtyard[1], blueDefenses[3]);
+            addEdge(blueCourtyard[1], blueDefenses[4]);
+            addEdge(blueCourtyard[2], blueTower);
+            addEdge(blueCourtyard[2], blueDefenses[3]);
+            addEdge(blueCourtyard[2], blueDefenses[4]);
+            addEdge(blueCourtyard[1], blueCourtyard[0]);
+            addEdge(blueCourtyard[1], blueCourtyard[2]);
 
-        // Add edges for blue defenses and centre field
-        addEdge(blueDefenses[0], centreBalls[5-5]);
-        addEdge(blueDefenses[1], centreBalls[5-5]);
-        addEdge(blueDefenses[1], centreBalls[5-4]);
-        addEdge(blueDefenses[1], centreBalls[5-3]);
-        addEdge(blueDefenses[2], centreBalls[5-3]);
-        addEdge(blueDefenses[2], centreBalls[5-2]);
-        addEdge(blueDefenses[3], centreBalls[5-2]);
-        addEdge(blueDefenses[3], centreBalls[5-1]);
-        addEdge(blueDefenses[4], centreBalls[5-1]);
-        addEdge(blueDefenses[4], centreBalls[5-0]);
+            // Add edges for blue defenses and centre field
+            addEdge(blueDefenses[0], centreBalls[5-5]);
+            addEdge(blueDefenses[1], centreBalls[5-5]);
+            addEdge(blueDefenses[1], centreBalls[5-4]);
+            addEdge(blueDefenses[1], centreBalls[5-3]);
+            addEdge(blueDefenses[2], centreBalls[5-3]);
+            addEdge(blueDefenses[2], centreBalls[5-2]);
+            addEdge(blueDefenses[3], centreBalls[5-2]);
+            addEdge(blueDefenses[3], centreBalls[5-1]);
+            addEdge(blueDefenses[4], centreBalls[5-1]);
+            addEdge(blueDefenses[4], centreBalls[5-0]);
 
-        // Add edges for blue secret passage
-        addEdge(bluePassage[0], bluePassage[1]);
-        addEdge(bluePassage[1], bluePassage[2]);
-        addEdge(bluePassage[2], bluePassage[3]);
-        addEdge(bluePassage[3], centreBalls[5-5]);
-        addEdge(bluePassage[3], centreBalls[5-4]);
-        addEdge(bluePassage[3], centreBalls[5-3]);
-
+            // Add edges for blue secret passage
+            addEdge(bluePassage[0], bluePassage[1]);
+            addEdge(bluePassage[1], bluePassage[2]);
+            addEdge(bluePassage[2], bluePassage[3]);
+            addEdge(bluePassage[3], centreBalls[5-5]);
+            addEdge(bluePassage[3], centreBalls[5-4]);
+            addEdge(bluePassage[3], centreBalls[5-3]);
+        }
 
         /**
          * NEUTRAL
          */
-        // Connect centreBalls to eachother
-        addEdge(centreBalls[0], centreBalls[1]);
-        addEdge(centreBalls[1], centreBalls[2]);
-        addEdge(centreBalls[2], centreBalls[3]);
-        addEdge(centreBalls[3], centreBalls[4]);
-        addEdge(centreBalls[4], centreBalls[5]);
-
+        {
+            // Connect centreBalls to eachother
+            addEdge(centreBalls[0], centreBalls[1]);
+            addEdge(centreBalls[1], centreBalls[2]);
+            addEdge(centreBalls[2], centreBalls[3]);
+            addEdge(centreBalls[3], centreBalls[4]);
+            addEdge(centreBalls[4], centreBalls[5]);
+        }
+        
         printAdj();
     }
 }
