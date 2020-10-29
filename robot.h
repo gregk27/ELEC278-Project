@@ -11,7 +11,7 @@
 class Robot {
     private:
         void initGraph();
-        Fieldpoint *getShotZone(int range, int angle);
+        Shotpoint *getShotZone(int range, int angle, int time);
     public:
         // Robot's unique ID (0-6)
         int id;
@@ -44,6 +44,7 @@ class Robot {
         // The graph used by this robot, will have different shooting points than others, otherwise identical
         Graph *graph;
 
+        LinkedList<Shotpoint *> shotpoints;
         
         // Create an empty robot, 
         Robot();

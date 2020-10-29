@@ -30,16 +30,16 @@ Robot::Robot(){
 
 void Robot::initGraph(){
     graph = Field::initGraph();
-    graph->addNode(getShotZone(shotRange, centreAngle));
-    graph->addNode(getShotZone(shotRange, 0));
-    graph->addNode(getShotZone(shotRange, -centreAngle));
+    graph->addNode(getShotZone(shotRange, centreAngle, centreShotTime));
+    graph->addNode(getShotZone(shotRange, 0, centreShotTime));
+    graph->addNode(getShotZone(shotRange, -centreAngle, centreShotTime));
 
-    graph->addNode(getShotZone(shotRange, 90-sideAngle));
-    graph->addNode(getShotZone(shotRange, -(90-sideAngle)));
+    graph->addNode(getShotZone(shotRange, 90-sideAngle, sideShotTime));
+    graph->addNode(getShotZone(shotRange, -(90-sideAngle), sideShotTime));
 
 }
 
-Fieldpoint *Robot::getShotZone(int range, int angle){
+Shotpoint *Robot::getShotZone(int range, int angle, int time){
     int x, y;
     float angleRad = angle*(M_PI/180);
     if(alliance == Alliance::RED){
@@ -53,7 +53,7 @@ Fieldpoint *Robot::getShotZone(int range, int angle){
         y = 0;
     }
 
-    return new Fieldpoint(x, y, Alliance::NEUTRAL, Fieldpoint::Type::NODE);
+    return new Shotpoint(x, y, Alliance::NEUTRAL, Fieldpoint::Type::SHOTNODE);
 }
 
 

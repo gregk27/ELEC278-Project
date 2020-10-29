@@ -25,7 +25,8 @@ class Fieldpoint {
             NODE, 
             DEFENSE, 
             TOWER, 
-            RESTRICTED
+            RESTRICTED,
+            SHOTNODE
         };
 
         // X location, inches from top-left
@@ -109,6 +110,12 @@ class Defense: public Fieldpoint {
         // Type of defense
         Defenses defType;
 
+        using Fieldpoint::Fieldpoint;
+};
+
+class Shotpoint: public Fieldpoint {
+    public:
+        int time;
         using Fieldpoint::Fieldpoint;
 };
 

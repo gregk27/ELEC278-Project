@@ -383,6 +383,10 @@ namespace Field {
                     out[x][y][1]='N';
                     out[x][y][2]='R';
                     break;
+                case Fieldpoint::Type::SHOTNODE:
+                    out[x][y][1]='S';
+                    out[x][y][2]='N';
+                    break;
                 default:
                     out[x][y][1]='N';
                     out[x][y][2]=' ';
