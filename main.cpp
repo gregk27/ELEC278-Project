@@ -5,6 +5,7 @@
 // #include "field/Fieldpoint.h"
 #include "field/field.h"
 #include "utils/LinkedList.h"
+#include "utils/Graph.h"
 
 int main(){
 
@@ -19,8 +20,7 @@ int main(){
         printf("%d\n", d.crossTime(r));
     }
 
-    Field::init();
-    print_field(false);
+    Field::print(*Field::initGraph(), false);
 
     // // print_bin(r.defenses, 16);
 

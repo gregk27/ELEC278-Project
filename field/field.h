@@ -5,6 +5,7 @@
 #include "Fieldpoint.h"
 #include "../game.h"
 #include "../utils/LinkedList.h"
+#include "../utils/Graph.h"
 
 // Dimensions from this drawing: https://i.imgur.com/1d51oAV.png and game manual https://firstfrc.blob.core.windows.net/frc2016manuals/GameManual/FRC-2016-game-manual-02.pdf 
 #define FIELD_WIDTH 320
@@ -26,8 +27,6 @@
 #define COURTYARD_COUNT 3 // Number of nodes in courtyard array
 #define CENTRE_BALL_COUNT 6 // NUmber of nodes in the centre ball array
 
-void print_field(bool showdots);
-
 // All locations in inches from top-left. Field dimensions take from game manual.
 // Namespace with field graph and functions
 namespace Field {
@@ -36,11 +35,6 @@ namespace Field {
         int distance;
     } Edge;
 
-    // Linkedlist with all nodes
-    extern LinkedList<Fieldpoint *> nodes;
-    // Linkedlist ajdacency list
-    extern LinkedList<LinkedList<Edge>*> adjacency; 
-    
     extern Fieldpoint redTower;
     extern Defense redDefenses[DEFENSE_COUNT];
     extern Fieldpoint redPassage[PASSAGE_COUNT];
@@ -49,7 +43,8 @@ namespace Field {
     extern Defense blueDefenses[DEFENSE_COUNT];
     extern Fieldpoint bluePassage[PASSAGE_COUNT];
 
-    void init();
-}
+    Graph *initGraph();
+    void print(Graph g, bool showdots);
+};
 
 #endif // !FIELD_H
