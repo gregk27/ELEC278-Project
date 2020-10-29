@@ -341,7 +341,7 @@ namespace Field {
         return g;
     }
 
-    void print(Graph g, bool showdots){
+    void print(Graph *g, bool showdots){
         char out[FIELD_LENGTH/10][FIELD_WIDTH/10][3];
         for(int i=0; i<FIELD_WIDTH/10; i++){
             for(int j=0; j<FIELD_LENGTH/10; j++){
@@ -352,12 +352,12 @@ namespace Field {
         }
 
         int x,y;
-        for(int i = 0; i<g.nodes.size(); i++){
-            x = g.nodes[i]->x/10;
-            y = g.nodes[i]->y/10;
+        for(int i = 0; i<g->nodes.size(); i++){
+            x = g->nodes[i]->x/10;
+            y = g->nodes[i]->y/10;
 
             // Set alliance letter
-            switch(g.nodes[i]->alliance){
+            switch(g->nodes[i]->alliance){
                 case Alliance::RED:
                     out[x][y][0] = 'R';
                     break;
@@ -370,7 +370,7 @@ namespace Field {
             }
 
             // Set type letters
-            switch(g.nodes[i]->type){
+            switch(g->nodes[i]->type){
                 case Fieldpoint::Type::TOWER:
                     out[x][y][1]='T';
                     out[x][y][2]='W';

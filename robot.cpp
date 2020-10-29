@@ -1,11 +1,17 @@
 #include <stdio.h>
 #include <string>
 #include <stdlib.h>
+#include <math.h>
 #include "robot.h"
 #include "utils.h"
+#include "field/field.h"
 #include "field/Fieldpoint.h"
 
 #define BUFF_SIZE 256
+// Some compilers may be missing M_PI, this serves as a safety check https://stackoverflow.com/questions/14920675/is-there-a-function-in-c-language-to-calculate-degrees-radians
+#ifndef M_PI
+#define M_PI 3.1415926535
+#endif
 
 Robot::Robot(){
     this->id = -1;
@@ -21,6 +27,35 @@ Robot::Robot(){
     this->sideAngle = 0;
     this->lowTime = 0;
 }
+
+void Robot::initGraph(){
+    graph = Field::initGraph();
+    graph->addNode(getShotZone(shotRange, centreAngle));
+    graph->addNode(getShotZone(shotRange, 0));
+    graph->addNode(getShotZone(shotRange, -centreAngle));
+
+    graph->addNode(getShotZone(shotRange, 90-sideAngle));
+    graph->addNode(getShotZone(shotRange, -(90-sideAngle)));
+
+}
+
+Fieldpoint *Robot::getShotZone(int range, int angle){
+    int x, y;
+    float angleRad = angle*(M_PI/180);
+    if(alliance == Alliance::RED){
+        x = Field::redTower.x + range*cos(angleRad);
+        y = Field::redTower.y + range*sin(angleRad);
+    } else if(alliance == Alliance::BLUE){
+        x = Field::blueTower.x - range*cos(angleRad);
+        y = Field::blueTower.y + range*sin(angleRad);
+    } else {
+        x = 0;
+        y = 0;
+    }
+
+    return new Fieldpoint(x, y, Alliance::NEUTRAL, Fieldpoint::Type::NODE);
+}
+
 
 int Robot::crossTime(Defense *d){
     // If it's the low bar, then it is impossible or 1 second
@@ -68,5 +103,6 @@ Robot *Robot::parseCSV(std::string filename){
         &(bot->speed));
     bot->alliance = Alliance::RED;
     bot->id = 0;
+    bot->initGraph();
     return bot;
 }

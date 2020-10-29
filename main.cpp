@@ -20,7 +20,7 @@ int main(){
         printf("%d\n", r->crossTime(d));
     }
 
-    Field::print(*Field::initGraph(), false);
+    Field::print(r->graph, false);
 
     // // print_bin(r.defenses, 16);
 

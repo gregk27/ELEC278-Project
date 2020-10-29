@@ -44,7 +44,7 @@ namespace Field {
     extern Fieldpoint bluePassage[PASSAGE_COUNT];
 
     Graph *initGraph();
-    void print(Graph g, bool showdots);
+    void print(Graph *g, bool showdots);
 };
 
 #endif // !FIELD_H

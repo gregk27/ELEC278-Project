@@ -2,12 +2,16 @@
 #define ROBOT_H
 #include <stdbool.h>
 #include <string>
+#include "utils/Graph.h"
 #include "game.h"
 
 /**
  * Class describing a robot
  */
 class Robot {
+    private:
+        void initGraph();
+        Fieldpoint *getShotZone(int range, int angle);
     public:
         // Robot's unique ID (0-6)
         int id;
@@ -36,6 +40,9 @@ class Robot {
         int sideAngle;
         // Time in seconds needed to score in low goal. 0 indicates unable
         int lowTime;
+        
+        // The graph used by this robot, will have different shooting points than others, otherwise identical
+        Graph *graph;
 
         
         // Create an empty robot, 
