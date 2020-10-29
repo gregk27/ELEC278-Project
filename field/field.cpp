@@ -337,7 +337,6 @@ namespace Field {
             g->addEdge(&centreBalls[4], &centreBalls[5]);
         }
         
-        g->printAdj();
         return g;
     }
 

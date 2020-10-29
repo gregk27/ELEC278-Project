@@ -11,7 +11,7 @@
 class Robot {
     private:
         void initGraph();
-        Shotpoint *getShotZone(int range, int angle, int time);
+        Shotpoint *getShotZone(int range, int angle);
     public:
         // Robot's unique ID (0-6)
         int id;

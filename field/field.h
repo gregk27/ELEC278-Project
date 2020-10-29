@@ -38,10 +38,12 @@ namespace Field {
     extern Fieldpoint redTower;
     extern Defense redDefenses[DEFENSE_COUNT];
     extern Fieldpoint redPassage[PASSAGE_COUNT];
+    extern Fieldpoint redCourtyard[COURTYARD_COUNT];
 
     extern Fieldpoint blueTower;
     extern Defense blueDefenses[DEFENSE_COUNT];
     extern Fieldpoint bluePassage[PASSAGE_COUNT];
+    extern Fieldpoint blueCourtyard[COURTYARD_COUNT];
 
     Graph *initGraph();
     void print(Graph *g, bool showdots);

@@ -30,16 +30,63 @@ Robot::Robot(){
 
 void Robot::initGraph(){
     graph = Field::initGraph();
-    graph->addNode(getShotZone(shotRange, centreAngle, centreShotTime));
-    graph->addNode(getShotZone(shotRange, 0, centreShotTime));
-    graph->addNode(getShotZone(shotRange, -centreAngle, centreShotTime));
+    Shotpoint *s;
+    if(centreShotTime > 0){
+        // Middle centre
+        s = getShotZone(shotRange, 0);
+        s->time = centreShotTime;
+        graph->addNode(s);
+        // Connected to central courtyard and central 2 defenses
+        graph->addEdge(s, &Field::redCourtyard[1]);
+        graph->addEdge(s, &Field::redDefenses[2]);
+        graph->addEdge(s, &Field::redDefenses[3]);
+        // Add angled nodes if applicable
+        if(centreAngle > 0){
+            // Top centre
+            s = getShotZone(shotRange, -centreAngle);
+            s->time = centreShotTime;
+            graph->addNode(s);
+            // Connected to upper/central courtyard and upper 2 defenses
+            graph->addEdge(s, &Field::redCourtyard[2]);
+            graph->addEdge(s, &Field::redCourtyard[1]);
+            graph->addEdge(s, &Field::redDefenses[3]);
+            graph->addEdge(s, &Field::redDefenses[4]);
 
-    graph->addNode(getShotZone(shotRange, 90-sideAngle, sideShotTime));
-    graph->addNode(getShotZone(shotRange, -(90-sideAngle), sideShotTime));
+            // Bottom centre
+            s = getShotZone(shotRange, centreAngle);
+            s->time = centreShotTime;
+            graph->addNode(s);
+            // Connected to lower courtyard and central 2 defenses
+            graph->addEdge(s, &Field::redCourtyard[0]);
+            graph->addEdge(s, &Field::redCourtyard[1]);
+            graph->addEdge(s, &Field::redDefenses[0]);
+            graph->addEdge(s, &Field::redDefenses[1]);
+            graph->addEdge(s, &Field::redDefenses[2]);
+        }
+    }
+    if(sideShotTime > 0){
+        // Upper side
+        s = getShotZone(shotRange, -(90-sideAngle));
+        s->time = sideShotTime;
+        graph->addNode(s);
+        // Connect to upper courtyard and upper 2 defenses
+        graph->addEdge(s, &Field::redCourtyard[2]);
+        graph->addEdge(s, &Field::redDefenses[3]);
+        graph->addEdge(s, &Field::redDefenses[4]);
 
+        // Lower side
+        s = getShotZone(shotRange, 90-sideAngle);
+        s->time = sideShotTime;
+        graph->addNode(s);
+        // Connect to lower courtyard and lower 2 defenses
+        graph->addEdge(s, &Field::redCourtyard[0]);
+        graph->addEdge(s, &Field::redDefenses[0]);
+        graph->addEdge(s, &Field::redDefenses[1]);
+    }
+    graph->printAdj();
 }
 
-Shotpoint *Robot::getShotZone(int range, int angle, int time){
+Shotpoint *Robot::getShotZone(int range, int angle){
     int x, y;
     float angleRad = angle*(M_PI/180);
     if(alliance == Alliance::RED){
