@@ -41,6 +41,13 @@ class Robot {
         // Create an empty robot, 
         Robot();
         
+        /**
+         *  Get the time which the robot tales to cross the defense
+         *  - d: Pointer to the defense
+         *  Returns: The time in seconds, from 1-15. If the robot cannot cross 0 is returned.
+         */
+        int crossTime(Defense *d);
+        
         /*
         * Parse a csv file containing robot information
         * Returns a pointer to the found robot

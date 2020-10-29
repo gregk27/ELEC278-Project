@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include "robot.h"
 #include "utils.h"
+#include "field/Fieldpoint.h"
 
 #define BUFF_SIZE 256
 
@@ -19,6 +20,15 @@ Robot::Robot(){
     this->centreAngle = 0;
     this->sideAngle = 0;
     this->lowTime = 0;
+}
+
+int Robot::crossTime(Defense *d){
+    // If it's the low bar, then it is impossible or 1 second
+    if(d->defType == Defense::LOW_BAR){
+        return canLowbar;
+    }
+    //Shift the current defense into lower 4 bits, then mask
+    return (defenses >> (d->defType*4)) & 0xF;
 }
 
 // bool can_cross(Robot *r, Defenses d){

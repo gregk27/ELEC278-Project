@@ -14,10 +14,10 @@ int main(){
     Robot *r;
     r = Robot::parseCSV("./robots.csv");
 
-    Defense d = Defense(0,0);
+    Defense *d = new Defense(0,0);
     for(int i=0;i<8;i++){
-        d.defType = (Defense::Defenses) i;
-        printf("%d\n", d.crossTime(r));
+        d->defType = (Defense::Defenses) i;
+        printf("%d\n", r->crossTime(d));
     }
 
     Field::print(*Field::initGraph(), false);

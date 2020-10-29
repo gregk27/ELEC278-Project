@@ -1,7 +1,6 @@
 #ifndef FIELDPOINT_H
 #define FIELDPOINT_H
 #include "../game.h"
-#include "../robot.h"
 
 typedef enum _fieldtype {
     // Generic travel node
@@ -99,13 +98,6 @@ class Defense: public Fieldpoint {
             // Low Bar
             LOW_BAR         =-1 // Low bar isn't in defense mask
         } Defenses;
-
-        /**
-         *  Get the time which the robot tales to cross the defense
-         *  - r: Pointer to the robot
-         *  Returns: The time in seconds, from 1-15. If the robot cannot cross 0 is returned.
-         */
-        int crossTime(Robot *r);
 
         /**
          * Called when crossing the defense, subtracts from value
