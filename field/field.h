@@ -46,6 +46,13 @@ namespace Field {
     extern Fieldpoint blueCourtyard[COURTYARD_COUNT];
 
     Graph *initGraph();
+    
+    /**
+     * Export graph to GraphML file formatted for use with https://yworks.com/yed-live
+     * - g: Graph to export
+     * - fielname: Name of output file, needs extension
+     */
+    void toGraphML(Graph *g, const char* filename);
     void print(Graph *g, bool showdots);
 };
 

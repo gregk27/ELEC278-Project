@@ -21,6 +21,7 @@ int main(){
     }
 
     Field::print(r->graph, false);
+    Field::toGraphML(r->graph, "out.graphml");
 
     // // print_bin(r.defenses, 16);
 
