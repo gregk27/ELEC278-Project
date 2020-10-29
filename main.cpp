@@ -12,7 +12,7 @@ int main(){
     printf("Hello World\n");
 
     Robot *r;
-    r = parse_csv("./robots.csv");
+    r = Robot::parseCSV("./robots.csv");
 
     Defense d = Defense(0,0);
     for(int i=0;i<8;i++){

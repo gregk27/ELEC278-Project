@@ -40,13 +40,14 @@ class Robot {
         
         // Create an empty robot, 
         Robot();
+        
+        /*
+        * Parse a csv file containing robot information
+        * Returns a pointer to the found robot
+        */
+        static Robot *parseCSV(std::string filename);
 };
 
-/*
- * Parse a csv file containing robot information
- * Returns a pointer to the found robot
-*/
-Robot *parse_csv(std::string filename);
 
 
 

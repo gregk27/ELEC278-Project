@@ -30,7 +30,7 @@ Robot::Robot(){
  * Parse a csv file containing robot information
  * Returns a pointer to the found robot
 */
-Robot *parse_csv(std::string filename){
+Robot *Robot::parseCSV(std::string filename){
     // Open the file
     FILE *f = fopen(filename.c_str(), "r"); 
     if(f == NULL) return NULL;
