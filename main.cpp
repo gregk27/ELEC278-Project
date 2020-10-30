@@ -6,6 +6,7 @@
 #include "field/field.h"
 #include "utils/LinkedList.h"
 #include "utils/Graph.h"
+#include "game.h"
 
 int main(){
 
@@ -13,6 +14,8 @@ int main(){
 
     Robot *r;
     r = Robot::parseCSV("./robots.csv");
+    // Event queue to be populated by simulation
+    LinkedList<Event> events;
 
     Defense *d = new Defense(0,0);
     for(int i=0;i<8;i++){

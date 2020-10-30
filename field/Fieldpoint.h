@@ -2,6 +2,9 @@
 #define FIELDPOINT_H
 #include "../game.h"
 
+// Forward-declaration of alliance from ../game.h
+enum class Alliance;
+
 typedef enum _fieldtype {
     // Generic travel node
     NODE,
