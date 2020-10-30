@@ -4,7 +4,7 @@
 #include <string>
 #include "utils/Graph.h"
 #include "game.h"
-#include "utils.h"
+#include "utils/utils.h"
 
 typedef unsigned char byte;
 

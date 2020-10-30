@@ -295,7 +295,7 @@
 </node>
 	<node id="32">
 	<data key="d5">
-		<y:RectD X="192" Y="148" Width="10" Height="10"/>
+		<y:RectD X="160" Y="148" Width="10" Height="10"/>
 	</data>
 	<data key="d7">
 		<yjs:ShapeNodeStyle stroke="#FF4A2A7C" fill="#FF4A2A7C"/>
@@ -303,7 +303,7 @@
 </node>
 	<node id="33">
 	<data key="d5">
-		<y:RectD X="101" Y="-7" Width="10" Height="10"/>
+		<y:RectD X="151" Y="97" Width="10" Height="10"/>
 	</data>
 	<data key="d7">
 		<yjs:ShapeNodeStyle stroke="#FF4A2A7C" fill="#FF4A2A7C"/>
@@ -311,7 +311,7 @@
 </node>
 	<node id="34">
 	<data key="d5">
-		<y:RectD X="101" Y="303" Width="10" Height="10"/>
+		<y:RectD X="151" Y="198" Width="10" Height="10"/>
 	</data>
 	<data key="d7">
 		<yjs:ShapeNodeStyle stroke="#FF4A2A7C" fill="#FF4A2A7C"/>
@@ -319,7 +319,7 @@
 </node>
 	<node id="35">
 	<data key="d5">
-		<y:RectD X="130" Y="12" Width="10" Height="10"/>
+		<y:RectD X="85" Y="19" Width="10" Height="10"/>
 	</data>
 	<data key="d7">
 		<yjs:ShapeNodeStyle stroke="#FF4A2A7C" fill="#FF4A2A7C"/>
@@ -327,7 +327,7 @@
 </node>
 	<node id="36">
 	<data key="d5">
-		<y:RectD X="130" Y="283" Width="10" Height="10"/>
+		<y:RectD X="85" Y="276" Width="10" Height="10"/>
 	</data>
 	<data key="d7">
 		<yjs:ShapeNodeStyle stroke="#FF4A2A7C" fill="#FF4A2A7C"/>
