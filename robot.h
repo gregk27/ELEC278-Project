@@ -4,6 +4,9 @@
 #include <string>
 #include "utils/Graph.h"
 #include "game.h"
+#include "utils.h"
+
+typedef unsigned char byte;
 
 /**
  * Class describing a robot
@@ -14,11 +17,11 @@ class Robot {
         Shotpoint *getShotZone(int range, int angle);
     public:
         // Robot's unique ID (0-6)
-        int id;
+        byte id;
         // Robot's team number
         int team;
-        // Robot's speed (fpm)
-        int speed;
+        // Robot's speed (ips)
+        float speed;
         // Robot's alliance
         Alliance alliance;
 
@@ -29,17 +32,17 @@ class Robot {
         long defenses;
 
         // Maximum range for high goal shot, in feet
-        int shotRange;
+        byte shotRange;
         // Time in seconds needed for shot at centre goal. 0 indicates unable
-        int centreShotTime;
+        byte centreShotTime;
         // Time in seconds needed for shot at side goal. 0 indicates unable
-        int sideShotTime;
+        byte sideShotTime;
         // Max angle in degrees for shot at centre goal
-        int centreAngle;
+        byte centreAngle;
         // Angle in degrees for shot at side goal
-        int sideAngle;
+        byte sideAngle;
         // Time in seconds needed to score in low goal. 0 indicates unable
-        int lowTime;
+        byte lowTime;
         
         // The graph used by this robot, will have different shooting points than others, otherwise identical
         Graph *graph;
@@ -61,6 +64,21 @@ class Robot {
         * Returns a pointer to the found robot
         */
         static Robot *parseCSV(std::string filename);
+
+        // Exception thrown when CSV file not found
+        struct file_open_exception : public ExceptionBase {
+            using ExceptionBase::ExceptionBase;
+        };
+
+        // Exception thrown when CSV input is shorter than expected
+        struct csv_parsing_exception : public ExceptionBase {
+            using ExceptionBase::ExceptionBase;
+        };
+
+        // Exception thrown for input parameters which will cause severe issues
+        struct invalid_parameter_exception : public ExceptionBase {
+            using ExceptionBase::ExceptionBase;
+        };
 };
 
 

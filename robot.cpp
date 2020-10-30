@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string>
+#include <cstring>
 #include <stdlib.h>
 #include <math.h>
 #include "robot.h"
@@ -29,6 +30,15 @@ Robot::Robot(){
 }
 
 void Robot::initGraph(){
+    // Initialise warning
+    std::stringstream warning;
+    // If the shot range is greated than the distance to defenses, there is something wrong. Warn the user and cap it
+    if(shotRange > DEFENSE_EDGE_OFFSET-TOWER_OFFSET){
+        warning << "\tShot range of " << (int)shotRange << "\" is larger than the " << DEFENSE_EDGE_OFFSET-TOWER_OFFSET << "\" distance to the defenses. This will be capped to prevent issues.\n";
+        shotRange = DEFENSE_EDGE_OFFSET-TOWER_OFFSET;
+    }
+    
+    // Initialise the graph with field nodes
     graph = Field::initGraph();
     Shotpoint *s;
     if(centreShotTime > 0){
@@ -62,6 +72,15 @@ void Robot::initGraph(){
             graph->addEdge(s, &Field::redDefenses[0]);
             graph->addEdge(s, &Field::redDefenses[1]);
             graph->addEdge(s, &Field::redDefenses[2]);
+
+            // If the centre angle is higher than 40° soft limit
+            if(centreAngle > 40){
+                warning << "\tCentre angle of " << (int)centreAngle << "° exceeds recommended limit of 40°\n";
+            }
+        }
+        // If the cetre shot time is more than 20 seconds, there may be input issues
+        if(centreShotTime > 20){
+            warning << "\tCentre shot time of " << (int)centreShotTime << "s is quite high, there may be broken input\n";
         }
     }
     if(sideShotTime > 0){
@@ -82,6 +101,28 @@ void Robot::initGraph(){
         graph->addEdge(s, &Field::redCourtyard[0]);
         graph->addEdge(s, &Field::redDefenses[0]);
         graph->addEdge(s, &Field::redDefenses[1]);
+
+        // If the side angle is higher than 40° soft limit
+        if(sideAngle > 40){
+            warning << "\tSide angle of " << (int)sideAngle << "° exceeds recommended limit of 40°\n";
+        }
+        // If the side shot time is more than 20 seconds, there may be input issues
+        if(sideShotTime > 20){
+            warning << "\tSide shot time of " << (int)sideShotTime << "s is quite high, there may be broken input\n";
+        }
+    }
+
+    // If the warning string has content, then there are warnings to report
+    if(warning.str().length() > 0){
+        printf("The following shot parameters exceed recommended tolerance:\n");
+        printf(warning.str().c_str());
+        // Allow the user to continue, as these warnings don't stop functionality
+        printf("Do you wish to continue with the simulation? [y/n] ");
+        char c;
+        scanf("%c", &c);
+        if(c != 'Y' && c != 'y'){
+            throw(invalid_parameter_exception("Shot configuration warnings not accepted"));
+        }
     }
     graph->printAdj();
 }
@@ -125,7 +166,11 @@ int Robot::crossTime(Defense *d){
 Robot *Robot::parseCSV(std::string filename){
     // Open the file
     FILE *f = fopen(filename.c_str(), "r"); 
-    if(f == NULL) return NULL;
+    if(f == NULL){
+        std::stringstream s;
+        s << "Could not open file " << filename;
+        throw file_open_exception(s.str());
+    }
 
     // Buffer for read lines. No line following the correct format will exceed 64 characters
     char line[BUFF_SIZE];
@@ -137,7 +182,7 @@ Robot *Robot::parseCSV(std::string filename){
     // Read robot line
     fgets (line, BUFF_SIZE, f);
     // Data order: team,can_low,shot_range,centre_shot_time,side_shot_time,centre_angle,side_angle,low_time,defenses,speed
-    sscanf(line, "%d,%d,%d,%d,%d,%d,%d,%d,%lx,%d", 
+    int result = sscanf(line, "%d,%d,%d,%d,%d,%d,%d,%d,%lx,%d", 
         &(bot->team),
         &(bot->canLowbar),
         &(bot->shotRange),
@@ -148,8 +193,30 @@ Robot *Robot::parseCSV(std::string filename){
         &(bot->lowTime),
         &(bot->defenses),
         &(bot->speed));
+    
+    // Validate input
+    // If less values are read than expected, something went wrong
+    if(result != 10){
+        std::stringstream s;
+        s << "Error while parsing robot " << bot->team << ". Read " << result << " values.";
+        throw csv_parsing_exception(s.str());
+    }
+    // If the bot's speed is 0, then it can't go anywhere and there is no point in simulating
+    if(!bot->speed) throw invalid_parameter_exception("Robot's speed is zero, this would prevent any motion. Speed must be at least 1.");
+    // If the bot cannot cross any defenses, then there is no point in simulating
+    if(!bot->defenses && !bot->canLowbar) throw invalid_parameter_exception("Robot cannot cross any defenses, this would prevent any gameplay. Robot must be able to cross at least one defense");
+    // If the bot can't score, then tehre is no point in simulating
+    if(!bot->centreShotTime && !bot->sideShotTime && !bot->lowTime) throw invalid_parameter_exception("Robot cannot score, this prevents any gameplay. One scoring time must be nonzero");
+    
+    // Finish setup
+    // Convert from the fpm input to ips for internal use
+    bot->speed *= 12/60.0;
+    // Set the bot's alliance. Currently this is hardcoded to red but may change in the future
     bot->alliance = Alliance::RED;
+    // Set the bot's id. Currently hardcoded but this may change in the future
     bot->id = 0;
+    // Initialise the bot's internal field graph
     bot->initGraph();
+
     return bot;
 }
