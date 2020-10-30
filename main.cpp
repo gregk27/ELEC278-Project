@@ -5,22 +5,23 @@
 // #include "field/Fieldpoint.h"
 #include "field/field.h"
 #include "utils/LinkedList.h"
+#include "utils/Graph.h"
 
 int main(){
 
     printf("Hello World\n");
 
     Robot *r;
-    r = parse_csv("./robots.csv");
+    r = Robot::parseCSV("./robots.csv");
 
-    Defense d = Defense(0,0);
+    Defense *d = new Defense(0,0);
     for(int i=0;i<8;i++){
-        d.defType = (Defense::Defenses) i;
-        printf("%d\n", d.crossTime(r));
+        d->defType = (Defense::Defenses) i;
+        printf("%d\n", r->crossTime(d));
     }
 
-    Field::init();
-    print_field(true);
+    Field::print(r->graph, false);
+    Field::toGraphML(r->graph, "out.graphml");
 
     // // print_bin(r.defenses, 16);
 

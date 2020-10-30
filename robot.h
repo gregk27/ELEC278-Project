@@ -2,12 +2,16 @@
 #define ROBOT_H
 #include <stdbool.h>
 #include <string>
+#include "utils/Graph.h"
 #include "game.h"
 
 /**
  * Class describing a robot
  */
 class Robot {
+    private:
+        void initGraph();
+        Shotpoint *getShotZone(int range, int angle);
     public:
         // Robot's unique ID (0-6)
         int id;
@@ -36,17 +40,29 @@ class Robot {
         int sideAngle;
         // Time in seconds needed to score in low goal. 0 indicates unable
         int lowTime;
+        
+        // The graph used by this robot, will have different shooting points than others, otherwise identical
+        Graph *graph;
 
+        LinkedList<Shotpoint *> shotpoints;
         
         // Create an empty robot, 
         Robot();
+        
+        /**
+         *  Get the time which the robot tales to cross the defense
+         *  - d: Pointer to the defense
+         *  Returns: The time in seconds, from 1-15. If the robot cannot cross 0 is returned.
+         */
+        int crossTime(Defense *d);
+        
+        /*
+        * Parse a csv file containing robot information
+        * Returns a pointer to the found robot
+        */
+        static Robot *parseCSV(std::string filename);
 };
 
-/*
- * Parse a csv file containing robot information
- * Returns a pointer to the found robot
-*/
-Robot *parse_csv(std::string filename);
 
 
 

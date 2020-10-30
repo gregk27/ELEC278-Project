@@ -134,8 +134,9 @@ class LinkedList{
         /**
          * Add data to the end of the list
          *  - data: The data to add
+         * Returns: The index of the data
          */
-        void push(T data){
+        int push(T data){
             if(this->first == NULL){
                 // Create node and make it the front
                 this->first = new Node<T>(NULL, NULL, data);
@@ -150,6 +151,7 @@ class LinkedList{
                 n->next->previous = n;
             }
             count ++;
+            return count-1;
         }
 
         /**
@@ -218,7 +220,7 @@ class LinkedList{
          * - fun: Lambda function of the format: (T,int)-> void, T is data at node, int is index of node
          */ 
         void forEach(std::function<void(T, int)> fun){
-            this->forEachNode([fun](Node<int> *n, int i)-> void {
+            this->forEachNode([fun](Node<T> *n, int i)-> void {
                 fun(n->data, i);
             });
         }

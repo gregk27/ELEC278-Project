@@ -1,10 +1,17 @@
 #include <stdio.h>
 #include <string>
 #include <stdlib.h>
+#include <math.h>
 #include "robot.h"
 #include "utils.h"
+#include "field/field.h"
+#include "field/Fieldpoint.h"
 
 #define BUFF_SIZE 256
+// Some compilers may be missing M_PI, this serves as a safety check https://stackoverflow.com/questions/14920675/is-there-a-function-in-c-language-to-calculate-degrees-radians
+#ifndef M_PI
+#define M_PI 3.1415926535
+#endif
 
 Robot::Robot(){
     this->id = -1;
@@ -21,6 +28,91 @@ Robot::Robot(){
     this->lowTime = 0;
 }
 
+void Robot::initGraph(){
+    graph = Field::initGraph();
+    Shotpoint *s;
+    if(centreShotTime > 0){
+        // Middle centre
+        s = getShotZone(shotRange, 0);
+        s->time = centreShotTime;
+        graph->addNode(s);
+        // Connected to central courtyard and central 2 defenses
+        graph->addEdge(s, &Field::redCourtyard[1]);
+        graph->addEdge(s, &Field::redDefenses[2]);
+        graph->addEdge(s, &Field::redDefenses[3]);
+        // Add angled nodes if applicable
+        if(centreAngle > 0){
+            // Top centre
+            s = getShotZone(shotRange, -centreAngle);
+            s->time = centreShotTime;
+            graph->addNode(s);
+            // Connected to upper/central courtyard and upper 2 defenses
+            graph->addEdge(s, &Field::redCourtyard[2]);
+            graph->addEdge(s, &Field::redCourtyard[1]);
+            graph->addEdge(s, &Field::redDefenses[3]);
+            graph->addEdge(s, &Field::redDefenses[4]);
+
+            // Bottom centre
+            s = getShotZone(shotRange, centreAngle);
+            s->time = centreShotTime;
+            graph->addNode(s);
+            // Connected to lower courtyard and central 2 defenses
+            graph->addEdge(s, &Field::redCourtyard[0]);
+            graph->addEdge(s, &Field::redCourtyard[1]);
+            graph->addEdge(s, &Field::redDefenses[0]);
+            graph->addEdge(s, &Field::redDefenses[1]);
+            graph->addEdge(s, &Field::redDefenses[2]);
+        }
+    }
+    if(sideShotTime > 0){
+        // Upper side
+        s = getShotZone(shotRange, -(90-sideAngle));
+        s->time = sideShotTime;
+        graph->addNode(s);
+        // Connect to upper courtyard and upper 2 defenses
+        graph->addEdge(s, &Field::redCourtyard[2]);
+        graph->addEdge(s, &Field::redDefenses[3]);
+        graph->addEdge(s, &Field::redDefenses[4]);
+
+        // Lower side
+        s = getShotZone(shotRange, 90-sideAngle);
+        s->time = sideShotTime;
+        graph->addNode(s);
+        // Connect to lower courtyard and lower 2 defenses
+        graph->addEdge(s, &Field::redCourtyard[0]);
+        graph->addEdge(s, &Field::redDefenses[0]);
+        graph->addEdge(s, &Field::redDefenses[1]);
+    }
+    graph->printAdj();
+}
+
+Shotpoint *Robot::getShotZone(int range, int angle){
+    int x, y;
+    float angleRad = angle*(M_PI/180);
+    if(alliance == Alliance::RED){
+        x = Field::redTower.x + range*cos(angleRad);
+        y = Field::redTower.y + range*sin(angleRad);
+    } else if(alliance == Alliance::BLUE){
+        x = Field::blueTower.x - range*cos(angleRad);
+        y = Field::blueTower.y + range*sin(angleRad);
+    } else {
+        x = 0;
+        y = 0;
+    }
+
+    return new Shotpoint(x, y, Alliance::NEUTRAL, Fieldpoint::Type::SHOTNODE);
+}
+
+
+int Robot::crossTime(Defense *d){
+    // If it's the low bar, then it is impossible or 1 second
+    if(d->defType == Defense::LOW_BAR){
+        return canLowbar;
+    }
+    //Shift the current defense into lower 4 bits, then mask
+    return (defenses >> (d->defType*4)) & 0xF;
+}
+
 // bool can_cross(Robot *r, Defenses d){
 //     // Mask the defenses to check
 //     return (r->defenses >> (int)d*4 & 0xF) != 0;
@@ -30,7 +122,7 @@ Robot::Robot(){
  * Parse a csv file containing robot information
  * Returns a pointer to the found robot
 */
-Robot *parse_csv(std::string filename){
+Robot *Robot::parseCSV(std::string filename){
     // Open the file
     FILE *f = fopen(filename.c_str(), "r"); 
     if(f == NULL) return NULL;
@@ -58,5 +150,6 @@ Robot *parse_csv(std::string filename){
         &(bot->speed));
     bot->alliance = Alliance::RED;
     bot->id = 0;
+    bot->initGraph();
     return bot;
 }
