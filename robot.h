@@ -79,6 +79,12 @@ class Robot {
         struct invalid_parameter_exception : public ExceptionBase {
             using ExceptionBase::ExceptionBase;
         };
+        
+        // Navigation
+
+        // Fieldpoint with 0 length with all scoring positions, used as target for dijkstra
+        Fieldpoint *goalNode;
+
 };
 
 

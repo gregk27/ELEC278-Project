@@ -18,6 +18,7 @@ class Graph {
         void addNodes(Fieldpoint f[], int i);
         void addNodes(Defense b[], int i);
         void addEdge(Fieldpoint *a, Fieldpoint *b);
+        void addEdge(Fieldpoint *a, Fieldpoint *b, int weight);
         void printAdj();
 };
 

@@ -124,6 +124,15 @@ void Robot::initGraph(){
             throw(invalid_parameter_exception("Shot configuration warnings not accepted"));
         }
     }
+
+    goalNode = new Fieldpoint(Field::redTower.x+10, Field::redTower.y, Alliance::RED);
+    // Connect tower and shotpoints to goal node with 0 distance
+    graph->addNode(goalNode);
+    graph->addEdge(goalNode, &Field::redTower, 0);
+    shotpoints.forEach([this](Shotpoint *s, int i){
+        this->graph->addEdge(goalNode, s, 0);
+    });
+
     graph->printAdj();
 }
 

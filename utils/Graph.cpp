@@ -27,6 +27,16 @@ void Graph::addEdge(Fieldpoint *a, Fieldpoint *b){
     adjacency[b->index]->push(e);
 }
 
+void Graph::addEdge(Fieldpoint *a, Fieldpoint *b, int distance){
+    Edge e;
+    e.end = b;
+    e.distance = distance;
+    adjacency[a->index]->push(e);
+    e.end = a;
+    adjacency[b->index]->push(e);
+}
+
+
 void Graph::printAdj(){
     adjacency.forEach([](LinkedList<Edge> *l, int i)->void {
         printf("%d->", i);
