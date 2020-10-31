@@ -15,6 +15,11 @@ class Robot {
     private:
         void initGraph();
         Shotpoint *getShotZone(int range, int angle);
+        /**
+         * Get the event representing the robot's last action
+         * Returns: Event representing robot's last action
+         */
+        Event getEvent();
     public:
         // Robot's unique ID (0-6)
         byte id;
@@ -84,7 +89,18 @@ class Robot {
 
         // Fieldpoint with 0 length with all scoring positions, used as target for dijkstra
         Fieldpoint *goalNode;
+        // Current location on the field
+        Fieldpoint *location;
+        // Time at which the robot will have arrived
+        int wakeTime = 0;
+        // Flag indicating if the robot has a ball, defaults to true
+        bool hasBall = true;
 
+        /**
+         * Have the bot navigate the next leg
+         *  - events: The event queue to log to
+         */
+        void navUpdate(LinkedList<Event> *events);
 };
 
 

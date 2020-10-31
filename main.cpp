@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdbool.h>
+#include <string>
 #include <iostream>
 #include "robot.h"
 // #include "field/Fieldpoint.h"
@@ -14,6 +15,7 @@ int main(){
 
     Robot *r;
     r = Robot::parseCSV("./robots.csv");
+    r->location = &Field::redDefenses[0];
     // Event queue to be populated by simulation
     LinkedList<Event> events;
 
@@ -23,10 +25,16 @@ int main(){
         printf("%d\n", r->crossTime(d));
     }
 
-    Field::print(r->graph, false);
+    // Field::print(r->graph, false);
     Field::toGraphML(r->graph, "out.graphml");
 
-    // // print_bin(r.defenses, 16);
+
+    r->navUpdate(&events);
+
+    events.forEach([](Event e, int i){
+        std::string out = e.toString(); 
+        printf(out.c_str());
+    });
 
     // // printf("%d, %d, %d, %d\n",
     // // r.defenses,

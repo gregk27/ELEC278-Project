@@ -163,6 +163,32 @@ int Robot::crossTime(Defense *d){
     return (defenses >> (d->defType*4)) & 0xF;
 }
 
+Event Robot::getEvent(){
+    Event e;
+    e.location = location;
+    e.r = this;
+    e.time = wakeTime;
+    switch(location->type){
+        case Fieldpoint::Type::TOWER:
+            e.type = Event::Type::SCORE_LOW;
+            e.points = LOW_POINTS;
+            break;
+        case Fieldpoint::Type::SHOTNODE:
+            e.type = Event::Type::SCORE_HIGH;
+            e.points = HIGH_POINTS;
+            break;
+        case Fieldpoint::Type::DEFENSE:
+            e.type = Event::Type::CROSS;
+            e.points = ((Defense *) location)->value;
+            break;
+    }
+    return e;
+}
+
+void Robot::navUpdate(LinkedList<Event> *events){
+    events->push(getEvent());
+}
+
 // bool can_cross(Robot *r, Defenses d){
 //     // Mask the defenses to check
 //     return (r->defenses >> (int)d*4 & 0xF) != 0;
