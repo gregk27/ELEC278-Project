@@ -236,6 +236,21 @@ class LinkedList{
                 n = n->next;
             }
         }
+
+        /**
+         * Find a node in the list
+         * - fun: Comparator function that will be called for each node. Will return when this returns false
+         * Returns: The index of the target node
+         */
+        int find(std::function<bool(T*)> fun){
+            Node<T> *n = this->first;
+            for(int i=0; i<this->size(); i++){
+                if(fun(n->data)){
+                    return i;
+                }
+                n = n->next;
+            }
+        }
     
 };
 
