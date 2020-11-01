@@ -3,6 +3,7 @@
 #include <cstring>
 #include <stdlib.h>
 #include <math.h>
+#include <limits.h>
 #include "robot.h"
 #include "utils/utils.h"
 #include "field/field.h"
@@ -185,8 +186,36 @@ Event Robot::getEvent(){
     return e;
 }
 
+bool compareNodes(Graph::DijkstraNode *in, Graph::DijkstraNode *n1, Graph::DijkstraNode *n2){
+    // If n1 is null, then have the condition return true. Otherwise find position where new node fits between existing
+    return (n1 == NULL ? true : in->weight > n1->weight) && in->weight < n2->weight;
+}
+
 void Robot::navUpdate(LinkedList<Event> *events){
+    // Add completed event to queue
     events->push(getEvent());
+
+    LinkedList<Graph::DijkstraNode*> todo;
+    LinkedList<Graph::DijkstraNode*> completed;
+
+    // Initialise the TODO array with inifinty
+    graph->nodes.forEach([&todo,this](Fieldpoint *f, int i){
+        Graph::DijkstraNode *n = new Graph::DijkstraNode();
+        n->node = f;
+        n->prev = NULL;
+        n->weight = (f == location ? 0 : INT_MAX);
+        todo.orderedInsert(n, compareNodes);
+    });
+    todo.forEach([](Graph::DijkstraNode *n, int i){
+        printf("%d:\t%d=\t%d\n", i, n->node->index, n->weight);
+    });
+
+
+    // while(todo.size() > 0){
+
+    // }
+
+
 }
 
 // bool can_cross(Robot *r, Defenses d){
