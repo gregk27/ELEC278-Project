@@ -180,8 +180,9 @@ class LinkedList{
         /**
          * Remove an item from the list
          *  - i: The index of the item
+         * Returns: The removed value
          */
-        void remove(int i){
+        T remove(int i){
             // Get the node to delete
             Node<T> *n = this->getNode(i);
             // If there is only one node
@@ -198,8 +199,12 @@ class LinkedList{
             }
             // Reduce count
             count --;
+            // Get the data to return
+            T returnVal = n->data;
             // Delete the node
             delete n;
+
+            return returnVal;
         }
 
         /**
@@ -250,6 +255,55 @@ class LinkedList{
                 }
                 n = n->next;
             }
+        }
+
+        /**
+         * Insert a node into the list at position based on callback
+         *  - node: The node to insert
+         *  - fun:  Callback comparison function, the node will be inserted when this returns true. First arg is new data, second is node before, second arg is node after. If node is end, second arg will be NULL
+         * Returns: The index where the node is inserted
+         */
+        int orderedInsert(T data, std::function<bool(T, T, T)> fun){
+
+            // If the list is empty automatically add to front
+            if(size() == 0){
+                push(data);
+                return 0;
+            }
+
+            Node<T> *n = this->first;
+            // Check for front insert cases
+            if(fun(data, NULL, n->data)){
+                push_front(data);
+                return 0;
+            }
+
+            // Loop through to find correct place
+            for(int i=0; i<this->size(); i++){
+                // If we have reached the end of the list, just push it on the back
+                if(n->next == first){
+                    push(data);
+                    return this->size()-1;
+                }
+
+                // If this is the correct place, run the insert
+                if(fun(data, n->data, n->next->data)){
+                    // Create a node from the data
+                    Node<T> *node = new Node<T>(n->next, n, data);
+                    // Update neighbours
+                    n->next->previous = node;
+                    n->previous = n;
+
+                    // Update if first node
+                    if(n == first){
+                        first = node;
+                    }
+                    count ++;
+                    return i;
+                }
+                n = n->next;
+            }
+            return 0;
         }
     
 };
