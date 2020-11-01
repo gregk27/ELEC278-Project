@@ -187,8 +187,11 @@ Event Robot::getEvent(){
 }
 
 bool compareNodes(Graph::DijkstraNode *in, Graph::DijkstraNode *n1, Graph::DijkstraNode *n2){
-    // If n1 is null, then have the condition return true. Otherwise find position where new node fits between existing
-    return (n1 == NULL ? true : in->weight > n1->weight) && in->weight < n2->weight;
+    if(n1 == NULL){
+        return in->weight > n2->weight;
+    } else {
+        return in->weight <= n1->weight && in->weight >= n2->weight;
+    }
 }
 
 void Robot::navUpdate(LinkedList<Event> *events){
@@ -209,13 +212,54 @@ void Robot::navUpdate(LinkedList<Event> *events){
     todo.forEach([](Graph::DijkstraNode *n, int i){
         printf("%d:\t%d=\t%d\n", i, n->node->index, n->weight);
     });
+    printf("\n\n");
 
+    Graph::DijkstraNode *n;
+    LinkedList<Graph::Edge> *adj;
+    while(todo.pop(&n)){
 
-    // while(todo.size() > 0){
+        //Get the adjacency matrix for this node and iterate over it
+        adj = graph->adjacency[n->node->index];
+        for(int i=0; i<adj->size(); i++){
+            Graph::Edge e = (*adj)[i];
+            // Get the index of the edge's end node in the todo list
+            int todoIDX = todo.find([e](Graph::DijkstraNode *o)->bool{
+                return o->node == e.end;
+            });
+            // If it's not in the list, then it has already been visited
+            if(todoIDX == -1) continue;
 
-    // }
+            // Weight is time in seconds, measure by previous plus d*v
+            int weight = n->weight + e.distance*speed; // TODO: Add more cases for different node types
 
+            // If we have a new shorter path, update it
+            if(todo[todoIDX]->weight > weight){
+                // Get the node and remove it
+                printf("Removing %d. NodeIDX: %d\n", todoIDX, e.end->index);
+                Graph::DijkstraNode *n2 = todo.remove(todoIDX);
+                // Update the node
+                n2->prev = n;
+                n2->weight = weight;
+                // Reinsert it at correct position
+                todo.orderedInsert(n2, compareNodes); //Error on 4th run 
 
+            }
+            // If we've reached the target
+            printf("On node: %d\n", e.end->index);
+            if(e.end == goalNode){
+                printf("DONE!");
+                break;
+            }
+        }
+        // Add n to the completed list. This is done first so we can pop off the target node once reached
+        printf("Completed %d", n->node->index);
+        completed.push_front(n); 
+
+        todo.forEach([](Graph::DijkstraNode *n, int i){
+            printf("%d:\t%d=\t%d\n", i, n->node->index, n->weight);
+        });
+        printf("\n\n");
+    }
 }
 
 // bool can_cross(Robot *r, Defenses d){
@@ -246,7 +290,7 @@ Robot *Robot::parseCSV(std::string filename){
     // Read robot line
     fgets (line, BUFF_SIZE, f);
     // Data order: team,can_low,shot_range,centre_shot_time,side_shot_time,centre_angle,side_angle,low_time,defenses,speed
-    int result = sscanf(line, "%d,%d,%d,%d,%d,%d,%d,%d,%lx,%d", 
+    int result = sscanf(line, "%d,%d,%d,%d,%d,%d,%d,%d,%lx,%f", 
         &(bot->team),
         &(bot->canLowbar),
         &(bot->shotRange),

@@ -73,7 +73,7 @@ class LinkedList{
                 return NULL;
             }
             // If the index is closer going the opposite direction, the adjust it
-            if(abs(i)<this->size()/2)
+            if(abs(i)>this->size()/2)
                 i = (abs(i)-this->size()) * (i>0 ? 1 : -1);
             
             Node<T> *n = this->first;
@@ -245,9 +245,9 @@ class LinkedList{
         /**
          * Find a node in the list
          * - fun: Comparator function that will be called for each node. Will return when this returns false
-         * Returns: The index of the target node
+         * Returns: The index of the target node, -1 if not found
          */
-        int find(std::function<bool(T*)> fun){
+        int find(std::function<bool(T)> fun){
             Node<T> *n = this->first;
             for(int i=0; i<this->size(); i++){
                 if(fun(n->data)){
@@ -255,6 +255,7 @@ class LinkedList{
                 }
                 n = n->next;
             }
+            return -1;
         }
 
         /**
@@ -292,12 +293,8 @@ class LinkedList{
                     Node<T> *node = new Node<T>(n->next, n, data);
                     // Update neighbours
                     n->next->previous = node;
-                    n->previous = n;
+                    n->next = node;
 
-                    // Update if first node
-                    if(n == first){
-                        first = node;
-                    }
                     count ++;
                     return i;
                 }
