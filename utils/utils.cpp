@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string>
 #include "utils.h"
 
 
@@ -13,4 +14,12 @@ void print_bin(int num, int length){
         num >> 1;
     }
     printf("\n");
+}
+
+ExceptionBase::ExceptionBase(const std::string msg){
+    this->msg = msg;
+}
+
+const char * ExceptionBase::what () const throw () {
+    return msg.c_str();
 }
