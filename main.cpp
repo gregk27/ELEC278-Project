@@ -1,3 +1,4 @@
+// FLAGS: -ISDL2 -LSDL2 -lmingw32 -lSDL2main -lSDL2
 #include <stdio.h>
 #include <stdbool.h>
 #include <iostream>
@@ -7,24 +8,27 @@
 #include "utils/LinkedList.h"
 #include "utils/Graph.h"
 #include "game.h"
+#include "ui/Interface.h"
 
-int main(){
+int main(int argc, char *argv[]){
 
     printf("Hello World\n");
 
-    Robot *r;
-    r = Robot::parseCSV("./robots.csv");
-    // Event queue to be populated by simulation
-    LinkedList<Event> events;
+    Interface::init();
 
-    Defense *d = new Defense(0,0);
-    for(int i=0;i<8;i++){
-        d->defType = (Defense::Defenses) i;
-        printf("%d\n", r->crossTime(d));
-    }
+    // Robot *r;
+    // r = Robot::parseCSV("./robots.csv");
+    // // Event queue to be populated by simulation
+    // LinkedList<Event> events;
 
-    Field::print(r->graph, false);
-    Field::toGraphML(r->graph, "out.graphml");
+    // Defense *d = new Defense(0,0);
+    // for(int i=0;i<8;i++){
+    //     d->defType = (Defense::Defenses) i;
+    //     printf("%d\n", r->crossTime(d));
+    // }
+
+    // Field::print(r->graph, false);
+    // Field::toGraphML(r->graph, "out.graphml");
 
     // // print_bin(r.defenses, 16);
 
