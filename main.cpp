@@ -8,6 +8,7 @@
 #include "field/field.h"
 #include "utils/LinkedList.h"
 #include "utils/Graph.h"
+#include "SDL_GFX/SDL_gfxPrimitives.h"
 #include "game.h"
 #include "ui/Interface.h"
 
