@@ -1,6 +1,7 @@
 #include <string>
 #include <stdbool.h>
 #include "interface.h"
+#include "../SDL_GFX/SDL_gfxPrimitives.h"
 #include "../SDL2/SDL.h"
 #include "../SDL2/SDL_render.h"
 #include "../SDL2/SDL_rect.h"
