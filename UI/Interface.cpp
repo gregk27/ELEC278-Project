@@ -20,9 +20,14 @@ void drawGraph(Graph *g){
     r.h=20;
     r.w=20;
 
-    SDL_SetRenderDrawColor(fieldRenderer, 255,255,255,SDL_ALPHA_OPAQUE);
+    SDL_SetRenderDrawColor(fieldRenderer, 0,0,0,SDL_ALPHA_OPAQUE);
     g->adjacency.forEach([g](LinkedList<Graph::Edge>* l, int i){
         l->forEach([i,l,g](Graph::Edge e, int j){
+            if(e.end->type == Fieldpoint::Type::SHOTNODE || g->nodes[i]->type == Fieldpoint::Type::SHOTNODE){
+                SDL_SetRenderDrawColor(fieldRenderer, 185, 115, 255, SDL_ALPHA_OPAQUE);
+            } else {
+                SDL_SetRenderDrawColor(fieldRenderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
+            }
             SDL_RenderDrawLine(fieldRenderer, g->nodes[i]->x*2, g->nodes[i]->y*2, e.end->x*2, e.end->y*2);
         });
     });
@@ -41,6 +46,9 @@ void drawGraph(Graph *g){
             default:
                 SDL_SetRenderDrawColor(fieldRenderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
                 break;
+        }
+        if(p->type == Fieldpoint::Type::SHOTNODE){
+            SDL_SetRenderDrawColor(fieldRenderer, 185, 115, 255, SDL_ALPHA_OPAQUE);
         }
         SDL_RenderFillRect(fieldRenderer,&r);
     });
@@ -83,7 +91,7 @@ void Interface::init(){
                         running = false;
             }
         }
-
+        SDL_SetRenderDrawColor(fieldRenderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
         SDL_RenderClear(fieldRenderer);
         SDL_RenderCopy(fieldRenderer, fieldImage, NULL, &dest);
         if(activeGraph != NULL){
