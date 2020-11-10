@@ -17,8 +17,8 @@ int main(int argc, char *argv[]){
 
     std::thread renderThread(Interface::init);
 
-    // Robot *r;
-    // r = Robot::parseCSV("./robots.csv");
+    Robot *r;
+    r = Robot::parseCSV("./robots.csv");
     // // Event queue to be populated by simulation
     // LinkedList<Event> events;
 
@@ -29,7 +29,9 @@ int main(int argc, char *argv[]){
     // }
 
     // Field::print(r->graph, false);
-    // Field::toGraphML(r->graph, "out.graphml");
+    Field::toGraphML(r->graph, "out.graphml");
+    Interface::setGraph(r->graph);
+    // Interface::drawGraph(r->graph);
 
     // // print_bin(r.defenses, 16);
 
