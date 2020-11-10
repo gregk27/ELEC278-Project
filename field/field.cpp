@@ -249,6 +249,7 @@ namespace Field {
             // Add edges for red courtyard nodes
             g->addEdge(&redCourtyard[0], &redTower);
             g->addEdge(&redCourtyard[0], &redDefenses[0]);
+            g->addEdge(&redCourtyard[0], &redDefenses[1]);
             g->addEdge(&redCourtyard[0], &redCourtyard[1]);
             g->addEdge(&redCourtyard[0], &redCourtyard[2]);
             g->addEdge(&redCourtyard[1], &redDefenses[0]);
@@ -291,6 +292,7 @@ namespace Field {
             // Add edges for blue courtyard nodes
             g->addEdge(&blueCourtyard[0], &blueTower);
             g->addEdge(&blueCourtyard[0], &blueDefenses[0]);
+            g->addEdge(&blueCourtyard[0], &blueDefenses[1]);
             g->addEdge(&blueCourtyard[0], &blueCourtyard[1]);
             g->addEdge(&blueCourtyard[0], &blueCourtyard[2]);
             g->addEdge(&blueCourtyard[1], &blueDefenses[0]);
