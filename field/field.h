@@ -13,7 +13,7 @@
 
 #define TOWER_OFFSET 12 // Edge of 2ft tower is on centerline
 
-#define DEFENSE_EDGE_OFFSET 192 // Distance from the wall to the edge of the defense
+#define DEFENSE_EDGE_OFFSET 202 // Distance from the wall to the edge of the defense, +10 to better line up on GUI
 #define DEFENSE_WIDTH 54
 #define DEFENSE_LENGTH 24
 
