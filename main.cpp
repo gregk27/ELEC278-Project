@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <iostream>
+#include <thread>
 #include "robot.h"
 // #include "field/Fieldpoint.h"
 #include "field/field.h"
@@ -14,7 +15,7 @@ int main(int argc, char *argv[]){
 
     printf("Hello World\n");
 
-    Interface::init();
+    std::thread renderThread(Interface::init);
 
     // Robot *r;
     // r = Robot::parseCSV("./robots.csv");
@@ -40,5 +41,7 @@ int main(int argc, char *argv[]){
     // print_field(true);
 
     // std::cout << "/* message */" << std::endl;
+    
+    renderThread.join();
     return 0;
 }
