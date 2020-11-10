@@ -16,11 +16,11 @@ int main(int argc, char *argv[]){
 
     printf("Hello World\n");
 
-    std::thread renderThread(Interface::init);
+    // std::thread renderThread(Interface::init);
 
     Robot *r;
     r = Robot::parseCSV("./robots.csv");
-    r->location = &Field::redDefenses[0];
+    r->location = &Field::redPassage[0];
     // Event queue to be populated by simulation
     LinkedList<Event> events;
 
@@ -35,8 +35,11 @@ int main(int argc, char *argv[]){
     Interface::setGraph(r->graph);
     // Interface::drawGraph(r->graph);
 
-
+    while(r->location != &Field::redTower){
+        r->navUpdate(&events);
+    }
     r->navUpdate(&events);
+
 
     events.forEach([](Event e, int i){
         std::string out = e.toString(); 
@@ -52,6 +55,6 @@ int main(int argc, char *argv[]){
 
     // std::cout << "/* message */" << std::endl;
     
-    renderThread.join();
+    // renderThread.join();
     return 0;
 }

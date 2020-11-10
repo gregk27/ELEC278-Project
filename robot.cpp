@@ -182,6 +182,10 @@ Event Robot::getEvent(){
             e.type = Event::Type::CROSS;
             e.points = ((Defense *) location)->value;
             break;
+        default:
+            e.type = Event::Type::PASSTHROUGH;
+            e.points = 0;
+            break;
     }
     return e;
 }
@@ -216,7 +220,8 @@ void Robot::navUpdate(LinkedList<Event> *events){
 
     Graph::DijkstraNode *n;
     LinkedList<Graph::Edge> *adj;
-    while(todo.pop(&n)){
+    bool done = false;
+    while(todo.pop(&n) && !done){
 
         //Get the adjacency matrix for this node and iterate over it
         adj = graph->adjacency[n->node->index];
@@ -230,7 +235,7 @@ void Robot::navUpdate(LinkedList<Event> *events){
             if(todoIDX == -1) continue;
 
             // Weight is time in seconds, measure by previous plus d*v
-            int weight = n->weight + e.distance*speed; // TODO: Add more cases for different node types
+            int weight = n->weight + e.distance/speed; // TODO: Add more cases for different node types
 
             // If we have a new shorter path, update it
             if(todo[todoIDX]->weight > weight){
@@ -248,6 +253,7 @@ void Robot::navUpdate(LinkedList<Event> *events){
             printf("On node: %d\n", e.end->index);
             if(e.end == goalNode){
                 printf("DONE!");
+                done=true;
                 break;
             }
         }
@@ -260,6 +266,14 @@ void Robot::navUpdate(LinkedList<Event> *events){
         });
         printf("\n\n");
     }
+    // Cycle back to find next node
+    while(n->prev->node!=location){
+        n = n->prev;
+    }
+    // Move the robot to the next node
+    location = n->node;
+    // Update the wake time
+    wakeTime += n->weight;
 }
 
 // bool can_cross(Robot *r, Defenses d){

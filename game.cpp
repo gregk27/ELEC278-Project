@@ -5,7 +5,7 @@
 
 std::string Event::toString(){
     std::stringstream s;
-    s << r->team << "@" << time << ":\t";
+    s << r->team << "\t@" << time << "\t#" << location->index << ":\t";
     switch(type){
         case Type::SCORE_LOW:
             s << "Score ball in low goal for " << points << " points";
@@ -14,7 +14,7 @@ std::string Event::toString(){
             s << "Score ball in high goal for " << points << " points";
             break;
         case Type::CROSS:
-            s << "Cross defense for  " << points << "points";
+            s << "Cross defense for  " << points << " points";
             break;
         case Type::INTAKE:
             s << "Intake ball";
