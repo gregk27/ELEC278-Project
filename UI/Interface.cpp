@@ -3,8 +3,6 @@
 #include "interface.h"
 #include "../SDL2/SDL.h"
 #include "../SDL2/SDL_render.h"
-#include "../SDL_GFX/SDL_gfxPrimitives.h"
-#include "../SDL_GFX/SDL_gfxBlitFunc.h"
 #include "../SDL2/SDL_rect.h"
 #include "../field/field.h"
 #include "../utils/Graph.h"
@@ -17,31 +15,22 @@ SDL_Renderer *fieldRenderer;
 SDL_Texture *fieldImage;
 Graph *activeGraph;
 
-SDL_Surface *generateGraph(Graph *g){
+void drawGraph(Graph *g){
     SDL_Rect r;
-
-    SDL_Surface *surf = SDL_CreateRGBSurface(0, 650*2, 320*2, 32, 0xff000000, 0x00ff0000, 0x0000ff00, 0x000000ff);
-
     r.h=20;
     r.w=20;
 
-    SDL_SetRenderDrawColor(fieldRenderer, 0,0,0,SDL_ALPHA_OPAQUE);
-    g->adjacency.forEach([&surf,g](LinkedList<Graph::Edge>* l, int i){
-        l->forEach([&surf,i,l,g](Graph::Edge e, int j){
-            // If it's a going to a shot node, set the colour then revert
-            if(e.end->type == Fieldpoint::Type::SHOTNODE){
-                lineColor(surf, g->nodes[i]->x*2, g->nodes[i]->y*2, e.end->x*2, e.end->y*2, 0xFF00FFFF);
-            } else { // Otherwise just draw the white line
-                lineColor(surf, g->nodes[i]->x*2, g->nodes[i]->y*2, e.end->x*2, e.end->y*2, 0xFFFFFFFF);
-            }
+    SDL_SetRenderDrawColor(fieldRenderer, 255,255,255,SDL_ALPHA_OPAQUE);
+    g->adjacency.forEach([g](LinkedList<Graph::Edge>* l, int i){
+        l->forEach([i,l,g](Graph::Edge e, int j){
+            SDL_RenderDrawLine(fieldRenderer, g->nodes[i]->x*2, g->nodes[i]->y*2, e.end->x*2, e.end->y*2);
         });
     });
 
-    g->nodes.forEach([&surf,&r](Fieldpoint *p, int i){
+    g->nodes.forEach([&r](Fieldpoint *p, int i){
         // Set x and y, doubled because canavas is scaled up, subtract 10 to centre
         r.x = p->x*2-10;
         r.y = p->y*2-10;
-        // Set the node colour based on owning alliance
         switch (p->alliance){
             case Alliance::RED:
                 SDL_SetRenderDrawColor(fieldRenderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
@@ -53,14 +42,8 @@ SDL_Surface *generateGraph(Graph *g){
                 SDL_SetRenderDrawColor(fieldRenderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
                 break;
         }
-        // If it's a shot node set the colour
-        if(p->type == Fieldpoint::Type::SHOTNODE){
-            SDL_SetRenderDrawColor(fieldRenderer, 255, 0, 255, SDL_ALPHA_OPAQUE);
-        }
         SDL_RenderFillRect(fieldRenderer,&r);
     });
-
-    return surf;
 }
 
 void Interface::init(){
@@ -104,7 +87,7 @@ void Interface::init(){
         SDL_RenderClear(fieldRenderer);
         SDL_RenderCopy(fieldRenderer, fieldImage, NULL, &dest);
         if(activeGraph != NULL){
-            SDL_RenderCopy(fieldRenderer, SDL_CreateTextureFromSurface(fieldRenderer, generateGraph(activeGraph)), NULL, &dest);
+            drawGraph(activeGraph);
         }
         SDL_RenderPresent(fieldRenderer);
     }
