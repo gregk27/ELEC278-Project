@@ -302,6 +302,39 @@ class LinkedList{
             }
             return 0;
         }
+
+        class Iterator {
+            public: 
+                Node<T> *current;
+                
+                Iterator(Node<T> *start){
+                    this->current = start;
+                }
+
+                bool operator== (const Iterator& other){
+                    return current == other.current;   
+                }
+
+                bool operator!= (const Iterator& other){
+                    return current != other.current;   
+                }
+
+                const Iterator& operator++ () {
+                    current = current->next;
+                    return *this;
+                }
+
+                const T operator* (){
+                    return current->data;
+                }
+        };
+
+        Iterator begin(){
+            return Iterator(first);
+        }
+        Iterator end(){
+            return Iterator(getNode(-1));
+        }
     
 };
 
