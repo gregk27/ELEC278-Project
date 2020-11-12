@@ -16,7 +16,7 @@ int main(int argc, char *argv[]){
 
     printf("Hello World\n");
 
-    // std::thread renderThread(Interface::init);
+    std::thread renderThread(Interface::init);
 
     Robot *r;
     r = Robot::parseCSV("./robots.csv");
@@ -40,11 +40,10 @@ int main(int argc, char *argv[]){
     }
     r->navUpdate(&events);
 
-
-    events.forEach([](Event e, int i){
-        std::string out = e.toString(); 
+    for(auto i :events){
+        std::string out = i.data.toString(); 
         printf(out.c_str());
-    });
+    }
 
     // // printf("%d, %d, %d, %d\n",
     // // r.defenses,
@@ -55,6 +54,6 @@ int main(int argc, char *argv[]){
 
     // std::cout << "/* message */" << std::endl;
     
-    // renderThread.join();
+    renderThread.join();
     return 0;
 }

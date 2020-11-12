@@ -130,9 +130,9 @@ void Robot::initGraph(){
     // Connect tower and shotpoints to goal node with 0 distance
     graph->addNode(goalNode);
     graph->addEdge(goalNode, &Field::redTower, 0);
-    shotpoints.forEach([this](Shotpoint *s, int i){
-        this->graph->addEdge(goalNode, s, 0);
-    });
+    for(auto i : shotpoints) {
+        this->graph->addEdge(goalNode, i.data, 0);
+    }
 
     graph->printAdj();
 }
@@ -206,16 +206,16 @@ void Robot::navUpdate(LinkedList<Event> *events){
     LinkedList<Graph::DijkstraNode*> completed;
 
     // Initialise the TODO array with inifinty
-    graph->nodes.forEach([&todo,this](Fieldpoint *f, int i){
+    for(auto i : graph->nodes){
         Graph::DijkstraNode *n = new Graph::DijkstraNode();
-        n->node = f;
+        n->node = i.data;
         n->prev = NULL;
-        n->weight = (f == location ? 0 : INT_MAX);
+        n->weight = (i.data == location ? 0 : INT_MAX);
         todo.orderedInsert(n, compareNodes);
-    });
-    todo.forEach([](Graph::DijkstraNode *n, int i){
-        printf("%d:\t%d=\t%d\n", i, n->node->index, n->weight);
-    });
+    }
+    for(auto i : todo) {
+        printf("%d:\t%d=\t%d\n", i.index, i.data->node->index, i.data->weight);
+    }
     printf("\n\n");
 
     Graph::DijkstraNode *n;
@@ -261,9 +261,9 @@ void Robot::navUpdate(LinkedList<Event> *events){
         printf("Completed %d", n->node->index);
         completed.push_front(n); 
 
-        todo.forEach([](Graph::DijkstraNode *n, int i){
-            printf("%d:\t%d=\t%d\n", i, n->node->index, n->weight);
-        });
+        for(auto i : todo) {
+            printf("%d:\t%d=\t%d\n", i.index, i.data->node->index, i.data->weight);
+        }
         printf("\n\n");
     }
     // Cycle back to find next node
