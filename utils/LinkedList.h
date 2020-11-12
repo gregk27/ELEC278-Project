@@ -303,51 +303,95 @@ class LinkedList{
             return 0;
         }
 
+        // Iterator class used by for loops
         class Iterator {
             public: 
-                struct listItem {
+                /**
+                 * Struct containing information for interated list item
+                 *  - data: The item's data
+                 *  - index:The item's index
+                 *  - node: Pointer to the node containing the item
+                 */
+                struct ListItem {
+                    // The item's data
                     T data;
+                    // The item's index
                     int index;
+                    // Pointer to the node containing the item
                     Node<T> *node;
                 };
                 
-
+                // Current node
                 Node<T> *current;
+                // Index of the current node
                 int idx;
                 
+                /**
+                 * Create a new iterator
+                 * - start: Poitner to the starting node
+                 * - idx:   Index of the starting node
+                 */
                 Iterator(Node<T> *start, int idx){
                     this->current = start;
                     this->idx = idx;
                 }
 
+                /**
+                 * Check if two Iterators are the same
+                 */
                 bool operator== (const Iterator& other){
                     return current == other.current && idx == other.idx;   
                 }
 
+                /**
+                 * Check if two Iterators are different
+                 */
                 bool operator!= (const Iterator& other){
                     return current != other.current || idx != other.idx;   
                 }
 
+                /**
+                 * Increment the iterator by one step
+                 * Will go to next node in list and increment idx
+                 */
                 const Iterator& operator++ () {
                     current = current->next;
                     idx ++;
                     return *this;
                 }
 
-                const listItem operator* (){
-                    return listItem{
-                        .data=current->data,
-                        .index=idx,
-                        .node=current,
-                    };
+                /**
+                 * Get the current item
+                 * Returns a ListItem with values
+                 */
+                const ListItem operator* (){
+                    ListItem l;
+                    if(current != NULL){
+                        l.data = current->data;
+                    }
+                    l.index=idx;
+                    l.node=current;
+                    return l;
                 }
         };
 
+        /**
+         * Get the iterator representing the beginning of the list
+         * Returns: Iterator with first node and index of 0.
+         */
         Iterator begin(){
             return Iterator(first, 0);
         }
+
+        /**
+         * Get the iterator representing the end of the list
+         * Returns: Iterator with last node and index of (size()-1)
+         */
         Iterator end(){
-            return Iterator(getNode(-1), count-1);
+            // For emtpy array, return same as initial
+            if(size() == 0) return begin();
+            // For other cases return first item, but with wraparound index
+            return Iterator(first, size());
         }
     
 };
