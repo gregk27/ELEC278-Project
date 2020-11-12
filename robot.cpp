@@ -225,8 +225,8 @@ void Robot::navUpdate(LinkedList<Event> *events){
 
         //Get the adjacency matrix for this node and iterate over it
         adj = graph->adjacency[n->node->index];
-        for(int i=0; i<adj->size(); i++){
-            Graph::Edge e = (*adj)[i];
+        for(auto i : *adj){
+            Graph::Edge e = i.data;
             // Get the index of the edge's end node in the todo list
             int todoIDX = todo.find([e](Graph::DijkstraNode *o)->bool{
                 return o->node == e.end;
