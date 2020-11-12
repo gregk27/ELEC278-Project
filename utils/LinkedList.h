@@ -305,35 +305,49 @@ class LinkedList{
 
         class Iterator {
             public: 
-                Node<T> *current;
+                struct listItem {
+                    T data;
+                    int index;
+                    Node<T> *node;
+                };
                 
-                Iterator(Node<T> *start){
+
+                Node<T> *current;
+                int idx;
+                
+                Iterator(Node<T> *start, int idx){
                     this->current = start;
+                    this->idx = idx;
                 }
 
                 bool operator== (const Iterator& other){
-                    return current == other.current;   
+                    return current == other.current && idx == other.idx;   
                 }
 
                 bool operator!= (const Iterator& other){
-                    return current != other.current;   
+                    return current != other.current || idx != other.idx;   
                 }
 
                 const Iterator& operator++ () {
                     current = current->next;
+                    idx ++;
                     return *this;
                 }
 
-                const T operator* (){
-                    return current->data;
+                const listItem operator* (){
+                    return listItem{
+                        .data=current->data,
+                        .index=idx,
+                        .node=current,
+                    };
                 }
         };
 
         Iterator begin(){
-            return Iterator(first);
+            return Iterator(first, 0);
         }
         Iterator end(){
-            return Iterator(getNode(-1));
+            return Iterator(getNode(-1), count-1);
         }
     
 };
