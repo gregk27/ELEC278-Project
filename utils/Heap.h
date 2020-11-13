@@ -2,6 +2,7 @@
 #define HEAP_H
 #include <vector>
 #include <functional>
+#include <string>
 
 
 template <class T>
@@ -22,20 +23,25 @@ class Heap{
     public:
         std::vector<T> data;
         std::function<bool(T, T)> comapre;
+        std::function<const char*(T)> toString;
 
-        Heap(int size, std::function<bool(T, T)> comapre){
+        Heap<T>(std::function<bool(T, T)> comapre, std::function<const char*(T)> toString){
             this->comapre = comapre;
+            this->toString = toString;
         }
 
         void push(T d){
+            printf("Pushing %s\n", toString(d));
             int idx = data.size();
-            data.resize(idx+1);
+            data.push_back(d);
             int parent;
             while(idx != 0){
                 parent = getParent(idx);
                 // If it's the right place, insert and exit
                 if(!comapre(d, data[parent])){
                     data[idx] = d;
+                    printTree(0);
+                    printf("\n");
                     return;
                 }
                 // Otherwise copy value down and go up
@@ -44,16 +50,20 @@ class Heap{
             }
             // If we get this far, then only place left is root of heap
             data[idx] = d;
+            printTree(0);
+            printf("\n");
         }
 
-        bool pop(T *out){
+        bool pop(T *out, int idx){
+            printf("Popping %d\n", idx);
             if(data.size() == 0){
+                printTree(0);
+                printf("\n");
                 return false;
             }
             int lastIdx = data.size()-1;
-            int toAdd = data[lastIdx];
-            *out = data[0];
-            int idx = 0;
+            T toAdd = data[lastIdx];
+            *out = data[idx];
             while(idx < lastIdx){
                 int right = getRight(idx);
                 int left = getLeft(idx);
@@ -79,10 +89,51 @@ class Heap{
                 }
             }
 
-            data[idx] = toAdd;
             data.pop_back();
+
+            push(toAdd);
+
+            printTree(0);
+            printf("\n");
             return true;
         }
+
+        T *peek(int i){
+            if(i >= data.size()) return NULL;
+            return &data[i];
+        }
+
+        int indexOf(std::function<bool(T)> isEqual){
+            for(int i=0; i<data.size(); i++){
+                if(isEqual(data[i])){
+                    return i;
+                }
+            }
+            return -1;
+        }
+
+        void printTree (int idx)
+        // Print whole tree. We cannot make it look pretty graphically, so we add some
+        // characters to make it a little easier to understand.  We also don't really
+        // know what the value field is - it is declared to be a void pointer - so we
+        // treat it as though it points to an integer.
+        {
+            // start of this tree
+            printf("{");
+            // values in the root node (assuming value is pointing to an integer)
+            printf("(%s@%d),", toString(data[idx]), idx);
+            
+            // Now show left subtree or {} if there is no left subtree
+            if (getLeft(idx) < data.size())	printTree(getLeft(idx));
+            else							printf("{}");
+            // Marker between left and right subtrees		
+            printf(",");
+            // Now show right subtree or {} if there is no right subtree
+            if (getRight(idx) < data.size())	printTree(getRight(idx));
+            else							printf("{}");
+            // Close display of this tree with closing curly bracket	
+            printf("}");
+        }//printTree()
 };
 
 
