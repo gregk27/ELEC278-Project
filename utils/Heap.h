@@ -39,16 +39,13 @@ class Heap{
                 parent = getParent(idx);
                 // If it's the right place, insert and exit
                 if(!comapre(d, data[parent])){
-                    data[idx] = d;
-                    printTree(0);
-                    printf("\n");
-                    return;
+                    break;
                 }
                 // Otherwise copy value down and go up
                 data[idx] = data[parent];
                 idx = parent;
             }
-            // If we get this far, then only place left is root of heap
+            // Place wherever counter wound up
             data[idx] = d;
             printTree(0);
             printf("\n");
@@ -64,31 +61,45 @@ class Heap{
             int lastIdx = data.size()-1;
             T toAdd = data[lastIdx];
             *out = data[idx];
-            while(idx < lastIdx){
-                int right = getRight(idx);
-                int left = getLeft(idx);
-                // If the right is in bounds, the left will also be
-                if(right < lastIdx){
-                    // Take the oposite of compare
-                    if(!comapre(data[left],data[right])){
-                        data[idx] = data[right];
-                        idx = right;
-                    } else {
-                        data[idx] = data[left];
-                        idx = left;
-                    }
-                } else if(right == lastIdx) { // If there is only left child
-                    if(comapre(data[left],toAdd)){
-                        data[idx] = data[left];
-                        idx = left;
-                    } else {
+            int parent = getParent(idx);
+            // If it's smaller than parent, bubble up
+            if(idx != 0 && comapre(toAdd, data[parent])){
+                while(idx != 0){
+                    parent = getParent(idx);
+                    // If it's the right place, insert and exit
+                    if(!comapre(toAdd, data[parent])){
                         break;
                     }
-                } else if(left >= lastIdx){ // If there are no children, break
-                    break;
+                    // Otherwise copy value down and go up
+                    data[idx] = data[parent];
+                    idx = parent;
+                }
+            } else { // Otherwise bubble down
+                while(idx < lastIdx){
+                    int right = getRight(idx);
+                    int left = getLeft(idx);
+                    // If the right is in bounds, the left will also be
+                    if(right < lastIdx){
+                        // Take the oposite of compare
+                        if(!comapre(data[left],data[right])){
+                            data[idx] = data[right];
+                            idx = right;
+                        } else {
+                            data[idx] = data[left];
+                            idx = left;
+                        }
+                    } else if(right == lastIdx) { // If there is only left child
+                        if(comapre(data[left],toAdd)){
+                            data[idx] = data[left];
+                            idx = left;
+                        } else {
+                            break;
+                        }
+                    } else if(left >= lastIdx){ // If there are no children, break
+                        break;
+                    }
                 }
             }
-
             data.pop_back();
 
             push(toAdd);

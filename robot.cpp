@@ -4,10 +4,12 @@
 #include <stdlib.h>
 #include <math.h>
 #include <limits.h>
+#include <sstream>
 #include "robot.h"
 #include "utils/utils.h"
 #include "field/field.h"
 #include "field/Fieldpoint.h"
+#include "utils/Heap.h"
 
 #define BUFF_SIZE 256
 // Some compilers may be missing M_PI, this serves as a safety check https://stackoverflow.com/questions/14920675/is-there-a-function-in-c-language-to-calculate-degrees-radians
@@ -190,19 +192,16 @@ Event Robot::getEvent(){
     return e;
 }
 
-bool compareNodes(Graph::DijkstraNode *in, Graph::DijkstraNode *n1, Graph::DijkstraNode *n2){
-    if(n1 == NULL){
-        return in->weight > n2->weight;
-    } else {
-        return in->weight <= n1->weight && in->weight >= n2->weight;
-    }
-}
-
 void Robot::navUpdate(LinkedList<Event> *events){
     // Add completed event to queue
     events->push(getEvent());
 
-    LinkedList<Graph::DijkstraNode*> todo;
+    Heap<Graph::DijkstraNode*> todo = Heap<Graph::DijkstraNode*>([](Graph::DijkstraNode *n1, Graph::DijkstraNode *n2)->bool{return n1->weight < n2->weight;}, [](Graph::DijkstraNode *d)->const char*{
+        if(d == NULL) return "N,N";
+        std::stringstream s;
+        s << d->weight << "," << d->node->index;
+        return s.str().c_str();
+    });
     LinkedList<Graph::DijkstraNode*> completed;
 
     // Initialise the TODO array with inifinty
@@ -211,42 +210,44 @@ void Robot::navUpdate(LinkedList<Event> *events){
         n->node = i.data;
         n->prev = NULL;
         n->weight = (i.data == location ? 0 : INT_MAX);
-        todo.orderedInsert(n, compareNodes);
+        todo.push(n);
     }
-    for(auto i : todo) {
-        printf("%d:\t%d=\t%d\n", i.index, i.data->node->index, i.data->weight);
+    int count = 0;
+    for(auto i : todo.data) {
+        printf("%d:\t%d=\t%d\n", count++, i->node->index, i->weight);
     }
+    todo.printTree(0);
     printf("\n\n");
 
     Graph::DijkstraNode *n;
     LinkedList<Graph::Edge> *adj;
     bool done = false;
-    while(todo.pop(&n) && !done){
-
+    while(todo.pop(&n, 0) && !done){  
+        
         //Get the adjacency matrix for this node and iterate over it
         adj = graph->adjacency[n->node->index];
         for(auto i : *adj){
             Graph::Edge e = i.data;
-            // Get the index of the edge's end node in the todo list
-            int todoIDX = todo.find([e](Graph::DijkstraNode *o)->bool{
-                return o->node == e.end;
-            });
+
             // If it's not in the list, then it has already been visited
-            if(todoIDX == -1) continue;
+            int todoIdx = todo.indexOf([e](Graph::DijkstraNode *n)->bool{return e.end == n->node;});
+            if(todoIdx == -1) continue;
 
             // Weight is time in seconds, measure by previous plus d*v
             int weight = n->weight + e.distance/speed; // TODO: Add more cases for different node types
 
             // If we have a new shorter path, update it
-            if(todo[todoIDX]->weight > weight){
+            if((*todo.peek(todoIdx))->weight > weight){
+                Graph::DijkstraNode *n2;
+                todo.pop(&n2, todoIdx);
                 // Get the node and remove it
-                printf("Removing %d. NodeIDX: %d\n", todoIDX, e.end->index);
-                Graph::DijkstraNode *n2 = todo.remove(todoIDX);
+                printf("Removing %d. NodeIDX: %d\n", n2->node->index, e.end->index);
+                
                 // Update the node
                 n2->prev = n;
                 n2->weight = weight;
-                // Reinsert it at correct position
-                todo.orderedInsert(n2, compareNodes); //Error on 4th run 
+                // Reinsert it
+                todo.push(n2); 
 
             }
             // If we've reached the target
@@ -258,12 +259,15 @@ void Robot::navUpdate(LinkedList<Event> *events){
             }
         }
         // Add n to the completed list. This is done first so we can pop off the target node once reached
-        printf("Completed %d", n->node->index);
+        printf("Completed %d\n", n->node->index);
         completed.push_front(n); 
 
-        for(auto i : todo) {
-            printf("%d:\t%d=\t%d\n", i.index, i.data->node->index, i.data->weight);
+        int count = 0;
+        for(auto i : todo.data) {
+            printf("%d:\t%d=\t%d\n", count++, i->node->index, i->weight);
         }
+        printf("\n");
+        todo.printTree(0);
         printf("\n\n");
     }
     // Cycle back to find next node
