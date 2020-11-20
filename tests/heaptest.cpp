@@ -21,10 +21,11 @@ int main(){
     h.push(3);
     h.push(2);
     h.push(1);
-    int i;
-    h.pop(&i, 0);
-    h.pop(&i, 0);
-    h.pop(&i, 0);
+    int t;
+    for(int i = 0; i<100; i++){
+        h.pop(&t, 4);
+        h.push(i+t);
+    }
 
 
 }

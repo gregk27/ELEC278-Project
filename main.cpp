@@ -20,7 +20,7 @@ int main(int argc, char *argv[]){
 
     Robot *r;
     r = Robot::parseCSV("./robots.csv");
-    r->location = &Field::blueTower;
+    r->location = &Field::redPassage[0];
     // Event queue to be populated by simulation
     LinkedList<Event> events;
 

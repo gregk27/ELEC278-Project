@@ -30,11 +30,9 @@ class Heap{
             this->toString = toString;
         }
 
-        void push(T d){
-            printf("Pushing %s\n", toString(d));
-            int idx = data.size();
-            data.push_back(d);
+        void reHeapify(int idx){
             int parent;
+            T d = data[idx];
             while(idx != 0){
                 parent = getParent(idx);
                 // If it's the right place, insert and exit
@@ -49,6 +47,13 @@ class Heap{
             data[idx] = d;
             printTree(0);
             printf("\n");
+        }
+
+        void push(T d){
+            printf("Pushing %s\n", toString(d));
+            int idx = data.size();
+            data.push_back(d);
+            reHeapify(idx);
         }
 
         bool pop(T *out, int idx){
@@ -102,7 +107,8 @@ class Heap{
             }
             data.pop_back();
 
-            push(toAdd);
+            data[idx] = toAdd;
+            reHeapify(idx);
 
             printTree(0);
             printf("\n");
