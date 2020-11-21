@@ -3,10 +3,13 @@
 #include <cstring>
 #include <stdlib.h>
 #include <math.h>
+#include <limits.h>
+#include <sstream>
 #include "robot.h"
 #include "utils/utils.h"
 #include "field/field.h"
 #include "field/Fieldpoint.h"
+#include "utils/Heap.h"
 
 #define BUFF_SIZE 256
 // Some compilers may be missing M_PI, this serves as a safety check https://stackoverflow.com/questions/14920675/is-there-a-function-in-c-language-to-calculate-degrees-radians
@@ -124,6 +127,15 @@ void Robot::initGraph(){
             throw(invalid_parameter_exception("Shot configuration warnings not accepted"));
         }
     }
+
+    goalNode = new Fieldpoint(Field::redTower.x+10, Field::redTower.y, Alliance::RED);
+    // Connect tower and shotpoints to goal node with 0 distance
+    graph->addNode(goalNode);
+    graph->addEdge(goalNode, &Field::redTower, 0);
+    for(auto i : shotpoints) {
+        this->graph->addEdge(goalNode, i.data, 0);
+    }
+
     graph->printAdj();
 }
 
@@ -154,6 +166,104 @@ int Robot::crossTime(Defense *d){
     return (defenses >> (d->defType*4)) & 0xF;
 }
 
+Event Robot::getEvent(){
+    Event e;
+    e.location = location;
+    e.r = this;
+    e.time = wakeTime;
+    switch(location->type){
+        case Fieldpoint::Type::TOWER:
+            e.type = Event::Type::SCORE_LOW;
+            e.points = LOW_POINTS;
+            break;
+        case Fieldpoint::Type::SHOTNODE:
+            e.type = Event::Type::SCORE_HIGH;
+            e.points = HIGH_POINTS;
+            break;
+        case Fieldpoint::Type::DEFENSE:
+            e.type = Event::Type::CROSS;
+            e.points = ((Defense *) location)->value;
+            break;
+        default:
+            e.type = Event::Type::PASSTHROUGH;
+            e.points = 0;
+            break;
+    }
+    return e;
+}
+
+void Robot::navUpdate(LinkedList<Event> *events){
+    // Add completed event to queue
+    events->push(getEvent());
+
+    Heap<Graph::DijkstraNode*> todo = Heap<Graph::DijkstraNode*>([](Graph::DijkstraNode *n1, Graph::DijkstraNode *n2)->bool{return n1->weight < n2->weight;}, [](Graph::DijkstraNode *d)->const char*{
+        if(d == NULL) return "N,N";
+        std::stringstream s;
+        s << d->weight << "," << d->node->index;
+        return s.str().c_str();
+    });
+    LinkedList<Graph::DijkstraNode*> completed;
+
+    // Initialise the TODO array with inifinty
+    for(auto i : graph->nodes){
+        Graph::DijkstraNode *n = new Graph::DijkstraNode();
+        n->node = i.data;
+        n->prev = NULL;
+        n->weight = (i.data == location ? 0 : INT_MAX);
+        todo.push(n);
+    }
+
+    Graph::DijkstraNode *n;
+    LinkedList<Graph::Edge> *adj;
+    bool done = false;
+    while(todo.pop(&n, 0) && !done){  
+        
+        //Get the adjacency matrix for this node and iterate over it
+        adj = graph->adjacency[n->node->index];
+        for(auto i : *adj){
+            Graph::Edge e = i.data;
+
+            // If it's not in the list, then it has already been visited
+            int todoIdx = todo.indexOf([e](Graph::DijkstraNode *n)->bool{return e.end == n->node;});
+            if(todoIdx == -1) continue;
+
+            // Weight is time in seconds, measure by previous plus d*v
+            int weight = n->weight + e.distance/speed; // TODO: Add more cases for different node types
+
+            // If we have a new shorter path, update it
+            if((*todo.peek(todoIdx))->weight > weight){
+                Graph::DijkstraNode *n2;
+                // Get the node and remove it
+                todo.pop(&n2, todoIdx);
+                
+                // Update the node
+                n2->prev = n;
+                n2->weight = weight;
+                // Reinsert it
+                todo.push(n2); 
+
+            }
+            // If we've reached the target
+            if(e.end == goalNode){
+                printf("DONE!");
+                done=true;
+                break;
+            }
+        }
+        // Add n to the completed list. This is done first so we can pop off the target node once reached
+        printf("Completed %d\n", n->node->index);
+        completed.push_front(n); 
+    }
+    // Cycle back to find next node
+    while(n->prev->node!=location){
+        n = n->prev;
+    }
+    // Move the robot to the next node
+    location = n->node;
+    // Update the wake time
+    wakeTime += n->weight;
+}
+
 // bool can_cross(Robot *r, Defenses d){
 //     // Mask the defenses to check
 //     return (r->defenses >> (int)d*4 & 0xF) != 0;
@@ -182,7 +292,7 @@ Robot *Robot::parseCSV(std::string filename){
     // Read robot line
     fgets (line, BUFF_SIZE, f);
     // Data order: team,can_low,shot_range,centre_shot_time,side_shot_time,centre_angle,side_angle,low_time,defenses,speed
-    int result = sscanf(line, "%d,%d,%d,%d,%d,%d,%d,%d,%lx,%d", 
+    int result = sscanf(line, "%d,%d,%d,%d,%d,%d,%d,%d,%lx,%f", 
         &(bot->team),
         &(bot->canLowbar),
         &(bot->shotRange),

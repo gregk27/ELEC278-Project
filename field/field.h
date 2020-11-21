@@ -45,6 +45,8 @@ namespace Field {
     extern Fieldpoint bluePassage[PASSAGE_COUNT];
     extern Fieldpoint blueCourtyard[COURTYARD_COUNT];
 
+    extern Fieldpoint centreBalls[CENTRE_BALL_COUNT];
+
     Graph *initGraph();
     
     /**

@@ -21,18 +21,21 @@ void drawGraph(Graph *g){
     r.w=20;
 
     SDL_SetRenderDrawColor(fieldRenderer, 0,0,0,SDL_ALPHA_OPAQUE);
-    g->adjacency.forEach([g](LinkedList<Graph::Edge>* l, int i){
-        l->forEach([i,l,g](Graph::Edge e, int j){
-            if(e.end->type == Fieldpoint::Type::SHOTNODE || g->nodes[i]->type == Fieldpoint::Type::SHOTNODE){
+    for(auto i : g->adjacency){
+        LinkedList<Graph::Edge> *l = i.data;
+        for(auto j : *l) {
+            Graph::Edge e = j.data;
+            if(e.end->type == Fieldpoint::Type::SHOTNODE || g->nodes[i.index]->type == Fieldpoint::Type::SHOTNODE){
                 SDL_SetRenderDrawColor(fieldRenderer, 185, 115, 255, SDL_ALPHA_OPAQUE);
             } else {
                 SDL_SetRenderDrawColor(fieldRenderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
             }
-            SDL_RenderDrawLine(fieldRenderer, g->nodes[i]->x*2, g->nodes[i]->y*2, e.end->x*2, e.end->y*2);
-        });
-    });
+            SDL_RenderDrawLine(fieldRenderer, g->nodes[i.index]->x*2, g->nodes[i.index]->y*2, e.end->x*2, e.end->y*2);
+        }
+    }
 
-    g->nodes.forEach([&r](Fieldpoint *p, int i){
+    for(auto i : g->nodes){
+        Fieldpoint *p = i.data;
         // Set x and y, doubled because canavas is scaled up, subtract 10 to centre
         r.x = p->x*2-10;
         r.y = p->y*2-10;
@@ -51,7 +54,7 @@ void drawGraph(Graph *g){
             SDL_SetRenderDrawColor(fieldRenderer, 185, 115, 255, SDL_ALPHA_OPAQUE);
         }
         SDL_RenderFillRect(fieldRenderer,&r);
-    });
+    }
 }
 
 void Interface::init(){

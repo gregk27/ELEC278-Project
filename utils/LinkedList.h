@@ -73,7 +73,7 @@ class LinkedList{
                 return NULL;
             }
             // If the index is closer going the opposite direction, the adjust it
-            if(abs(i)<this->size()/2)
+            if(abs(i)>this->size()/2)
                 i = (abs(i)-this->size()) * (i>0 ? 1 : -1);
             
             Node<T> *n = this->first;
@@ -180,8 +180,9 @@ class LinkedList{
         /**
          * Remove an item from the list
          *  - i: The index of the item
+         * Returns: The removed value
          */
-        void remove(int i){
+        T remove(int i){
             // Get the node to delete
             Node<T> *n = this->getNode(i);
             // If there is only one node
@@ -198,8 +199,12 @@ class LinkedList{
             }
             // Reduce count
             count --;
+            // Get the data to return
+            T returnVal = n->data;
             // Delete the node
             delete n;
+
+            return returnVal;
         }
 
         /**
@@ -235,6 +240,158 @@ class LinkedList{
                 fun(n, i);
                 n = n->next;
             }
+        }
+
+        /**
+         * Find a node in the list
+         * - fun: Comparator function that will be called for each node. Will return when this returns false
+         * Returns: The index of the target node, -1 if not found
+         */
+        int find(std::function<bool(T)> fun){
+            Node<T> *n = this->first;
+            for(int i=0; i<this->size(); i++){
+                if(fun(n->data)){
+                    return i;
+                }
+                n = n->next;
+            }
+            return -1;
+        }
+
+        /**
+         * Insert a node into the list at position based on callback
+         *  - node: The node to insert
+         *  - fun:  Callback comparison function, the node will be inserted when this returns true. First arg is new data, second is node before, second arg is node after. If node is end, second arg will be NULL
+         * Returns: The index where the node is inserted
+         */
+        int orderedInsert(T data, std::function<bool(T, T, T)> fun){
+
+            // If the list is empty automatically add to front
+            if(size() == 0){
+                push(data);
+                return 0;
+            }
+
+            Node<T> *n = this->first;
+            // Check for front insert cases
+            if(fun(data, NULL, n->data)){
+                push_front(data);
+                return 0;
+            }
+
+            // Loop through to find correct place
+            for(int i=0; i<this->size(); i++){
+                // If we have reached the end of the list, just push it on the back
+                if(n->next == first){
+                    push(data);
+                    return this->size()-1;
+                }
+
+                // If this is the correct place, run the insert
+                if(fun(data, n->data, n->next->data)){
+                    // Create a node from the data
+                    Node<T> *node = new Node<T>(n->next, n, data);
+                    // Update neighbours
+                    n->next->previous = node;
+                    n->next = node;
+
+                    count ++;
+                    return i;
+                }
+                n = n->next;
+            }
+            return 0;
+        }
+
+        // Iterator class used by for loops
+        class Iterator {
+            public: 
+                /**
+                 * Struct containing information for interated list item
+                 *  - data: The item's data
+                 *  - index:The item's index
+                 *  - node: Pointer to the node containing the item
+                 */
+                struct ListItem {
+                    // The item's data
+                    T data;
+                    // The item's index
+                    int index;
+                    // Pointer to the node containing the item
+                    Node<T> *node;
+                };
+                
+                // Current node
+                Node<T> *current;
+                // Index of the current node
+                int idx;
+                
+                /**
+                 * Create a new iterator
+                 * - start: Poitner to the starting node
+                 * - idx:   Index of the starting node
+                 */
+                Iterator(Node<T> *start, int idx){
+                    this->current = start;
+                    this->idx = idx;
+                }
+
+                /**
+                 * Check if two Iterators are the same
+                 */
+                bool operator== (const Iterator& other){
+                    return current == other.current && idx == other.idx;   
+                }
+
+                /**
+                 * Check if two Iterators are different
+                 */
+                bool operator!= (const Iterator& other){
+                    return current != other.current || idx != other.idx;   
+                }
+
+                /**
+                 * Increment the iterator by one step
+                 * Will go to next node in list and increment idx
+                 */
+                const Iterator& operator++ () {
+                    current = current->next;
+                    idx ++;
+                    return *this;
+                }
+
+                /**
+                 * Get the current item
+                 * Returns a ListItem with values
+                 */
+                const ListItem operator* (){
+                    ListItem l;
+                    if(current != NULL){
+                        l.data = current->data;
+                    }
+                    l.index=idx;
+                    l.node=current;
+                    return l;
+                }
+        };
+
+        /**
+         * Get the iterator representing the beginning of the list
+         * Returns: Iterator with first node and index of 0.
+         */
+        Iterator begin(){
+            return Iterator(first, 0);
+        }
+
+        /**
+         * Get the iterator representing the end of the list
+         * Returns: Iterator with last node and index of (size()-1)
+         */
+        Iterator end(){
+            // For emtpy array, return same as initial
+            if(size() == 0) return begin();
+            // For other cases return first item, but with wraparound index
+            return Iterator(first, size());
         }
     
 };

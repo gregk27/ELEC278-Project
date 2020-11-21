@@ -1,6 +1,7 @@
 // FLAGS: -ISDL2 -LSDL2 -lmingw32 -lSDL2main -lSDL2
 #include <stdio.h>
 #include <stdbool.h>
+#include <string>
 #include <iostream>
 #include <thread>
 #include "robot.h"
@@ -19,8 +20,9 @@ int main(int argc, char *argv[]){
 
     Robot *r;
     r = Robot::parseCSV("./robots.csv");
-    // // Event queue to be populated by simulation
-    // LinkedList<Event> events;
+    r->location = &Field::redPassage[0];
+    // Event queue to be populated by simulation
+    LinkedList<Event> events;
 
     // Defense *d = new Defense(0,0);
     // for(int i=0;i<8;i++){
@@ -33,7 +35,15 @@ int main(int argc, char *argv[]){
     Interface::setGraph(r->graph);
     // Interface::drawGraph(r->graph);
 
-    // // print_bin(r.defenses, 16);
+    while(r->location != &Field::redTower){
+        r->navUpdate(&events);
+    }
+    r->navUpdate(&events);
+
+    for(auto i :events){
+        std::string out = i.data.toString(); 
+        printf(out.c_str());
+    }
 
     // // printf("%d, %d, %d, %d\n",
     // // r.defenses,

@@ -3,12 +3,19 @@
 #include "LinkedList.h"
 #include "../field/Fieldpoint.h"
 
+
 class Graph {
     public: 
         typedef struct {
             Fieldpoint *end;
             int distance;
         } Edge;
+
+        struct DijkstraNode{
+            Fieldpoint *node;
+            DijkstraNode *prev;
+            int weight;
+        };
 
         LinkedList<Fieldpoint *> nodes;
         LinkedList<LinkedList<Edge>*> adjacency;
@@ -18,6 +25,7 @@ class Graph {
         void addNodes(Fieldpoint f[], int i);
         void addNodes(Defense b[], int i);
         void addEdge(Fieldpoint *a, Fieldpoint *b);
+        void addEdge(Fieldpoint *a, Fieldpoint *b, int weight);
         void printAdj();
 };
 

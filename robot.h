@@ -15,6 +15,19 @@ class Robot {
     private:
         void initGraph();
         Shotpoint *getShotZone(int range, int angle);
+        /**
+         * Get the event representing the robot's last action
+         * Returns: Event representing robot's last action
+         */
+        Event getEvent();
+        /**
+         * Apply Dijkstra's algorithm at a node
+         *  - f:      Pointer to the node where the algorithm will be performed
+         *  - target: Pointer to the target node
+         *  - processing: Pointer to a linkedlist storing nodes to process
+         *  - completed:  Pointer to a linkedlist storing completed nodes
+         */
+        void dijkstra(Fieldpoint *f, Fieldpoint *target, LinkedList<Graph::DijkstraNode> *processing, LinkedList<Graph::DijkstraNode> *completed);
     public:
         // Robot's unique ID (0-6)
         byte id;
@@ -79,6 +92,23 @@ class Robot {
         struct invalid_parameter_exception : public ExceptionBase {
             using ExceptionBase::ExceptionBase;
         };
+        
+        // Navigation
+
+        // Fieldpoint with 0 length with all scoring positions, used as target for dijkstra
+        Fieldpoint *goalNode;
+        // Current location on the field
+        Fieldpoint *location;
+        // Time at which the robot will have arrived
+        int wakeTime = 0;
+        // Flag indicating if the robot has a ball, defaults to true
+        bool hasBall = true;
+
+        /**
+         * Have the bot navigate the next leg
+         *  - events: The event queue to log to
+         */
+        void navUpdate(LinkedList<Event> *events);
 };
 
 
