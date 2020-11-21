@@ -22,12 +22,10 @@ class Robot {
         Event getEvent();
         /**
          * Apply Dijkstra's algorithm at a node
-         *  - f:      Pointer to the node where the algorithm will be performed
          *  - target: Pointer to the target node
-         *  - processing: Pointer to a linkedlist storing nodes to process
-         *  - completed:  Pointer to a linkedlist storing completed nodes
+         * Returns: The DijkstraNode at the end of the found path
          */
-        void dijkstra(Fieldpoint *f, Fieldpoint *target, LinkedList<Graph::DijkstraNode> *processing, LinkedList<Graph::DijkstraNode> *completed);
+        Graph::DijkstraNode *getPath(Fieldpoint *target);
     public:
         // Robot's unique ID (0-6)
         byte id;

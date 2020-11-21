@@ -196,6 +196,20 @@ void Robot::navUpdate(LinkedList<Event> *events){
     // Add completed event to queue
     events->push(getEvent());
 
+
+    Graph::DijkstraNode *n = getPath(goalNode);
+
+    // Cycle back to find next node
+    while(n->prev != NULL && n->prev->node!=location){
+        n = n->prev;
+    }
+    // Move the robot to the next node
+    location = n->node;
+    // Update the wake time
+    wakeTime += n->weight;
+}
+
+Graph::DijkstraNode *Robot::getPath(Fieldpoint *target){
     Heap<Graph::DijkstraNode*> todo = Heap<Graph::DijkstraNode*>([](Graph::DijkstraNode *n1, Graph::DijkstraNode *n2)->bool{return n1->weight < n2->weight;}, [](Graph::DijkstraNode *d)->const char*{
         if(d == NULL) return "N,N";
         std::stringstream s;
@@ -244,24 +258,17 @@ void Robot::navUpdate(LinkedList<Event> *events){
 
             }
             // If we've reached the target
-            if(e.end == goalNode){
+            if(e.end == target){
                 printf("DONE!");
                 done=true;
-                break;
+                return n;
             }
         }
         // Add n to the completed list. This is done first so we can pop off the target node once reached
         printf("Completed %d\n", n->node->index);
         completed.push_front(n); 
     }
-    // Cycle back to find next node
-    while(n->prev->node!=location){
-        n = n->prev;
-    }
-    // Move the robot to the next node
-    location = n->node;
-    // Update the wake time
-    wakeTime += n->weight;
+    return NULL;
 }
 
 // bool can_cross(Robot *r, Defenses d){

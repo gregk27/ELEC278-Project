@@ -16,7 +16,7 @@ int main(int argc, char *argv[]){
 
     printf("Hello World\n");
 
-    std::thread renderThread(Interface::init);
+    // std::thread renderThread(Interface::init);
 
     Robot *r;
     r = Robot::parseCSV("./robots.csv");
@@ -54,6 +54,6 @@ int main(int argc, char *argv[]){
 
     // std::cout << "/* message */" << std::endl;
     
-    renderThread.join();
+    // renderThread.join();
     return 0;
 }
