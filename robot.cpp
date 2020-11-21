@@ -212,12 +212,6 @@ void Robot::navUpdate(LinkedList<Event> *events){
         n->weight = (i.data == location ? 0 : INT_MAX);
         todo.push(n);
     }
-    int count = 0;
-    for(auto i : todo.data) {
-        printf("%d:\t%d=\t%d\n", count++, i->node->index, i->weight);
-    }
-    todo.printTree(0);
-    printf("\n\n");
 
     Graph::DijkstraNode *n;
     LinkedList<Graph::Edge> *adj;
@@ -239,9 +233,8 @@ void Robot::navUpdate(LinkedList<Event> *events){
             // If we have a new shorter path, update it
             if((*todo.peek(todoIdx))->weight > weight){
                 Graph::DijkstraNode *n2;
-                todo.pop(&n2, todoIdx);
                 // Get the node and remove it
-                printf("Removing %d. NodeIDX: %d\n", n2->node->index, e.end->index);
+                todo.pop(&n2, todoIdx);
                 
                 // Update the node
                 n2->prev = n;
@@ -251,7 +244,6 @@ void Robot::navUpdate(LinkedList<Event> *events){
 
             }
             // If we've reached the target
-            printf("On node: %d\n", e.end->index);
             if(e.end == goalNode){
                 printf("DONE!");
                 done=true;
@@ -261,14 +253,6 @@ void Robot::navUpdate(LinkedList<Event> *events){
         // Add n to the completed list. This is done first so we can pop off the target node once reached
         printf("Completed %d\n", n->node->index);
         completed.push_front(n); 
-
-        int count = 0;
-        for(auto i : todo.data) {
-            printf("%d:\t%d=\t%d\n", count++, i->node->index, i->weight);
-        }
-        printf("\n");
-        todo.printTree(0);
-        printf("\n\n");
     }
     // Cycle back to find next node
     while(n->prev->node!=location){

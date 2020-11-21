@@ -45,22 +45,16 @@ class Heap{
             }
             // Place wherever counter wound up
             data[idx] = d;
-            printTree(0);
-            printf("\n");
         }
 
         void push(T d){
-            printf("Pushing %s\n", toString(d));
             int idx = data.size();
             data.push_back(d);
             reHeapify(idx);
         }
 
         bool pop(T *out, int idx){
-            printf("Popping %d\n", idx);
             if(data.size() == 0){
-                printTree(0);
-                printf("\n");
                 return false;
             }
             int lastIdx = data.size()-1;
@@ -110,8 +104,6 @@ class Heap{
             data[idx] = toAdd;
             reHeapify(idx);
 
-            printTree(0);
-            printf("\n");
             return true;
         }
 
