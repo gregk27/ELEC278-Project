@@ -235,6 +235,7 @@ Graph::DijkstraNode *Robot::getPath(Fieldpoint *target){
     LinkedList<Graph::DijkstraNode*> completed;
 
     // Initialise the TODO array with inifinty
+    // TODO: Don't add nodes which shouldn't be visited (eg other alliance, uncrossable defense)
     for(auto i : graph->nodes){
         Graph::DijkstraNode *n = new Graph::DijkstraNode();
         n->node = i.data;
@@ -298,6 +299,10 @@ int Robot::getWeight(Graph::Edge e){
 
      // Base weight is time in seconds, measure by previous plus d*v
      int weight = e.distance/speed;
+     // Don't go to nodes which are for the other alliance
+     if(e.end->alliance != alliance && e.end->alliance != Alliance::NEUTRAL){
+         return INT_MAX;
+     }
      if(e.end->type == Fieldpoint::Type::DEFENSE){
          int cTime = crossTime((Defense *) e.end);
          if(cTime != 0){
