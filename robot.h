@@ -27,7 +27,7 @@ class Robot {
          */
         Graph::DijkstraNode *getPath(Fieldpoint *target);
 
-        int getWeight(Graph::Edge e);
+        int getWeight(Graph::DijkstraNode *n, Graph::Edge e);
     public:
         // Robot's unique ID (0-6)
         byte id;

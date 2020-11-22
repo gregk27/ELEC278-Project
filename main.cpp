@@ -31,6 +31,7 @@ int main(int argc, char *argv[]){
 
     Robot *r;
     r = Robot::parseCSV("./robots.csv");
+    r->alliance = Alliance::RED;
     r->intakeNode = &Field::redPassage[0];
     r->location = &Field::centreBalls[0];
     // Event queue to be populated by simulation

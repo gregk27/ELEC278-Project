@@ -258,7 +258,7 @@ Graph::DijkstraNode *Robot::getPath(Fieldpoint *target){
             if(todoIdx == -1) continue;
 
             // Get weight of the edge
-            int edgeWeight = getWeight(e);
+            int edgeWeight = getWeight(n, e);
             int weight = n->weight + edgeWeight;
             if(edgeWeight == INT_MAX){
                 weight = INT_MAX;
@@ -294,13 +294,17 @@ Graph::DijkstraNode *Robot::getPath(Fieldpoint *target){
     return NULL;
 }
 
-int Robot::getWeight(Graph::Edge e){
-    // TODO: Account for restricted nodes and shooting
+int Robot::getWeight(Graph::DijkstraNode *n, Graph::Edge e){
+    // TODO: Account for shooting
 
      // Base weight is time in seconds, measure by previous plus d*v
      int weight = e.distance/speed;
      // Don't go to nodes which are for the other alliance
      if(e.end->alliance != alliance && e.end->alliance != Alliance::NEUTRAL){
+         return INT_MAX;
+     }
+     // Don't pathfind through shotnodes
+     if(n->node->type == Fieldpoint::Type::SHOTNODE && location != n->node){
          return INT_MAX;
      }
      if(e.end->type == Fieldpoint::Type::DEFENSE){
