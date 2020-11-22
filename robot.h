@@ -95,12 +95,16 @@ class Robot {
 
         // Fieldpoint with 0 length with all scoring positions, used as target for dijkstra
         Fieldpoint *goalNode;
+        // Fieldpoint where robot will intake balls
+        Fieldpoint *intakeNode;
         // Current location on the field
         Fieldpoint *location;
         // Time at which the robot will have arrived
         int wakeTime = 0;
         // Flag indicating if the robot has a ball, defaults to true
         bool hasBall = true;
+
+        int cyclesCompleted = 0;
 
         /**
          * Have the bot navigate the next leg

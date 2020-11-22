@@ -20,7 +20,8 @@ int main(int argc, char *argv[]){
 
     Robot *r;
     r = Robot::parseCSV("./robots.csv");
-    r->location = &Field::redPassage[0];
+    r->intakeNode = &Field::redPassage[0];
+    r->location = &Field::centreBalls[0];
     // Event queue to be populated by simulation
     LinkedList<Event> events;
 
@@ -35,7 +36,7 @@ int main(int argc, char *argv[]){
     Interface::setGraph(r->graph);
     // Interface::drawGraph(r->graph);
 
-    while(r->location != &Field::redTower){
+    while(r->cyclesCompleted < 3){
         r->navUpdate(&events);
     }
     r->navUpdate(&events);

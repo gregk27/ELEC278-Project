@@ -189,6 +189,9 @@ Event Robot::getEvent(){
             e.points = 0;
             break;
     }
+    if(e.location == intakeNode){
+        e.type == Event::Type::INTAKE;
+    }
     return e;
 }
 
@@ -196,8 +199,21 @@ void Robot::navUpdate(LinkedList<Event> *events){
     // Add completed event to queue
     events->push(getEvent());
 
+    // If the robot has scored a ball, it now needs to get another
+    if(location->type == Fieldpoint::Type::TOWER || location->type == Fieldpoint::Type::SHOTNODE){
+        hasBall = false;
+        cyclesCompleted ++;
+    } else if(location == intakeNode){
+        hasBall = true;
+    }
 
-    Graph::DijkstraNode *n = getPath(goalNode);
+    Graph::DijkstraNode *n;
+    // If the robot has the ball, go to the tower, otherwise go back to pickup node
+    if(hasBall){
+        n = getPath(goalNode);
+    } else {
+        n = getPath(&Field::redPassage[0]);
+    }
 
     // Cycle back to find next node
     while(n->prev != NULL && n->prev->node!=location){
@@ -229,8 +245,7 @@ Graph::DijkstraNode *Robot::getPath(Fieldpoint *target){
 
     Graph::DijkstraNode *n;
     LinkedList<Graph::Edge> *adj;
-    bool done = false;
-    while(todo.pop(&n, 0) && !done){  
+    while(todo.pop(&n, 0)){  
         
         //Get the adjacency matrix for this node and iterate over it
         adj = graph->adjacency[n->node->index];
@@ -260,8 +275,11 @@ Graph::DijkstraNode *Robot::getPath(Fieldpoint *target){
             // If we've reached the target
             if(e.end == target){
                 printf("DONE!");
-                done=true;
-                return n;
+                Graph::DijkstraNode *returnNode = new Graph::DijkstraNode();
+                returnNode->node = e.end;
+                returnNode->prev = n;
+                returnNode->weight = weight;
+                return returnNode;
             }
         }
         // Add n to the completed list. This is done first so we can pop off the target node once reached
