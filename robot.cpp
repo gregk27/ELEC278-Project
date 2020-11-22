@@ -182,7 +182,7 @@ Event Robot::getEvent(){
             break;
         case Fieldpoint::Type::DEFENSE:
             e.type = Event::Type::CROSS;
-            e.points = ((Defense *) location)->value;
+            e.points = ((Defense *) location)->cross();
             break;
         default:
             e.type = Event::Type::PASSTHROUGH;
@@ -256,8 +256,12 @@ Graph::DijkstraNode *Robot::getPath(Fieldpoint *target){
             int todoIdx = todo.indexOf([e](Graph::DijkstraNode *n)->bool{return e.end == n->node;});
             if(todoIdx == -1) continue;
 
-            // Weight is time in seconds, measure by previous plus d*v
-            int weight = n->weight + e.distance/speed; // TODO: Add more cases for different node types
+            // Get weight of the edge
+            int edgeWeight = getWeight(e);
+            int weight = n->weight + edgeWeight;
+            if(edgeWeight == INT_MAX){
+                weight = INT_MAX;
+            }
 
             // If we have a new shorter path, update it
             if((*todo.peek(todoIdx))->weight > weight){
@@ -274,7 +278,7 @@ Graph::DijkstraNode *Robot::getPath(Fieldpoint *target){
             }
             // If we've reached the target
             if(e.end == target){
-                printf("DONE!");
+                printf("DONE!\n");
                 Graph::DijkstraNode *returnNode = new Graph::DijkstraNode();
                 returnNode->node = e.end;
                 returnNode->prev = n;
@@ -287,6 +291,23 @@ Graph::DijkstraNode *Robot::getPath(Fieldpoint *target){
         completed.push_front(n); 
     }
     return NULL;
+}
+
+int Robot::getWeight(Graph::Edge e){
+    // TODO: Account for restricted nodes and shooting
+
+     // Base weight is time in seconds, measure by previous plus d*v
+     int weight = e.distance/speed;
+     if(e.end->type == Fieldpoint::Type::DEFENSE){
+         int cTime = crossTime((Defense *) e.end);
+         if(cTime != 0){
+             // Add cross time, subtract points for crossing
+             weight += cTime - ((Defense *) e.end)->value;
+         } else {
+             return INT_MAX;
+         }
+     }
+     return weight;
 }
 
 // bool can_cross(Robot *r, Defenses d){

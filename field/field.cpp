@@ -250,6 +250,7 @@ namespace Field {
             g->addEdge(&redCourtyard[0], &redTower);
             g->addEdge(&redCourtyard[0], &redDefenses[0]);
             g->addEdge(&redCourtyard[0], &redDefenses[1]);
+            g->addEdge(&redCourtyard[0], &redDefenses[2]);
             g->addEdge(&redCourtyard[0], &redCourtyard[1]);
             g->addEdge(&redCourtyard[0], &redCourtyard[2]);
             g->addEdge(&redCourtyard[1], &redDefenses[0]);

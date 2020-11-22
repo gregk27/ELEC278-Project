@@ -26,6 +26,8 @@ class Robot {
          * Returns: The DijkstraNode at the end of the found path
          */
         Graph::DijkstraNode *getPath(Fieldpoint *target);
+
+        int getWeight(Graph::Edge e);
     public:
         // Robot's unique ID (0-6)
         byte id;
@@ -103,6 +105,9 @@ class Robot {
         int wakeTime = 0;
         // Flag indicating if the robot has a ball, defaults to true
         bool hasBall = true;
+
+        // Value of each point gained in seconds taken, used to determine which defense or scoring method is best
+        float pointValue = 1;
 
         int cyclesCompleted = 0;
 

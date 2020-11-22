@@ -18,6 +18,17 @@ int main(int argc, char *argv[]){
 
     // std::thread renderThread(Interface::init);
 
+    // Initialise defenses
+    Field::redDefenses[0].defType = Defense::LOW_BAR;
+    Field::redDefenses[1].defType = Defense::PORTCULLIS;
+    Field::redDefenses[2].defType = Defense::MOAT;
+    Field::redDefenses[3].defType = Defense::SALLY_PORT;
+    Field::redDefenses[4].defType = Defense::DRAWBRIDGE;
+
+    // Cross the defense to remove it's point value
+    Field::redDefenses[2].cross();
+    Field::redDefenses[2].cross();
+
     Robot *r;
     r = Robot::parseCSV("./robots.csv");
     r->intakeNode = &Field::redPassage[0];
@@ -36,10 +47,9 @@ int main(int argc, char *argv[]){
     Interface::setGraph(r->graph);
     // Interface::drawGraph(r->graph);
 
-    while(r->cyclesCompleted < 3){
+    while(r->cyclesCompleted < 1){
         r->navUpdate(&events);
     }
-    r->navUpdate(&events);
 
     for(auto i :events){
         std::string out = i.data.toString(); 
