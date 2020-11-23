@@ -44,7 +44,7 @@ class Event {
         // Point change from the event
         int points;
         // Timestamp of the event, in seconds
-        int time;
+        float time;
 
         std::string toString();
 };

@@ -28,8 +28,8 @@ class Robot {
         Graph::DijkstraNode *getPath(Fieldpoint *target);
 
         struct EdgeData {
-            int weight;
-            int time;
+            float weight;
+            float time;
         };
 
         EdgeData getWeight(Graph::DijkstraNode *n, Graph::Edge e);
@@ -107,7 +107,7 @@ class Robot {
         // Current location on the field
         Fieldpoint *location;
         // Time at which the robot will have arrived
-        int wakeTime = 0;
+        float wakeTime = 0;
         // Flag indicating if the robot has a ball, defaults to true
         bool hasBall = true;
 

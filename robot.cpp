@@ -260,8 +260,8 @@ Graph::DijkstraNode *Robot::getPath(Fieldpoint *target){
 
             // Get weight of the edge
             Robot::EdgeData edgeData = getWeight(n, e);
-            int weight = n->weight + edgeData.weight;
-            int time = n->time + edgeData.time;
+            float weight = n->weight + edgeData.weight;
+            float time = n->time + edgeData.time;
             if(edgeData.weight == INT_MAX){
                 weight = INT_MAX;
             }

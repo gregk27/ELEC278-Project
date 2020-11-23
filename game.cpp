@@ -5,6 +5,7 @@
 
 std::string Event::toString(){
     std::stringstream s;
+    s.precision(4);
     s << r->team << "\t@" << time << "\t#" << location->index << ":\t";
     switch(type){
         case Type::SCORE_LOW:
