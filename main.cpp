@@ -61,6 +61,7 @@ int main(int argc, char *argv[]){
 
     printf("Final score: %d points", totalScore);
 
+    Console::setEvents(&events);
     Console::begin();
     // // printf("%d, %d, %d, %d\n",
     // // r.defenses,
