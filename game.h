@@ -11,6 +11,7 @@ const int HIGH_POINTS = 5;
 const int LOW_POINTS = 2;
 
 const int CROSS_POINTS = 5;
+const int BASE_POINTS = CROSS_POINTS*2;
 
 enum class Alliance {
     RED, BLUE, NEUTRAL
@@ -43,7 +44,7 @@ class Event {
         // Point change from the event
         int points;
         // Timestamp of the event, in seconds
-        int time;
+        float time;
 
         std::string toString();
 };

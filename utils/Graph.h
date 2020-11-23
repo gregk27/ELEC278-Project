@@ -14,7 +14,8 @@ class Graph {
         struct DijkstraNode{
             Fieldpoint *node;
             DijkstraNode *prev;
-            int weight;
+            float weight;
+            float time;
         };
 
         LinkedList<Fieldpoint *> nodes;

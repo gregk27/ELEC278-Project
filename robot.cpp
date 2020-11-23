@@ -182,12 +182,15 @@ Event Robot::getEvent(){
             break;
         case Fieldpoint::Type::DEFENSE:
             e.type = Event::Type::CROSS;
-            e.points = ((Defense *) location)->value;
+            e.points = ((Defense *) location)->cross();
             break;
         default:
             e.type = Event::Type::PASSTHROUGH;
             e.points = 0;
             break;
+    }
+    if(e.location == intakeNode){
+        e.type == Event::Type::INTAKE;
     }
     return e;
 }
@@ -196,6 +199,33 @@ void Robot::navUpdate(LinkedList<Event> *events){
     // Add completed event to queue
     events->push(getEvent());
 
+    // If the robot has scored a ball, it now needs to get another
+    if(location->type == Fieldpoint::Type::TOWER || location->type == Fieldpoint::Type::SHOTNODE){
+        hasBall = false;
+        cyclesCompleted ++;
+    } else if(location == intakeNode){
+        hasBall = true;
+    }
+
+    Graph::DijkstraNode *n;
+    // If the robot has the ball, go to the tower, otherwise go back to pickup node
+    if(hasBall){
+        n = getPath(goalNode);
+    } else {
+        n = getPath(&Field::redPassage[0]);
+    }
+
+    // Cycle back to find next node
+    while(n->prev != NULL && n->prev->node!=location){
+        n = n->prev;
+    }
+    // Move the robot to the next node
+    location = n->node;
+    // Update the wake time, because point value is deducted from time, re-add it
+    wakeTime += n->time;
+}
+
+Graph::DijkstraNode *Robot::getPath(Fieldpoint *target){
     Heap<Graph::DijkstraNode*> todo = Heap<Graph::DijkstraNode*>([](Graph::DijkstraNode *n1, Graph::DijkstraNode *n2)->bool{return n1->weight < n2->weight;}, [](Graph::DijkstraNode *d)->const char*{
         if(d == NULL) return "N,N";
         std::stringstream s;
@@ -205,18 +235,19 @@ void Robot::navUpdate(LinkedList<Event> *events){
     LinkedList<Graph::DijkstraNode*> completed;
 
     // Initialise the TODO array with inifinty
+    // TODO: Don't add nodes which shouldn't be visited (eg other alliance, uncrossable defense)
     for(auto i : graph->nodes){
         Graph::DijkstraNode *n = new Graph::DijkstraNode();
         n->node = i.data;
         n->prev = NULL;
         n->weight = (i.data == location ? 0 : INT_MAX);
+        n->time = 0;
         todo.push(n);
     }
 
     Graph::DijkstraNode *n;
     LinkedList<Graph::Edge> *adj;
-    bool done = false;
-    while(todo.pop(&n, 0) && !done){  
+    while(todo.pop(&n, 0)){  
         
         //Get the adjacency matrix for this node and iterate over it
         adj = graph->adjacency[n->node->index];
@@ -227,8 +258,13 @@ void Robot::navUpdate(LinkedList<Event> *events){
             int todoIdx = todo.indexOf([e](Graph::DijkstraNode *n)->bool{return e.end == n->node;});
             if(todoIdx == -1) continue;
 
-            // Weight is time in seconds, measure by previous plus d*v
-            int weight = n->weight + e.distance/speed; // TODO: Add more cases for different node types
+            // Get weight of the edge
+            Robot::EdgeData edgeData = getWeight(n, e);
+            float weight = n->weight + edgeData.weight;
+            float time = n->time + edgeData.time;
+            if(edgeData.weight == INT_MAX){
+                weight = INT_MAX;
+            }
 
             // If we have a new shorter path, update it
             if((*todo.peek(todoIdx))->weight > weight){
@@ -239,29 +275,57 @@ void Robot::navUpdate(LinkedList<Event> *events){
                 // Update the node
                 n2->prev = n;
                 n2->weight = weight;
+                n2->time += time;
                 // Reinsert it
                 todo.push(n2); 
 
             }
             // If we've reached the target
-            if(e.end == goalNode){
-                printf("DONE!");
-                done=true;
-                break;
+            if(e.end == target){
+                printf("DONE!\n");
+                Graph::DijkstraNode *returnNode = new Graph::DijkstraNode();
+                returnNode->node = e.end;
+                returnNode->prev = n;
+                returnNode->weight = weight;
+                returnNode->time = time;
+                return returnNode;
             }
         }
         // Add n to the completed list. This is done first so we can pop off the target node once reached
         printf("Completed %d\n", n->node->index);
         completed.push_front(n); 
     }
-    // Cycle back to find next node
-    while(n->prev->node!=location){
-        n = n->prev;
+    return NULL;
+}
+
+Robot::EdgeData Robot::getWeight(Graph::DijkstraNode *n, Graph::Edge e){
+    // TODO: Account for shooting
+    Robot::EdgeData out;
+    // Base weight is time in seconds, measure by previous plus d*v
+    out.weight = e.distance/speed;
+    out.time = out.weight;
+    // Don't go to nodes which are for the other alliance
+    if(e.end->alliance != alliance && e.end->alliance != Alliance::NEUTRAL){
+        out.weight = INT_MAX;
+        return out;
     }
-    // Move the robot to the next node
-    location = n->node;
-    // Update the wake time
-    wakeTime += n->weight;
+    // Don't pathfind through shotnodes
+    if(n->node->type == Fieldpoint::Type::SHOTNODE && location != n->node){
+        out.weight = INT_MAX;
+        return out;
+    }
+    if(e.end->type == Fieldpoint::Type::DEFENSE){
+        int cTime = crossTime((Defense *) e.end);
+        if(cTime != 0){
+            // Add cross time, subtract points for crossing
+            out.weight += cTime - ((Defense *) e.end)->value;
+            out.time += cTime;
+        } else {
+            out.weight = INT_MAX;
+            return out;
+        }
+    }
+    return out;
 }
 
 // bool can_cross(Robot *r, Defenses d){
@@ -319,8 +383,8 @@ Robot *Robot::parseCSV(std::string filename){
     if(!bot->centreShotTime && !bot->sideShotTime && !bot->lowTime) throw invalid_parameter_exception("Robot cannot score, this prevents any gameplay. One scoring time must be nonzero");
     
     // Finish setup
-    // Convert from the fpm input to ips for internal use
-    bot->speed *= 12/60.0;
+    // Convert from the fps input to ips for internal use
+    bot->speed *= 12;
     // Set the bot's alliance. Currently this is hardcoded to red but may change in the future
     bot->alliance = Alliance::RED;
     // Set the bot's id. Currently hardcoded but this may change in the future

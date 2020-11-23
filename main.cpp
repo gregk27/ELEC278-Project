@@ -16,11 +16,24 @@ int main(int argc, char *argv[]){
 
     printf("Hello World\n");
 
-    std::thread renderThread(Interface::init);
+    // std::thread renderThread(Interface::init);
+
+    // Initialise defenses
+    Field::redDefenses[0].defType = Defense::LOW_BAR;
+    Field::redDefenses[1].defType = Defense::PORTCULLIS;
+    Field::redDefenses[2].defType = Defense::MOAT;
+    Field::redDefenses[3].defType = Defense::SALLY_PORT;
+    Field::redDefenses[4].defType = Defense::DRAWBRIDGE;
+
+    // Cross the defense to remove it's point value
+    Field::redDefenses[2].cross();
+    Field::redDefenses[2].cross();
 
     Robot *r;
     r = Robot::parseCSV("./robots.csv");
-    r->location = &Field::redPassage[0];
+    r->alliance = Alliance::RED;
+    r->intakeNode = &Field::redPassage[0];
+    r->location = &Field::centreBalls[0];
     // Event queue to be populated by simulation
     LinkedList<Event> events;
 
@@ -35,16 +48,18 @@ int main(int argc, char *argv[]){
     Interface::setGraph(r->graph);
     // Interface::drawGraph(r->graph);
 
-    while(r->location != &Field::redTower){
+    while(r->wakeTime < 150){
         r->navUpdate(&events);
     }
-    r->navUpdate(&events);
 
+    int totalScore = 0;
     for(auto i :events){
         std::string out = i.data.toString(); 
         printf(out.c_str());
+        totalScore += i.data.points;
     }
 
+    printf("Final score: %d points", totalScore);
     // // printf("%d, %d, %d, %d\n",
     // // r.defenses,
     // // can_cross(&r, PORTCULLIS),
@@ -54,6 +69,6 @@ int main(int argc, char *argv[]){
 
     // std::cout << "/* message */" << std::endl;
     
-    renderThread.join();
+    // renderThread.join();
     return 0;
 }

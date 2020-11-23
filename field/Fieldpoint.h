@@ -5,6 +5,9 @@
 // Forward-declaration of alliance from ../game.h
 enum class Alliance;
 
+extern const int CROSS_POINTS;
+extern const int BASE_POINTS;
+
 typedef enum _fieldtype {
     // Generic travel node
     NODE,
@@ -109,7 +112,7 @@ class Defense: public Fieldpoint {
          */
         int cross();
         // Current value of the defense
-        int value;
+        int value = BASE_POINTS;
         // Type of defense
         Defenses defType;
 

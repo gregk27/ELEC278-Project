@@ -22,12 +22,17 @@ class Robot {
         Event getEvent();
         /**
          * Apply Dijkstra's algorithm at a node
-         *  - f:      Pointer to the node where the algorithm will be performed
          *  - target: Pointer to the target node
-         *  - processing: Pointer to a linkedlist storing nodes to process
-         *  - completed:  Pointer to a linkedlist storing completed nodes
+         * Returns: The DijkstraNode at the end of the found path
          */
-        void dijkstra(Fieldpoint *f, Fieldpoint *target, LinkedList<Graph::DijkstraNode> *processing, LinkedList<Graph::DijkstraNode> *completed);
+        Graph::DijkstraNode *getPath(Fieldpoint *target);
+
+        struct EdgeData {
+            float weight;
+            float time;
+        };
+
+        EdgeData getWeight(Graph::DijkstraNode *n, Graph::Edge e);
     public:
         // Robot's unique ID (0-6)
         byte id;
@@ -97,12 +102,19 @@ class Robot {
 
         // Fieldpoint with 0 length with all scoring positions, used as target for dijkstra
         Fieldpoint *goalNode;
+        // Fieldpoint where robot will intake balls
+        Fieldpoint *intakeNode;
         // Current location on the field
         Fieldpoint *location;
         // Time at which the robot will have arrived
-        int wakeTime = 0;
+        float wakeTime = 0;
         // Flag indicating if the robot has a ball, defaults to true
         bool hasBall = true;
+
+        // Value of each point gained in seconds taken, used to determine which defense or scoring method is best
+        float pointValue = 1;
+
+        int cyclesCompleted = 0;
 
         /**
          * Have the bot navigate the next leg
