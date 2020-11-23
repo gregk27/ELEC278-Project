@@ -3,6 +3,12 @@
 #include "game.h"
 #include "robot.h"
 
+const int HIGH_POINTS = 5;
+const int LOW_POINTS = 2;
+
+const int CROSS_POINTS = 5;
+const int BASE_POINTS = CROSS_POINTS*2;
+
 std::string Event::toString(){
     std::stringstream s;
     s.precision(4);

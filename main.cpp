@@ -9,7 +9,7 @@
 #include "field/field.h"
 #include "utils/LinkedList.h"
 #include "utils/Graph.h"
-#include "game.h"
+#include "ui/Console.h"
 #include "ui/Interface.h"
 
 int main(int argc, char *argv[]){
@@ -60,6 +60,8 @@ int main(int argc, char *argv[]){
     }
 
     printf("Final score: %d points", totalScore);
+
+    Console::begin();
     // // printf("%d, %d, %d, %d\n",
     // // r.defenses,
     // // can_cross(&r, PORTCULLIS),
