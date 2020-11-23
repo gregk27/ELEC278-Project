@@ -48,15 +48,18 @@ int main(int argc, char *argv[]){
     Interface::setGraph(r->graph);
     // Interface::drawGraph(r->graph);
 
-    while(r->cyclesCompleted < 1){
+    while(r->wakeTime < 150){
         r->navUpdate(&events);
     }
 
+    int totalScore = 0;
     for(auto i :events){
         std::string out = i.data.toString(); 
         printf(out.c_str());
+        totalScore += i.data.points;
     }
 
+    printf("Final score: %d points", totalScore);
     // // printf("%d, %d, %d, %d\n",
     // // r.defenses,
     // // can_cross(&r, PORTCULLIS),

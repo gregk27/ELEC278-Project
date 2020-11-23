@@ -221,8 +221,8 @@ void Robot::navUpdate(LinkedList<Event> *events){
     }
     // Move the robot to the next node
     location = n->node;
-    // Update the wake time
-    wakeTime += n->weight;
+    // Update the wake time, because point value is deducted from time, re-add it
+    wakeTime += n->time;
 }
 
 Graph::DijkstraNode *Robot::getPath(Fieldpoint *target){
@@ -241,6 +241,7 @@ Graph::DijkstraNode *Robot::getPath(Fieldpoint *target){
         n->node = i.data;
         n->prev = NULL;
         n->weight = (i.data == location ? 0 : INT_MAX);
+        n->time = 0;
         todo.push(n);
     }
 
@@ -258,9 +259,10 @@ Graph::DijkstraNode *Robot::getPath(Fieldpoint *target){
             if(todoIdx == -1) continue;
 
             // Get weight of the edge
-            int edgeWeight = getWeight(n, e);
-            int weight = n->weight + edgeWeight;
-            if(edgeWeight == INT_MAX){
+            Robot::EdgeData edgeData = getWeight(n, e);
+            int weight = n->weight + edgeData.weight;
+            int time = n->time + edgeData.time;
+            if(edgeData.weight == INT_MAX){
                 weight = INT_MAX;
             }
 
@@ -273,6 +275,7 @@ Graph::DijkstraNode *Robot::getPath(Fieldpoint *target){
                 // Update the node
                 n2->prev = n;
                 n2->weight = weight;
+                n2->time += time;
                 // Reinsert it
                 todo.push(n2); 
 
@@ -284,6 +287,7 @@ Graph::DijkstraNode *Robot::getPath(Fieldpoint *target){
                 returnNode->node = e.end;
                 returnNode->prev = n;
                 returnNode->weight = weight;
+                returnNode->time = time;
                 return returnNode;
             }
         }
@@ -294,29 +298,34 @@ Graph::DijkstraNode *Robot::getPath(Fieldpoint *target){
     return NULL;
 }
 
-int Robot::getWeight(Graph::DijkstraNode *n, Graph::Edge e){
+Robot::EdgeData Robot::getWeight(Graph::DijkstraNode *n, Graph::Edge e){
     // TODO: Account for shooting
-
-     // Base weight is time in seconds, measure by previous plus d*v
-     int weight = e.distance/speed;
-     // Don't go to nodes which are for the other alliance
-     if(e.end->alliance != alliance && e.end->alliance != Alliance::NEUTRAL){
-         return INT_MAX;
-     }
-     // Don't pathfind through shotnodes
-     if(n->node->type == Fieldpoint::Type::SHOTNODE && location != n->node){
-         return INT_MAX;
-     }
-     if(e.end->type == Fieldpoint::Type::DEFENSE){
-         int cTime = crossTime((Defense *) e.end);
-         if(cTime != 0){
-             // Add cross time, subtract points for crossing
-             weight += cTime - ((Defense *) e.end)->value;
-         } else {
-             return INT_MAX;
-         }
-     }
-     return weight;
+    Robot::EdgeData out;
+    // Base weight is time in seconds, measure by previous plus d*v
+    out.weight = e.distance/speed;
+    out.time = out.weight;
+    // Don't go to nodes which are for the other alliance
+    if(e.end->alliance != alliance && e.end->alliance != Alliance::NEUTRAL){
+        out.weight = INT_MAX;
+        return out;
+    }
+    // Don't pathfind through shotnodes
+    if(n->node->type == Fieldpoint::Type::SHOTNODE && location != n->node){
+        out.weight = INT_MAX;
+        return out;
+    }
+    if(e.end->type == Fieldpoint::Type::DEFENSE){
+        int cTime = crossTime((Defense *) e.end);
+        if(cTime != 0){
+            // Add cross time, subtract points for crossing
+            out.weight += cTime - ((Defense *) e.end)->value;
+            out.time += cTime;
+        } else {
+            out.weight = INT_MAX;
+            return out;
+        }
+    }
+    return out;
 }
 
 // bool can_cross(Robot *r, Defenses d){
@@ -374,8 +383,8 @@ Robot *Robot::parseCSV(std::string filename){
     if(!bot->centreShotTime && !bot->sideShotTime && !bot->lowTime) throw invalid_parameter_exception("Robot cannot score, this prevents any gameplay. One scoring time must be nonzero");
     
     // Finish setup
-    // Convert from the fpm input to ips for internal use
-    bot->speed *= 12/60.0;
+    // Convert from the fps input to ips for internal use
+    bot->speed *= 12;
     // Set the bot's alliance. Currently this is hardcoded to red but may change in the future
     bot->alliance = Alliance::RED;
     // Set the bot's id. Currently hardcoded but this may change in the future
