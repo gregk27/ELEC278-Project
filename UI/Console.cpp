@@ -34,13 +34,17 @@ void redraw(int selected){
     // Reset to top
     setCursor(0,0);
     // Print header
-    printf("  Time   Robot @Node    Desc\t\t\t\tPress ESC to exit\n");
+    printf("  Time   Robot @Node    Desc\t\t\tPress ESC to exit\n");
     
+    int score = 0;
+
     // Print events
     for(auto i : (*events)){
         // Check that it should be on screen
         // If it's less than the selected value (+ offset) and it's not low enough for bottom, don't render
         if(i.index < selected-2 && i.index < events->size()-LINES-1){
+            // Count the score as it's a passed event
+            score += i.data.points;
             continue;
         // If it's too low, stop here
         } else if (i.index > (selected-2 + LINES)){
@@ -50,13 +54,28 @@ void redraw(int selected){
         std::string out = i.data.toString();
         // If it's selected, print indicator and colour
         if(i.index == selected){
+            // Count the score as it's the event
+            score += i.data.points;
             SetConsoleTextAttribute(handle, 0x0B);
             printf(" >%s", out.c_str());
             SetConsoleTextAttribute(handle, 0x0F);
         } else {
+            if(i.index < selected){
+                // Count the score as it's a passed event
+                score += i.data.points;
+            }
             printf("  %s", out.c_str());
         }
     }
+
+    // Print overview
+    setCursor(80, 5);
+    printf("Time: %.2f    ", (*events)[selected].time);
+    setCursor(80, 6);
+    printf("Total score: %d ", score);
+
+    // Return cursor to origin
+    setCursor(0,0);
 }
 
 void Console::begin(){
@@ -64,6 +83,7 @@ void Console::begin(){
     printf("Printed a thing!\n");
 
     int selected = 0;
+    int score = 0;
     handle = GetStdHandle (STD_OUTPUT_HANDLE);
 
     system(CLEAR_COMMAND);
