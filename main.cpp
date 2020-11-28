@@ -44,14 +44,14 @@ int main(int argc, char *argv[]){
         printf("[0 2 4 6]: ");
         char buf[16];
         fgets(buf, 16, stdin);
-        int r = sscanf(buf, " %d %d %d %d", &d1, &d2, &d3, &d4);
+        int in = sscanf(buf, " %d %d %d %d", &d1, &d2, &d3, &d4);
         // If no values read, apply defaults 
-        if(r == -1){
+        if(in == -1){
             d1 = 0;
             d2 = 2;
             d3 = 4;
             d4 = 6;
-        } else if (r != 4){ // If not 0, but still wrong number then go again
+        } else if (in != 4){ // If not 0, but still wrong number then go again
             printf("Improper number of parameters, enter either 0 for default or exactly 4.\n");
             continue;
         }
@@ -71,6 +71,15 @@ int main(int argc, char *argv[]){
     Field::redDefenses[3].defType = static_cast<Defense::Defenses>(d3);
     Field::redDefenses[4].defType = static_cast<Defense::Defenses>(d4);
 
+    printf("Simulation length (seconds) [150]: ");
+    int duration;
+    char buf[16];
+    fgets(buf, 16, stdin);
+    int in = sscanf(buf, " %d", &duration);
+    if(in == -1){
+        duration = 150;
+    }
+
 
     // Event queue to be populated by simulation
     LinkedList<Event> events;
@@ -86,7 +95,7 @@ int main(int argc, char *argv[]){
     Interface::setGraph(r->graph);
     // Interface::drawGraph(r->graph);
 
-    while(r->wakeTime < 150){
+    while(r->wakeTime < duration){
         r->navUpdate(&events);
     }
 
