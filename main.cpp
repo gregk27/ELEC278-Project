@@ -18,6 +18,23 @@ int main(int argc, char *argv[]){
 
     // std::thread renderThread(Interface::init);
 
+    // Get robot file from user
+    std::string robotPath;
+    printf("Path to robot file [./robots.csv]: ");
+    std::getline(std::cin,robotPath);
+    if(robotPath == "")
+        robotPath = "./robots.csv";
+
+    // Initialise the robot from
+    Robot *r;
+    r = Robot::parseCSV(robotPath);
+    // Initialise the robot on red alliance
+    r->alliance = Alliance::RED;
+    // Balls are entered into play at the end of the passage
+    r->intakeNode = &Field::redPassage[0];
+    // The robot should start at the top-centre    
+    r->location = &Field::centreBalls[1];
+
     // Initialise defenses
     printf("Enter defense configuration for positions 2-5, enter the IDs with spaces between.\n");
     // Get input from user
@@ -54,11 +71,7 @@ int main(int argc, char *argv[]){
     Field::redDefenses[3].defType = static_cast<Defense::Defenses>(d3);
     Field::redDefenses[4].defType = static_cast<Defense::Defenses>(d4);
 
-    Robot *r;
-    r = Robot::parseCSV("./robots.csv");
-    r->alliance = Alliance::RED;
-    r->intakeNode = &Field::redPassage[0];
-    r->location = &Field::centreBalls[0];
+
     // Event queue to be populated by simulation
     LinkedList<Event> events;
 

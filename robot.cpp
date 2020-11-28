@@ -136,7 +136,7 @@ void Robot::initGraph(){
         this->graph->addEdge(goalNode, i.data, 0);
     }
 
-    graph->printAdj();
+    // graph->printAdj();
 }
 
 Shotpoint *Robot::getShotZone(int range, int angle){
