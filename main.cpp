@@ -9,46 +9,83 @@
 #include "field/field.h"
 #include "utils/LinkedList.h"
 #include "utils/Graph.h"
-#include "game.h"
+#include "ui/Console.h"
 #include "ui/Interface.h"
 
 int main(int argc, char *argv[]){
 
-    printf("Hello World\n");
-
     std::thread renderThread(Interface::init);
 
-    // Initialise defenses
-    Field::redDefenses[0].defType = Defense::LOW_BAR;
-    Field::redDefenses[1].defType = Defense::PORTCULLIS;
-    Field::redDefenses[2].defType = Defense::MOAT;
-    Field::redDefenses[3].defType = Defense::SALLY_PORT;
-    Field::redDefenses[4].defType = Defense::DRAWBRIDGE;
+    // Get robot file from user
+    std::string robotPath;
+    printf("Path to robot file [./robots.csv]: ");
+    std::getline(std::cin,robotPath);
+    if(robotPath == "")
+        robotPath = "./robots.csv";
 
-    // Cross the defense to remove it's point value
-    Field::redDefenses[2].cross();
-    Field::redDefenses[2].cross();
-
+    // Initialise the robot from
     Robot *r;
-    r = Robot::parseCSV("./robots.csv");
+    r = Robot::parseCSV(robotPath);
+    // Initialise the robot on red alliance
     r->alliance = Alliance::RED;
+    // Balls are entered into play at the end of the passage
     r->intakeNode = &Field::redPassage[0];
-    r->location = &Field::centreBalls[0];
+    // The robot should start at the top-centre    
+    r->location = &Field::centreBalls[1];
+
+    // Initialise defenses
+    printf("Enter defense configuration for positions 2-5, enter the IDs with spaces between.\n");
+    // Get input from user
+    int d1, d2, d3, d4;
+    while(1){
+        // Get input
+        printf("[0 2 4 6]: ");
+        char buf[16];
+        fgets(buf, 16, stdin);
+        int in = sscanf(buf, " %d %d %d %d", &d1, &d2, &d3, &d4);
+        // If no values read, apply defaults 
+        if(in == -1){
+            d1 = 0;
+            d2 = 2;
+            d3 = 4;
+            d4 = 6;
+        } else if (in != 4){ // If not 0, but still wrong number then go again
+            printf("Improper number of parameters, enter either 0 for default or exactly 4.\n");
+            continue;
+        }
+
+        // Divide each by 2 to get 1,2,3,4 for categories.
+        // If all different categories, average will be (1+2+3+4)/4 = 2.5\
+        // If there are duplicates/same category, prompt before proceeding
+        if((d1/2+d2/2+d3/2+d4/2)/4.0 != 2.5 || Console::confirm("You have selected multiple defenses from the same category, do you wish to proceed?\n", false))
+            break;
+    }
+
+    // Assign defenses based on input
+    // Position 1 is always low bar
+    Field::redDefenses[0].defType = Defense::LOW_BAR;
+    Field::redDefenses[1].defType = static_cast<Defense::Defenses>(d1);
+    Field::redDefenses[2].defType = static_cast<Defense::Defenses>(d2);
+    Field::redDefenses[3].defType = static_cast<Defense::Defenses>(d3);
+    Field::redDefenses[4].defType = static_cast<Defense::Defenses>(d4);
+
+    printf("Simulation length (seconds) [150]: ");
+    int duration;
+    char buf[16];
+    fgets(buf, 16, stdin);
+    int in = sscanf(buf, " %d", &duration);
+    if(in == -1){
+        duration = 150;
+    }
+
+
     // Event queue to be populated by simulation
     LinkedList<Event> events;
 
-    // Defense *d = new Defense(0,0);
-    // for(int i=0;i<8;i++){
-    //     d->defType = (Defense::Defenses) i;
-    //     printf("%d\n", r->crossTime(d));
-    // }
-
-    // Field::print(r->graph, false);
     Field::toGraphML(r->graph, "out.graphml");
     Interface::setGraph(r->graph);
-    // Interface::drawGraph(r->graph);
 
-    while(r->wakeTime < 150){
+    while(r->wakeTime < duration){
         r->navUpdate(&events);
     }
 
@@ -60,14 +97,9 @@ int main(int argc, char *argv[]){
     }
 
     printf("Final score: %d points", totalScore);
-    // // printf("%d, %d, %d, %d\n",
-    // // r.defenses,
-    // // can_cross(&r, PORTCULLIS),
-    // // can_cross(&r, SALLY_PORT), 
-    // // can_cross(&r, ROCK_WALL));
-    // print_field(true);
 
-    // std::cout << "/* message */" << std::endl;
+    Console::setEvents(&events);
+    Console::begin();
     
     renderThread.join();
     return 0;

@@ -49,6 +49,7 @@ void Robot::initGraph(){
         s = getShotZone(shotRange, 0);
         s->time = centreShotTime;
         graph->addNode(s);
+        shotpoints.push(s);
         // Connected to central courtyard and central 2 defenses
         graph->addEdge(s, &Field::redCourtyard[1]);
         graph->addEdge(s, &Field::redDefenses[2]);
@@ -57,6 +58,7 @@ void Robot::initGraph(){
         if(centreAngle > 0){
             // Top centre
             s = getShotZone(shotRange, -centreAngle);
+            shotpoints.push(s);
             s->time = centreShotTime;
             graph->addNode(s);
             // Connected to upper/central courtyard and upper 2 defenses
@@ -67,6 +69,7 @@ void Robot::initGraph(){
 
             // Bottom centre
             s = getShotZone(shotRange, centreAngle);
+            shotpoints.push(s);
             s->time = centreShotTime;
             graph->addNode(s);
             // Connected to lower courtyard and central 2 defenses
@@ -89,6 +92,7 @@ void Robot::initGraph(){
     if(sideShotTime > 0){
         // Upper side
         s = getShotZone(shotRange, -(90-sideAngle));
+        shotpoints.push(s);
         s->time = sideShotTime;
         graph->addNode(s);
         // Connect to upper courtyard and upper 2 defenses
@@ -98,6 +102,7 @@ void Robot::initGraph(){
 
         // Lower side
         s = getShotZone(shotRange, 90-sideAngle);
+        shotpoints.push(s);
         s->time = sideShotTime;
         graph->addNode(s);
         // Connect to lower courtyard and lower 2 defenses
@@ -136,7 +141,7 @@ void Robot::initGraph(){
         this->graph->addEdge(goalNode, i.data, 0);
     }
 
-    graph->printAdj();
+    // graph->printAdj();
 }
 
 Shotpoint *Robot::getShotZone(int range, int angle){

@@ -7,11 +7,11 @@
 class Robot;
 class Fieldpoint;
 
-const int HIGH_POINTS = 5;
-const int LOW_POINTS = 2;
+extern const int HIGH_POINTS;
+extern const int LOW_POINTS;
 
-const int CROSS_POINTS = 5;
-const int BASE_POINTS = CROSS_POINTS*2;
+extern const int CROSS_POINTS;
+extern const int BASE_POINTS;
 
 enum class Alliance {
     RED, BLUE, NEUTRAL

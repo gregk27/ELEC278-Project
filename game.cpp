@@ -1,28 +1,40 @@
 #include <string>
 #include <sstream>
+#include <iomanip>
 #include "game.h"
 #include "robot.h"
 
-std::string Event::toString(){
-    std::stringstream s;
-    s.precision(4);
-    s << r->team << "\t@" << time << "\t#" << location->index << ":\t";
+const int HIGH_POINTS = 5;
+const int LOW_POINTS = 2;
+
+const int CROSS_POINTS = 5;
+const int BASE_POINTS = CROSS_POINTS*2;
+
+using namespace std;
+
+string Event::toString(){
+    stringstream s, msg;
+    // s.precision(3);
+    s << setw(5) << (int) time 
+        << setw(7) << r->team 
+        << " @" << setw(3) << location->index 
+        << ":\t" << left << setw(50);
     switch(type){
         case Type::SCORE_LOW:
-            s << "Score ball in low goal for " << points << " points";
+            msg << "Score ball in low goal for " << points << " points";
             break;
         case Type::SCORE_HIGH:
-            s << "Score ball in high goal for " << points << " points";
+            msg << "Score ball in high goal for " << points << " points";
             break;
         case Type::CROSS:
-            s << "Cross defense for  " << points << " points";
+            msg << "Cross defense for  " << points << " points";
             break;
         case Type::INTAKE:
-            s << "Intake ball";
+            msg << "Intake ball";
             break;
         default:
-            s << "Drive through node " << location->index;
+            msg << "Drive through node " << location->index;
     }
-    s << ".\n";
+    s << msg.str() << "\n";
     return s.str();
 }
