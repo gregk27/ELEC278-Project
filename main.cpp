@@ -19,15 +19,40 @@ int main(int argc, char *argv[]){
     // std::thread renderThread(Interface::init);
 
     // Initialise defenses
-    Field::redDefenses[0].defType = Defense::LOW_BAR;
-    Field::redDefenses[1].defType = Defense::PORTCULLIS;
-    Field::redDefenses[2].defType = Defense::MOAT;
-    Field::redDefenses[3].defType = Defense::SALLY_PORT;
-    Field::redDefenses[4].defType = Defense::DRAWBRIDGE;
+    printf("Enter defense configuration for positions 2-5, enter the IDs with spaces between.\n");
+    // Get input from user
+    int d1, d2, d3, d4;
+    while(1){
+        // Get input
+        printf("[0 2 4 6]: ");
+        char buf[16];
+        fgets(buf, 16, stdin);
+        int r = sscanf(buf, " %d %d %d %d", &d1, &d2, &d3, &d4);
+        // If no values read, apply defaults 
+        if(r == -1){
+            d1 = 0;
+            d2 = 2;
+            d3 = 4;
+            d4 = 6;
+        } else if (r != 4){ // If not 0, but still wrong number then go again
+            printf("Improper number of parameters, enter either 0 for default or exactly 4.\n");
+            continue;
+        }
 
-    // Cross the defense to remove it's point value
-    Field::redDefenses[2].cross();
-    Field::redDefenses[2].cross();
+        // Divide each by 2 to get 1,2,3,4 for categories.
+        // If all different categories, average will be (1+2+3+4)/4 = 2.5\
+        // If there are duplicates/same category, prompt before proceeding
+        if((d1/2+d2/2+d3/2+d4/2)/4.0 != 2.5 || Console::confirm("You have selected multiple defenses from the same category, do you wish to proceed?\n", false))
+            break;
+    }
+
+    // Assign defenses based on input
+    // Position 1 is always low bar
+    Field::redDefenses[0].defType = Defense::LOW_BAR;
+    Field::redDefenses[1].defType = static_cast<Defense::Defenses>(d1);
+    Field::redDefenses[2].defType = static_cast<Defense::Defenses>(d2);
+    Field::redDefenses[3].defType = static_cast<Defense::Defenses>(d3);
+    Field::redDefenses[4].defType = static_cast<Defense::Defenses>(d4);
 
     Robot *r;
     r = Robot::parseCSV("./robots.csv");
