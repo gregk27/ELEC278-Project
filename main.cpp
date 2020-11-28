@@ -84,7 +84,6 @@ int main(int argc, char *argv[]){
 
     Field::toGraphML(r->graph, "out.graphml");
     Interface::setGraph(r->graph);
-    // Interface::drawGraph(r->graph);
 
     while(r->wakeTime < duration){
         r->navUpdate(&events);
