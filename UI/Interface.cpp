@@ -14,7 +14,8 @@ SDL_Window *fieldWindow;
 SDL_Renderer *fieldRenderer;
 SDL_Texture *fieldImage;
 Graph *activeGraph;
-Event *event;
+LinkedList<Event> *eventList;
+Node<Event> *event;
 bool running = false;
 
 void drawGraph(Graph *g){
@@ -58,13 +59,21 @@ void drawGraph(Graph *g){
         SDL_RenderFillRect(fieldRenderer,&r);
     }
 
-    if(event != NULL && event->location != NULL){
-        r.x = event->location->x*2-15;
-        r.y = event->location->y*2-15;
-        r.h = 30;
-        r.w = 30;
-        SDL_SetRenderDrawColor(fieldRenderer, 64,128,255, SDL_ALPHA_OPAQUE*0.75);
-        SDL_RenderFillRect(fieldRenderer, &r);
+    if(event != NULL){
+        if(event->data.location != NULL){
+            r.x = event->data.location->x*2-15;
+            r.y = event->data.location->y*2-15;
+            r.h = 30;
+            r.w = 30;
+            SDL_SetRenderDrawColor(fieldRenderer, 64,128,255, SDL_ALPHA_OPAQUE*0.75);
+            SDL_RenderFillRect(fieldRenderer, &r);
+        }
+        // If the event isn't the first, draw a line between it and the previous
+        if(event->previous != eventList->getNode(-1)){
+            SDL_SetRenderDrawColor(fieldRenderer, 64, 128, 255, SDL_ALPHA_OPAQUE);
+            SDL_RenderDrawLine(fieldRenderer, event->data.location->x*2, event->data.location->y*2, event->previous->data.location->x*2, event->previous->data.location->y*2);
+
+        }
     }
 }
 
@@ -115,7 +124,11 @@ void Interface::setGraph(Graph *g){
     activeGraph = g;
 }
 
-void Interface::setEvent(Event *e){
+void Interface::setEventList(LinkedList<Event> *e){
+    eventList = e;
+}
+
+void Interface::setEvent(Node<Event> *e){
     event = e;
 }
 
