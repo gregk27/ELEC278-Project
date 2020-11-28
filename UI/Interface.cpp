@@ -14,6 +14,7 @@ SDL_Window *fieldWindow;
 SDL_Renderer *fieldRenderer;
 SDL_Texture *fieldImage;
 Graph *activeGraph;
+Event *event;
 
 void drawGraph(Graph *g){
     SDL_Rect r;
@@ -54,6 +55,15 @@ void drawGraph(Graph *g){
             SDL_SetRenderDrawColor(fieldRenderer, 185, 115, 255, SDL_ALPHA_OPAQUE);
         }
         SDL_RenderFillRect(fieldRenderer,&r);
+    }
+
+    if(event != NULL && event->location != NULL){
+        r.x = event->location->x*2-15;
+        r.y = event->location->y*2-15;
+        r.h = 30;
+        r.w = 30;
+        SDL_SetRenderDrawColor(fieldRenderer, 64,128,255, SDL_ALPHA_OPAQUE*0.75);
+        SDL_RenderFillRect(fieldRenderer, &r);
     }
 }
 
@@ -107,4 +117,8 @@ void Interface::init(){
 
 void Interface::setGraph(Graph *g){
     activeGraph = g;
+}
+
+void Interface::setEvent(Event *e){
+    event = e;
 }

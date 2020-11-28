@@ -5,6 +5,7 @@
 
 #include "Console.h"
 #include "../game.h"
+#include "Interface.h"
 
 #include <windows.h>
 
@@ -104,6 +105,9 @@ void Console::begin(){
         }
         if(selected < 0) selected=0;
         if(selected >= events->size()) selected = events->size()-1;
+        Event *e = new Event();
+        events->get(selected, e);
+        Interface::setEvent(e);
         redraw(selected);
     }
 }
