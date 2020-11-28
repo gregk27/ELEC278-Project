@@ -9,6 +9,7 @@ namespace Interface {
 
     void setGraph(Graph *g);
     void setEvent(Event *e);
+    void close();
 
     // Exception thrown when window 
     struct window_creation_exception: public ExceptionBase{

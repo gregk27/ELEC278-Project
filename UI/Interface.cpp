@@ -15,6 +15,7 @@ SDL_Renderer *fieldRenderer;
 SDL_Texture *fieldImage;
 Graph *activeGraph;
 Event *event;
+bool running = false;
 
 void drawGraph(Graph *g){
     SDL_Rect r;
@@ -92,17 +93,12 @@ void Interface::init(){
     dest.w = imgSurf->w;
     dest.h = imgSurf->h;
 
-    bool running = true;
+    running = true;
     while(running){
         SDL_Event event;
-        // Poll over events
+        // Poll over events to prevent hanging
+        // Close event not handeled as closure dictaded by console
         while(SDL_PollEvent(&event)) {
-            // Handle quit event
-            if (event.type == SDL_QUIT ||
-                    (event.type == SDL_WINDOWEVENT &&
-                    event.window.event == SDL_WINDOWEVENT_CLOSE)) {
-                        running = false;
-            }
         }
         SDL_SetRenderDrawColor(fieldRenderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
         SDL_RenderClear(fieldRenderer);
@@ -121,4 +117,8 @@ void Interface::setGraph(Graph *g){
 
 void Interface::setEvent(Event *e){
     event = e;
+}
+
+void Interface::close(){
+    running = false;
 }

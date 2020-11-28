@@ -101,6 +101,7 @@ int main(int argc, char *argv[]){
     Console::setEvents(&events);
     Console::begin();
     
+    Interface::close();
     renderThread.join();
     return 0;
 }
