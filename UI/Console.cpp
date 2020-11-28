@@ -109,6 +109,9 @@ void Console::begin(){
         events->get(selected, e);
         Interface::setEvent(e);
         redraw(selected);
+        // Delay 100ms between keypresses
+        Sleep(100);
+        FlushConsoleInputBuffer(GetStdHandle(STD_INPUT_HANDLE));
     }
 }
 
