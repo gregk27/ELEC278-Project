@@ -107,3 +107,22 @@ void Console::begin(){
         redraw(selected);
     }
 }
+
+
+bool Console::confirm(std::string message, bool def) {
+    // If input is on new line, indent it
+    if(message.back() == '\n')
+        message += "\t";
+    // Print prompt
+    if(def){
+        printf("%s (y/n) [Y]: ", message.c_str());
+    } else {
+        printf("%s (y/n) [N]: ", message.c_str());
+    }
+    // Get input
+    char buf[8];
+    fgets(buf, 9, stdin);
+    if(buf[0] == '\n')
+        return def;
+    return buf[0] == 'Y' || buf[0] == 'y';
+}
