@@ -1,3 +1,8 @@
+/**
+ * Console.cpp/h
+ * These files contain the code used for displaying the GUI
+ */
+
 #include <string>
 #include <stdbool.h>
 #include "interface.h"
@@ -10,13 +15,21 @@
 
 using namespace Interface;
 
+// Window for displaying field
 SDL_Window *fieldWindow;
+// Renderer for fieldWindow
 SDL_Renderer *fieldRenderer;
+// Texture holding field image
 SDL_Texture *fieldImage;
+// The graph to display
 Graph *activeGraph;
+// List of events from sim
 LinkedList<Event> *eventList;
+// Currently selected event
 Node<Event> *event;
+// Flag to exit lop
 bool running = false;
+
 /**
  * Flag indicating graph visibility
  * 0 -> Hidden
@@ -25,6 +38,11 @@ bool running = false;
  */
 int graphVis = 0;
 
+/**
+ * Function to draw the graph to the fieldRendered
+ * Will draw nodes and edges depending on graphVis variable
+ * - g: Pointer to the graph to draw
+*/
 void drawGraph(Graph *g){
     SDL_Rect r;
     r.h=20;
@@ -69,6 +87,10 @@ void drawGraph(Graph *g){
     }
 }
 
+/**
+ * Draw information pertaining to the bot at the selected event to the screen
+ * Will draw location, line from last location, and planned path for that event
+ */
 void drawBot(){
     SDL_Rect r;
     if(event != NULL){
