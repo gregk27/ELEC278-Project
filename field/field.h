@@ -11,7 +11,13 @@
 #define FIELD_WIDTH 320
 #define FIELD_LENGTH 650
 
-#define TOWER_OFFSET 12 // Edge of 2ft tower is on centerline
+#define TOWER_OFFSET_X 6 // Edge of 2ft tower is on centerline
+#define TOWER_OFFSET_Y 24
+
+#define RED_TOWER_X TOWER_OFFSET_X // Slightly inset
+#define RED_TOWER_Y FIELD_WIDTH/2-TOWER_OFFSET_Y/2 // Red tower is above the middle
+#define BLUE_TOWER_X FIELD_LENGTH-TOWER_OFFSET_X // Place at far end
+#define BLUE_TOWER_Y FIELD_WIDTH/2+TOWER_OFFSET_Y/2 // Blue tower is below the middle
 
 #define DEFENSE_EDGE_OFFSET 202 // Distance from the wall to the edge of the defense, +10 to better line up on GUI
 #define DEFENSE_WIDTH 54
@@ -35,12 +41,14 @@ namespace Field {
         int distance;
     } Edge;
 
-    extern Fieldpoint redTower;
+    extern Fieldpoint redTowerTop;
+    extern Fieldpoint redTowerBottom;
     extern Defense redDefenses[DEFENSE_COUNT];
     extern Fieldpoint redPassage[PASSAGE_COUNT];
     extern Fieldpoint redCourtyard[COURTYARD_COUNT];
 
-    extern Fieldpoint blueTower;
+    extern Fieldpoint blueTowerTop;
+    extern Fieldpoint blueTowerBottom;
     extern Defense blueDefenses[DEFENSE_COUNT];
     extern Fieldpoint bluePassage[PASSAGE_COUNT];
     extern Fieldpoint blueCourtyard[COURTYARD_COUNT];

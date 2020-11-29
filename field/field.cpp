@@ -8,9 +8,15 @@
 
 namespace Field {
 
-    Fieldpoint redTower = Fieldpoint(
-        TOWER_OFFSET, 
-        FIELD_WIDTH/2-TOWER_OFFSET,  // Red tower is above the line
+    Fieldpoint redTowerTop = Fieldpoint(
+        RED_TOWER_X+TOWER_OFFSET_X, 
+        RED_TOWER_Y+TOWER_OFFSET_Y,
+        Alliance::RED, 
+        Fieldpoint::Type::TOWER
+    );
+    Fieldpoint redTowerBottom = Fieldpoint(
+        RED_TOWER_X+TOWER_OFFSET_X, 
+        RED_TOWER_Y-TOWER_OFFSET_Y,
         Alliance::RED, 
         Fieldpoint::Type::TOWER
     );
@@ -84,7 +90,7 @@ namespace Field {
         ),
         Fieldpoint(
             COURTYARD_OFFSET*1.5,
-            redTower.y,
+            RED_TOWER_Y,
             Alliance::NEUTRAL,
             Fieldpoint::Type::NODE
         ),
@@ -96,9 +102,15 @@ namespace Field {
         )
     };
 
-    Fieldpoint blueTower = Fieldpoint(
-        FIELD_LENGTH-TOWER_OFFSET, // Place a far end
-        FIELD_WIDTH/2 + TOWER_OFFSET, // Blue tower is below the line
+    Fieldpoint blueTowerTop = Fieldpoint(
+        BLUE_TOWER_X-TOWER_OFFSET_X,
+        BLUE_TOWER_Y+TOWER_OFFSET_Y,
+        Alliance::BLUE,
+        Fieldpoint::Type::TOWER
+    );
+    Fieldpoint blueTowerBottom = Fieldpoint(
+        BLUE_TOWER_X - TOWER_OFFSET_X,
+        BLUE_TOWER_Y - TOWER_OFFSET_Y,
         Alliance::BLUE,
         Fieldpoint::Type::TOWER
     );
@@ -172,7 +184,7 @@ namespace Field {
         ),
         Fieldpoint(
             FIELD_LENGTH-COURTYARD_OFFSET*1.5,
-            blueTower.y,
+            BLUE_TOWER_Y,
             Alliance::NEUTRAL,
             Fieldpoint::Type::NODE
         ),
@@ -230,12 +242,14 @@ namespace Field {
      */
     Graph *initGraph(){
         Graph *g = new Graph();
-        g->addNode(&redTower);
+        g->addNode(&redTowerTop);
+        g->addNode(&redTowerBottom);
         g->addNodes(redDefenses, DEFENSE_COUNT);
         g->addNodes(redPassage, PASSAGE_COUNT);
         g->addNodes(redCourtyard, COURTYARD_COUNT);
 
-        g->addNode(&blueTower);
+        g->addNode(&blueTowerTop);
+        g->addNode(&blueTowerBottom);
         g->addNodes(blueDefenses, DEFENSE_COUNT);
         g->addNodes(bluePassage, PASSAGE_COUNT);
         g->addNodes(blueCourtyard, COURTYARD_COUNT);
@@ -247,7 +261,7 @@ namespace Field {
          */
         {
             // Add edges for red courtyard nodes
-            g->addEdge(&redCourtyard[0], &redTower);
+            g->addEdge(&redCourtyard[0], &redTowerTop);
             g->addDefenseEdge(&redCourtyard[0], &redDefenses[0], false);
             g->addDefenseEdge(&redCourtyard[0], &redDefenses[1], false);
             g->addDefenseEdge(&redCourtyard[0], &redDefenses[2], false);
@@ -258,7 +272,7 @@ namespace Field {
             g->addDefenseEdge(&redCourtyard[1], &redDefenses[2], false);
             g->addDefenseEdge(&redCourtyard[1], &redDefenses[3], false);
             g->addDefenseEdge(&redCourtyard[1], &redDefenses[4], false);
-            g->addEdge(&redCourtyard[2], &redTower);
+            g->addEdge(&redCourtyard[2], &redTowerBottom);
             g->addDefenseEdge(&redCourtyard[2], &redDefenses[3], false);
             g->addDefenseEdge(&redCourtyard[2], &redDefenses[4], false);
             g->addEdge(&redCourtyard[1], &redCourtyard[0]);
@@ -291,7 +305,7 @@ namespace Field {
          */
         {
             // Add edges for blue courtyard nodes
-            g->addEdge(&blueCourtyard[0], &blueTower);
+            g->addEdge(&blueCourtyard[0], &blueTowerBottom);
             g->addDefenseEdge(&blueCourtyard[0], &blueDefenses[0], false);
             g->addDefenseEdge(&blueCourtyard[0], &blueDefenses[1], false);
             g->addEdge(&blueCourtyard[0], &blueCourtyard[1]);
@@ -301,7 +315,7 @@ namespace Field {
             g->addDefenseEdge(&blueCourtyard[1], &blueDefenses[2], false);
             g->addDefenseEdge(&blueCourtyard[1], &blueDefenses[3], false);
             g->addDefenseEdge(&blueCourtyard[1], &blueDefenses[4], false);
-            g->addEdge(&blueCourtyard[2], &blueTower);
+            g->addEdge(&blueCourtyard[2], &blueTowerTop);
             g->addDefenseEdge(&blueCourtyard[2], &blueDefenses[3], false);
             g->addDefenseEdge(&blueCourtyard[2], &blueDefenses[4], false);
             g->addEdge(&blueCourtyard[1], &blueCourtyard[0]);

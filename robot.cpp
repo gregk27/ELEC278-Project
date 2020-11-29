@@ -37,10 +37,13 @@ void Robot::initGraph(){
     // Initialise warning
     std::stringstream warning;
     // If the shot range is greated than the distance to defenses, there is something wrong. Warn the user and cap it
-    if(shotRange > DEFENSE_EDGE_OFFSET-TOWER_OFFSET){
-        warning << "\tShot range of " << (int)shotRange << "\" is larger than the " << DEFENSE_EDGE_OFFSET-TOWER_OFFSET << "\" distance to the defenses. This will be capped to prevent issues.\n";
-        shotRange = DEFENSE_EDGE_OFFSET-TOWER_OFFSET;
+    if(shotRange > DEFENSE_EDGE_OFFSET-TOWER_OFFSET_X){
+        warning << "\tShot range of " << (int)shotRange << "\" is larger than the " << DEFENSE_EDGE_OFFSET-TOWER_OFFSET_X << "\" distance to the defenses. This will be capped to prevent issues.\n";
+        shotRange = DEFENSE_EDGE_OFFSET-TOWER_OFFSET_X;
     }
+
+    // Create goal node at the centre of the tower
+    goalNode = new Fieldpoint(RED_TOWER_X, RED_TOWER_Y, Alliance::RED);
     
     // Initialise the graph with field nodes
     graph = Field::initGraph();
@@ -134,10 +137,10 @@ void Robot::initGraph(){
         }
     }
 
-    goalNode = new Fieldpoint(Field::redTower.x+10, Field::redTower.y, Alliance::RED);
     // Connect tower and shotpoints to goal node with 0 distance
     graph->addNode(goalNode);
-    graph->addEdge(goalNode, &Field::redTower, 0);
+    graph->addEdge(goalNode, &Field::redTowerTop, 0);
+    graph->addEdge(goalNode, &Field::redTowerBottom, 0);
     for(auto i : shotpoints) {
         this->graph->addEdge(goalNode, i.data, 0);
     }
@@ -149,11 +152,11 @@ Shotpoint *Robot::getShotZone(int range, int angle){
     int x, y;
     float angleRad = angle*(M_PI/180);
     if(alliance == Alliance::RED){
-        x = Field::redTower.x + range*cos(angleRad);
-        y = Field::redTower.y + range*sin(angleRad);
+        x = goalNode->x + range*cos(angleRad);
+        y = goalNode->y + range*sin(angleRad);
     } else if(alliance == Alliance::BLUE){
-        x = Field::blueTower.x - range*cos(angleRad);
-        y = Field::blueTower.y + range*sin(angleRad);
+        x = goalNode->x - range*cos(angleRad);
+        y = goalNode->y + range*sin(angleRad);
     } else {
         x = 0;
         y = 0;
