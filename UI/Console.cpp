@@ -20,6 +20,7 @@
 #define KEY_ESC 27
 #define KEY_FIRST 102
 #define KEY_LAST 108
+#define KEY_GRAPH 103
 
 #define HEIGHT 30
 #define LINES 25
@@ -160,6 +161,9 @@ void Console::begin(){
                 break;
             case KEY_LAST:
                 selected = events->size()-1;
+                break;
+            case KEY_GRAPH:
+                Interface::toggleGraph();
                 break;
             default:
                 continue;

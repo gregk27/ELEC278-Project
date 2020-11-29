@@ -12,6 +12,7 @@ namespace Interface {
     void setGraph(Graph *g);
     void setEventList(LinkedList<Event> *e);
     void setEvent(Node<Event> *e);
+    void toggleGraph();
     void close();
 
     // Exception thrown when window 

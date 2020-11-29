@@ -17,6 +17,13 @@ Graph *activeGraph;
 LinkedList<Event> *eventList;
 Node<Event> *event;
 bool running = false;
+/**
+ * Flag indicating graph visibility
+ * 0 -> Hidden
+ * 1 -> Nodes only
+ * 2 -> Nodes and lines
+ */
+int graphVis = 0;
 
 void drawGraph(Graph *g){
     SDL_Rect r;
@@ -24,16 +31,18 @@ void drawGraph(Graph *g){
     r.w=20;
 
     SDL_SetRenderDrawColor(fieldRenderer, 0,0,0,SDL_ALPHA_OPAQUE);
-    for(auto i : g->adjacency){
-        LinkedList<Graph::Edge> *l = i.data;
-        for(auto j : *l) {
-            Graph::Edge e = j.data;
-            if(e.end->type == Fieldpoint::Type::SHOTNODE || g->nodes[i.index]->type == Fieldpoint::Type::SHOTNODE){
-                SDL_SetRenderDrawColor(fieldRenderer, 185, 115, 255, SDL_ALPHA_OPAQUE);
-            } else {
-                SDL_SetRenderDrawColor(fieldRenderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
+    if(graphVis == 2){
+        for(auto i : g->adjacency){
+            LinkedList<Graph::Edge> *l = i.data;
+            for(auto j : *l) {
+                Graph::Edge e = j.data;
+                if(e.end->type == Fieldpoint::Type::SHOTNODE || g->nodes[i.index]->type == Fieldpoint::Type::SHOTNODE){
+                    SDL_SetRenderDrawColor(fieldRenderer, 185, 115, 255, SDL_ALPHA_OPAQUE);
+                } else {
+                    SDL_SetRenderDrawColor(fieldRenderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
+                }
+                SDL_RenderDrawLine(fieldRenderer, g->nodes[i.index]->x*2, g->nodes[i.index]->y*2, e.end->x*2, e.end->y*2);
             }
-            SDL_RenderDrawLine(fieldRenderer, g->nodes[i.index]->x*2, g->nodes[i.index]->y*2, e.end->x*2, e.end->y*2);
         }
     }
 
@@ -58,7 +67,10 @@ void drawGraph(Graph *g){
         }
         SDL_RenderFillRect(fieldRenderer,&r);
     }
+}
 
+void drawBot(){
+    SDL_Rect r;
     if(event != NULL){
         // Draw location indicator
         if(event->data.location != NULL){
@@ -122,9 +134,10 @@ void Interface::init(){
         SDL_SetRenderDrawColor(fieldRenderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
         SDL_RenderClear(fieldRenderer);
         SDL_RenderCopy(fieldRenderer, fieldImage, NULL, &dest);
-        if(activeGraph != NULL){
+        if(activeGraph != NULL && graphVis){
             drawGraph(activeGraph);
         }
+        drawBot();
         SDL_RenderPresent(fieldRenderer);
     }
     SDL_DestroyWindow(fieldWindow);
@@ -140,6 +153,13 @@ void Interface::setEventList(LinkedList<Event> *e){
 
 void Interface::setEvent(Node<Event> *e){
     event = e;
+}
+
+void Interface::toggleGraph(){
+    graphVis ++;
+    if(graphVis == 3){
+        graphVis = 0;
+    }
 }
 
 void Interface::close(){
