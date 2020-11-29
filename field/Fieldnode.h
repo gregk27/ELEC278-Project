@@ -1,24 +1,19 @@
+/**
+ * Fieldnode.cpp/h
+ * These files contains the the code used represent field nodes
+ * 
+ * Includes subclasses for Defenses and Shotnodes
+ */
+
 #ifndef FIELDNODE_H
 #define FIELDNODE_H
 
-// Forward-declaration of alliance from ../game.h
+// Forward-declarations from ../game.h, prevents circular dependancy
 enum class Alliance;
-
 extern const int CROSS_POINTS;
 extern const int BASE_POINTS;
 
-typedef enum _fieldtype {
-    // Generic travel node
-    NODE,
-    // Node representing a defense, points awarded for crossing
-    DEFENSE,
-    // Node representing the centre of the tower
-    TOWER,
-    // Node restricted to the owning alliance
-    RESTRICTED
-} Fieldtype;
-
-// Class representing a point on the graph
+// Class representing a node on the graph
 class Fieldnode {
     protected:
         Fieldnode();
@@ -28,9 +23,13 @@ class Fieldnode {
         enum class Type {
             // Generic travel node
             NODE, 
+            // Node representing a defense, points awarded for crossing
             DEFENSE, 
+            // Node representing the centre of the tower
             TOWER, 
+            // Node restricted to the owning alliance
             RESTRICTED,
+            // Node created by robot as location to shoot high goals
             SHOTNODE
         };
 
@@ -118,8 +117,13 @@ class Defense: public Fieldnode {
         using Fieldnode::Fieldnode;
 };
 
+/**
+ * Class representing a node used for shooting high goals
+ * These are added by robots to their member graphs
+ */
 class Shotnode: public Fieldnode {
     public:
+        // Time taken for the shot
         int time;
         using Fieldnode::Fieldnode;
 };
