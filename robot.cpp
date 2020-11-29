@@ -47,13 +47,13 @@ void Robot::initGraph(){
     
     // Initialise the graph with field nodes
     graph = Field::initGraph();
-    Shotpoint *s;
+    Shotnode *s;
     if(centreShotTime > 0){
         // Middle centre
         s = getShotZone(shotRange, 0);
         s->time = centreShotTime;
         graph->addNode(s);
-        shotpoints.push(s);
+        shotnodes.push(s);
         // Connected to central courtyard and central 2 defenses
         graph->addEdge(s, &Field::redCourtyard[1]);
         graph->addDefenseEdge(s, &Field::redDefenses[2], false);
@@ -62,7 +62,7 @@ void Robot::initGraph(){
         if(centreAngle > 0){
             // Top centre
             s = getShotZone(shotRange, -centreAngle);
-            shotpoints.push(s);
+            shotnodes.push(s);
             s->time = centreShotTime;
             graph->addNode(s);
             // Connected to upper/central courtyard and upper 2 defenses
@@ -73,7 +73,7 @@ void Robot::initGraph(){
 
             // Bottom centre
             s = getShotZone(shotRange, centreAngle);
-            shotpoints.push(s);
+            shotnodes.push(s);
             s->time = centreShotTime;
             graph->addNode(s);
             // Connected to lower courtyard and central 2 defenses
@@ -96,7 +96,7 @@ void Robot::initGraph(){
     if(sideShotTime > 0){
         // Upper side
         s = getShotZone(shotRange, -(90-sideAngle));
-        shotpoints.push(s);
+        shotnodes.push(s);
         s->time = sideShotTime;
         graph->addNode(s);
         // Connect to upper courtyard and upper 2 defenses
@@ -106,7 +106,7 @@ void Robot::initGraph(){
 
         // Lower side
         s = getShotZone(shotRange, 90-sideAngle);
-        shotpoints.push(s);
+        shotnodes.push(s);
         s->time = sideShotTime;
         graph->addNode(s);
         // Connect to lower courtyard and lower 2 defenses
@@ -137,18 +137,18 @@ void Robot::initGraph(){
         }
     }
 
-    // Connect tower and shotpoints to goal node with 0 distance
+    // Connect tower and shotnodes to goal node with 0 distance
     graph->addNode(goalNode);
     graph->addDirectedEdge(&Field::redTowerTop, goalNode, 0);
     graph->addDirectedEdge(&Field::redTowerBottom, goalNode, 0);
-    for(auto i : shotpoints) {
+    for(auto i : shotnodes) {
         this->graph->addDirectedEdge(i.data, goalNode, 0);
     }
 
     // graph->printAdj();
 }
 
-Shotpoint *Robot::getShotZone(int range, int angle){
+Shotnode *Robot::getShotZone(int range, int angle){
     int x, y;
     float angleRad = angle*(M_PI/180);
     if(alliance == Alliance::RED){
@@ -162,7 +162,7 @@ Shotpoint *Robot::getShotZone(int range, int angle){
         y = 0;
     }
 
-    return new Shotpoint(x, y, Alliance::NEUTRAL, Fieldnode::Type::SHOTNODE);
+    return new Shotnode(x, y, Alliance::NEUTRAL, Fieldnode::Type::SHOTNODE);
 }
 
 
@@ -337,8 +337,8 @@ Robot::EdgeData Robot::getWeight(Graph::DijkstraNode *n, Graph::Edge e){
             return out;
         }
     } else if (e.end->type == Fieldnode::Type::SHOTNODE && hasBall){ // Add time taken to shoot ball
-        out.weight += ((Shotpoint *) e.end)->time - HIGH_POINTS*pointValue;
-        out.time += ((Shotpoint *) e.end)->time;;
+        out.weight += ((Shotnode *) e.end)->time - HIGH_POINTS*pointValue;
+        out.time += ((Shotnode *) e.end)->time;;
     } else if (e.end->type == Fieldnode::Type::TOWER && hasBall){
         out.weight += lowTime - LOW_POINTS*pointValue;
         out.time += lowTime;

@@ -118,7 +118,7 @@ class Defense: public Fieldnode {
         using Fieldnode::Fieldnode;
 };
 
-class Shotpoint: public Fieldnode {
+class Shotnode: public Fieldnode {
     public:
         int time;
         using Fieldnode::Fieldnode;

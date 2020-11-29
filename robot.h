@@ -14,7 +14,7 @@ typedef unsigned char byte;
 class Robot {
     private:
         void initGraph();
-        Shotpoint *getShotZone(int range, int angle);
+        Shotnode *getShotZone(int range, int angle);
         /**
          * Get the event representing the robot's last action
          * Returns: Event representing robot's last action
@@ -70,7 +70,7 @@ class Robot {
         // The graph used by this robot, will have different shooting points than others, otherwise identical
         Graph *graph;
 
-        LinkedList<Shotpoint *> shotpoints;
+        LinkedList<Shotnode *> shotnodes;
         
         // Create an empty robot, 
         Robot();
