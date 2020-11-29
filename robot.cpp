@@ -327,12 +327,18 @@ Robot::EdgeData Robot::getWeight(Graph::DijkstraNode *n, Graph::Edge e){
         int cTime = crossTime((Defense *) e.end);
         if(cTime != 0){
             // Add cross time, subtract points for crossing
-            out.weight += cTime - ((Defense *) e.end)->value;
+            out.weight += cTime - ((Defense *) e.end)->value*pointValue;
             out.time += cTime;
         } else {
             out.weight = INT_MAX;
             return out;
         }
+    } else if (e.end->type == Fieldpoint::Type::SHOTNODE && hasBall){ // Add time taken to shoot ball
+        out.weight += ((Shotpoint *) e.end)->time - HIGH_POINTS*pointValue;
+        out.time += ((Shotpoint *) e.end)->time;;
+    } else if (e.end->type == Fieldpoint::Type::TOWER && hasBall){
+        out.weight += lowTime - LOW_POINTS*pointValue;
+        out.time += lowTime;
     }
     return out;
 }
