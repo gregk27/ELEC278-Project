@@ -248,33 +248,33 @@ namespace Field {
         {
             // Add edges for red courtyard nodes
             g->addEdge(&redCourtyard[0], &redTower);
-            g->addEdge(&redCourtyard[0], &redDefenses[0]);
-            g->addEdge(&redCourtyard[0], &redDefenses[1]);
-            g->addEdge(&redCourtyard[0], &redDefenses[2]);
+            g->addDefenseEdge(&redCourtyard[0], &redDefenses[0], false);
+            g->addDefenseEdge(&redCourtyard[0], &redDefenses[1], false);
+            g->addDefenseEdge(&redCourtyard[0], &redDefenses[2], false);
             g->addEdge(&redCourtyard[0], &redCourtyard[1]);
             g->addEdge(&redCourtyard[0], &redCourtyard[2]);
-            g->addEdge(&redCourtyard[1], &redDefenses[0]);
-            g->addEdge(&redCourtyard[1], &redDefenses[1]);
-            g->addEdge(&redCourtyard[1], &redDefenses[2]);
-            g->addEdge(&redCourtyard[1], &redDefenses[3]);
-            g->addEdge(&redCourtyard[1], &redDefenses[4]);
+            g->addDefenseEdge(&redCourtyard[1], &redDefenses[0], false);
+            g->addDefenseEdge(&redCourtyard[1], &redDefenses[1], false);
+            g->addDefenseEdge(&redCourtyard[1], &redDefenses[2], false);
+            g->addDefenseEdge(&redCourtyard[1], &redDefenses[3], false);
+            g->addDefenseEdge(&redCourtyard[1], &redDefenses[4], false);
             g->addEdge(&redCourtyard[2], &redTower);
-            g->addEdge(&redCourtyard[2], &redDefenses[3]);
-            g->addEdge(&redCourtyard[2], &redDefenses[4]);
+            g->addDefenseEdge(&redCourtyard[2], &redDefenses[3], false);
+            g->addDefenseEdge(&redCourtyard[2], &redDefenses[4], false);
             g->addEdge(&redCourtyard[1], &redCourtyard[0]);
             g->addEdge(&redCourtyard[1], &redCourtyard[2]);
 
             // Add edges for red defenses and centre field
-            g->addEdge(&redDefenses[0], &centreBalls[5]);
-            g->addEdge(&redDefenses[1], &centreBalls[5]);
-            g->addEdge(&redDefenses[1], &centreBalls[4]);
-            g->addEdge(&redDefenses[1], &centreBalls[3]);
-            g->addEdge(&redDefenses[2], &centreBalls[3]);
-            g->addEdge(&redDefenses[2], &centreBalls[2]);
-            g->addEdge(&redDefenses[3], &centreBalls[2]);
-            g->addEdge(&redDefenses[3], &centreBalls[1]);
-            g->addEdge(&redDefenses[4], &centreBalls[1]);
-            g->addEdge(&redDefenses[4], &centreBalls[0]);
+            g->addDefenseEdge(&redDefenses[0], &centreBalls[5], true);
+            g->addDefenseEdge(&redDefenses[1], &centreBalls[5], true);
+            g->addDefenseEdge(&redDefenses[1], &centreBalls[4], true);
+            g->addDefenseEdge(&redDefenses[1], &centreBalls[3], true);
+            g->addDefenseEdge(&redDefenses[2], &centreBalls[3], true);
+            g->addDefenseEdge(&redDefenses[2], &centreBalls[2], true);
+            g->addDefenseEdge(&redDefenses[3], &centreBalls[2], true);
+            g->addDefenseEdge(&redDefenses[3], &centreBalls[1], true);
+            g->addDefenseEdge(&redDefenses[4], &centreBalls[1], true);
+            g->addDefenseEdge(&redDefenses[4], &centreBalls[0], true);
 
             // Add edges for red secret passage
             g->addEdge(&redPassage[0], &redPassage[1]);
@@ -292,32 +292,32 @@ namespace Field {
         {
             // Add edges for blue courtyard nodes
             g->addEdge(&blueCourtyard[0], &blueTower);
-            g->addEdge(&blueCourtyard[0], &blueDefenses[0]);
-            g->addEdge(&blueCourtyard[0], &blueDefenses[1]);
+            g->addDefenseEdge(&blueCourtyard[0], &blueDefenses[0], false);
+            g->addDefenseEdge(&blueCourtyard[0], &blueDefenses[1], false);
             g->addEdge(&blueCourtyard[0], &blueCourtyard[1]);
             g->addEdge(&blueCourtyard[0], &blueCourtyard[2]);
-            g->addEdge(&blueCourtyard[1], &blueDefenses[0]);
-            g->addEdge(&blueCourtyard[1], &blueDefenses[1]);
-            g->addEdge(&blueCourtyard[1], &blueDefenses[2]);
-            g->addEdge(&blueCourtyard[1], &blueDefenses[3]);
-            g->addEdge(&blueCourtyard[1], &blueDefenses[4]);
+            g->addDefenseEdge(&blueCourtyard[1], &blueDefenses[0], false);
+            g->addDefenseEdge(&blueCourtyard[1], &blueDefenses[1], false);
+            g->addDefenseEdge(&blueCourtyard[1], &blueDefenses[2], false);
+            g->addDefenseEdge(&blueCourtyard[1], &blueDefenses[3], false);
+            g->addDefenseEdge(&blueCourtyard[1], &blueDefenses[4], false);
             g->addEdge(&blueCourtyard[2], &blueTower);
-            g->addEdge(&blueCourtyard[2], &blueDefenses[3]);
-            g->addEdge(&blueCourtyard[2], &blueDefenses[4]);
+            g->addDefenseEdge(&blueCourtyard[2], &blueDefenses[3], false);
+            g->addDefenseEdge(&blueCourtyard[2], &blueDefenses[4], false);
             g->addEdge(&blueCourtyard[1], &blueCourtyard[0]);
             g->addEdge(&blueCourtyard[1], &blueCourtyard[2]);
 
             // Add edges for blue defenses and centre field
-            g->addEdge(&blueDefenses[0], &centreBalls[5-5]);
-            g->addEdge(&blueDefenses[1], &centreBalls[5-5]);
-            g->addEdge(&blueDefenses[1], &centreBalls[5-4]);
-            g->addEdge(&blueDefenses[1], &centreBalls[5-3]);
-            g->addEdge(&blueDefenses[2], &centreBalls[5-3]);
-            g->addEdge(&blueDefenses[2], &centreBalls[5-2]);
-            g->addEdge(&blueDefenses[3], &centreBalls[5-2]);
-            g->addEdge(&blueDefenses[3], &centreBalls[5-1]);
-            g->addEdge(&blueDefenses[4], &centreBalls[5-1]);
-            g->addEdge(&blueDefenses[4], &centreBalls[5-0]);
+            g->addDefenseEdge(&blueDefenses[0], &centreBalls[5-5], true);
+            g->addDefenseEdge(&blueDefenses[1], &centreBalls[5-5], true);
+            g->addDefenseEdge(&blueDefenses[1], &centreBalls[5-4], true);
+            g->addDefenseEdge(&blueDefenses[1], &centreBalls[5-3], true);
+            g->addDefenseEdge(&blueDefenses[2], &centreBalls[5-3], true);
+            g->addDefenseEdge(&blueDefenses[2], &centreBalls[5-2], true);
+            g->addDefenseEdge(&blueDefenses[3], &centreBalls[5-2], true);
+            g->addDefenseEdge(&blueDefenses[3], &centreBalls[5-1], true);
+            g->addDefenseEdge(&blueDefenses[4], &centreBalls[5-1], true);
+            g->addDefenseEdge(&blueDefenses[4], &centreBalls[5-0], true);
 
             // Add edges for blue secret passage
             g->addEdge(&bluePassage[0], &bluePassage[1]);
@@ -370,7 +370,7 @@ namespace Field {
             for(auto j : *l){
                 fprintf(f, "\t<edge id=\"%d%d\" source=\"%d\" target=\"%d\" sourceport=\"p0\" targetport=\"p0\">\n", i.index, j.index, i.index, j.data.end->index);
                 
-                fprintf(f, "\t<data key=\"d13\">\n\t\t<yjs:PolylineEdgeStyle stroke=\"#0000000\">\n\t\t<yjs:PolylineEdgeStyle.targetArrow>\n\t\t\t<yjs:Arrow type=\"NONE\" stroke=\"#FF000000\" fill=\"BLACK\"/>\n\t\t</yjs:PolylineEdgeStyle.targetArrow>\n\t\t<yjs:PolylineEdgeStyle.sourceArrow>\n\t\t\t<yjs:Arrow type=\"NONE\" stroke=\"#FF000000\" fill=\"BLACK\"/>\n\t\t</yjs:PolylineEdgeStyle.sourceArrow>\n\t\t</yjs:PolylineEdgeStyle>\n\t</data>\n");
+                fprintf(f, "\t<data key=\"d13\">\n\t\t<yjs:PolylineEdgeStyle stroke=\"#0000000\">\n\t\t<yjs:PolylineEdgeStyle.targetArrow>\n\t\t\t<yjs:Arrow type=\"TRIANGLE\" stroke=\"#FF000000\" fill=\"BLACK\"/>\n\t\t</yjs:PolylineEdgeStyle.targetArrow>\n\t\t<yjs:PolylineEdgeStyle.sourceArrow>\n\t\t\t<yjs:Arrow type=\"NONE\" stroke=\"#FF000000\" fill=\"BLACK\"/>\n\t\t</yjs:PolylineEdgeStyle.sourceArrow>\n\t\t</yjs:PolylineEdgeStyle>\n\t</data>\n");
                 // fprintf(f, "\t<data key=\"d11\">\n\t\t<x:List>\n\t\t\t<y:Label Style=\"{y:GraphMLReference 3}\">\n\t\t\t\t<y:Label.Text>%d</y:Label.Text>\n\t\t\t\t<y:Label.LayoutParameter>\n\t\t\t\t\t<y:SmartEdgeLabelModelParameter Distance=\"5\">\n\t\t\t\t\t\t<y:SmartEdgeLabelModelParameter.Model>\n\t\t\t\t\t\t\t<y:SmartEdgeLabelModel/>\n\t\t\t\t\t\t</y:SmartEdgeLabelModelParameter.Model>\n\t\t\t\t\t</y:SmartEdgeLabelModelParameter>\n\t\t\t\t</y:Label.LayoutParameter>\n\t\t\t</y:Label>\n\t\t</x:List>\n\t</data>\n\t", e.distance);
 
                 fprintf(f, "\t</edge>\n");

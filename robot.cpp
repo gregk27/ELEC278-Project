@@ -53,8 +53,8 @@ void Robot::initGraph(){
         shotpoints.push(s);
         // Connected to central courtyard and central 2 defenses
         graph->addEdge(s, &Field::redCourtyard[1]);
-        graph->addEdge(s, &Field::redDefenses[2]);
-        graph->addEdge(s, &Field::redDefenses[3]);
+        graph->addDefenseEdge(s, &Field::redDefenses[2], false);
+        graph->addDefenseEdge(s, &Field::redDefenses[3], false);
         // Add angled nodes if applicable
         if(centreAngle > 0){
             // Top centre
@@ -65,8 +65,8 @@ void Robot::initGraph(){
             // Connected to upper/central courtyard and upper 2 defenses
             graph->addEdge(s, &Field::redCourtyard[2]);
             graph->addEdge(s, &Field::redCourtyard[1]);
-            graph->addEdge(s, &Field::redDefenses[3]);
-            graph->addEdge(s, &Field::redDefenses[4]);
+            graph->addDefenseEdge(s, &Field::redDefenses[3], false);
+            graph->addDefenseEdge(s, &Field::redDefenses[4], false);
 
             // Bottom centre
             s = getShotZone(shotRange, centreAngle);
@@ -76,9 +76,9 @@ void Robot::initGraph(){
             // Connected to lower courtyard and central 2 defenses
             graph->addEdge(s, &Field::redCourtyard[0]);
             graph->addEdge(s, &Field::redCourtyard[1]);
-            graph->addEdge(s, &Field::redDefenses[0]);
-            graph->addEdge(s, &Field::redDefenses[1]);
-            graph->addEdge(s, &Field::redDefenses[2]);
+            graph->addDefenseEdge(s, &Field::redDefenses[0], false);
+            graph->addDefenseEdge(s, &Field::redDefenses[1], false);
+            graph->addDefenseEdge(s, &Field::redDefenses[2], false);
 
             // If the centre angle is higher than 40° soft limit
             if(centreAngle > 40){
@@ -98,8 +98,8 @@ void Robot::initGraph(){
         graph->addNode(s);
         // Connect to upper courtyard and upper 2 defenses
         graph->addEdge(s, &Field::redCourtyard[2]);
-        graph->addEdge(s, &Field::redDefenses[3]);
-        graph->addEdge(s, &Field::redDefenses[4]);
+        graph->addDefenseEdge(s, &Field::redDefenses[3], false);
+        graph->addDefenseEdge(s, &Field::redDefenses[4], false);
 
         // Lower side
         s = getShotZone(shotRange, 90-sideAngle);
@@ -108,8 +108,8 @@ void Robot::initGraph(){
         graph->addNode(s);
         // Connect to lower courtyard and lower 2 defenses
         graph->addEdge(s, &Field::redCourtyard[0]);
-        graph->addEdge(s, &Field::redDefenses[0]);
-        graph->addEdge(s, &Field::redDefenses[1]);
+        graph->addDefenseEdge(s, &Field::redDefenses[0], false);
+        graph->addDefenseEdge(s, &Field::redDefenses[1], false);
 
         // If the side angle is higher than 40° soft limit
         if(sideAngle > 40){
