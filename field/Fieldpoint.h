@@ -78,11 +78,11 @@ class Defense: public Fieldpoint {
     private: 
         // Value lost on cross
         static const int CROSS_VALUE = 5;
-        // Maximum value of the defense
-        static const int MAX_VALUE = CROSS_VALUE*2;
 
         Defense();
     public:
+        // Maximum value of the defense
+        static const int MAX_VALUE = CROSS_VALUE*2;
         /* 
         * Bitmask positions for each defense
         * To get the speed for a particular defense, do

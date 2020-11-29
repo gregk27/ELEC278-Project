@@ -3,6 +3,7 @@
 
 #include "../utils/LinkedList.h"
 #include "../game.h"
+#include "../field/Fieldpoint.h"
 
 namespace Console {
     void setEvents(LinkedList<Event> *events);
@@ -15,6 +16,12 @@ namespace Console {
      * Returns: True if user enters Y/y, def on empty input, otherwise false
      */
     bool confirm(std::string message, bool def);
+
+    struct DefenseStat {
+        int index;
+        Defense::Defenses type;
+        int value;
+    };
 }
 
 

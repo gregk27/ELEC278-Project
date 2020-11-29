@@ -2,11 +2,13 @@
 #include <stdlib.h>
 #include <conio.h>
 #include <time.h>
+#include <string>
 
 #include "Console.h"
 #include "../game.h"
 #include "Interface.h"
 #include "../utils/LinkedList.h"
+#include "../field/field.h"
 
 #include <windows.h>
 
@@ -24,12 +26,33 @@ LinkedList<Event> *events;
 
 HANDLE handle;
 
+Console::DefenseStat defenses[5];
+
+/** 
+ * Names of defenses
+ * To get correct name, access Defenses value +1
+*/
+const std::string DEFENSE_NAMES[] = {"Low Bar", "Portcullis", "Cheval de Frise", "Moat", "Ramparts", "Drawbridge", "Sally Port", "Rock Wall", "Rough Terrain"};
+
+
 void setCursor(short x, short y){
     SetConsoleCursorPosition(handle, {x,y});
 }
 
 void Console::setEvents(LinkedList<Event> *e){
     events = e;
+}
+
+void updateScores(LinkedList<Event>::Iterator::ListItem i, int *scoreVar){
+    *scoreVar += i.data.points;
+    // If it was crossing a defense, then remove the points
+    if(i.data.location->type == Fieldpoint::Type::DEFENSE){
+        for(int j=0; j<5; j++){
+            if(defenses[j].index == i.data.location->index){
+                defenses[j].value -= i.data.points;
+            }
+        }
+    }
 }
 
 void redraw(int selected){
@@ -39,6 +62,10 @@ void redraw(int selected){
     printf("  Time   Robot @Node    Desc\t\t\tPress ESC to exit\n");
     
     int score = 0;
+    // Initialise defenses
+    for(int i=0; i<5; i++){
+        defenses[i].value = Defense::MAX_VALUE;
+    }
 
     // Print events
     for(auto i : (*events)){
@@ -46,7 +73,7 @@ void redraw(int selected){
         // If it's less than the selected value (+ offset) and it's not low enough for bottom, don't render
         if(i.index < selected-2 && i.index < events->size()-LINES-1){
             // Count the score as it's a passed event
-            score += i.data.points;
+            updateScores(i, &score);
             continue;
         // If it's too low, stop here
         } else if (i.index > (selected-2 + LINES)){
@@ -57,14 +84,14 @@ void redraw(int selected){
         // If it's selected, print indicator and colour
         if(i.index == selected){
             // Count the score as it's the event
-            score += i.data.points;
+            updateScores(i, &score);
             SetConsoleTextAttribute(handle, 0x0B);
             printf(" >%s", out.c_str());
             SetConsoleTextAttribute(handle, 0x0F);
         } else {
             if(i.index < selected){
                 // Count the score as it's a passed event
-                score += i.data.points;
+                updateScores(i, &score);
             }
             printf("  %s", out.c_str());
         }
@@ -75,6 +102,17 @@ void redraw(int selected){
     printf("Time: %.2f    ", (*events)[selected].time);
     setCursor(80, 6);
     printf("Total score: %d ", score);
+    
+    // Print defense information. Print in reverse order to match positions on field
+    setCursor(80,9);
+    printf("Defenses:");
+    setCursor(80,10);
+    printf("ID  Value Type");
+    for(int i=4; i>=0; i--){
+        setCursor(80, 11+i);
+        fflush(stdout);
+        printf("R%d: %2d %-16s", i, defenses[i].value, DEFENSE_NAMES[defenses[i].type+1].c_str());
+    }
 
     // Return cursor to origin
     setCursor(0,0);
@@ -83,6 +121,13 @@ void redraw(int selected){
 void Console::begin(){
     printf("Hello World\n");
     printf("Printed a thing!\n");
+
+    // Initialise defenses
+    for(int i=0; i<5; i++){
+        defenses[i].index = Field::redDefenses[i].index;
+        defenses[i].type = Field::redDefenses[i].defType;
+        defenses[i].value = Defense::MAX_VALUE;
+    }
 
     int selected = 0;
     int score = 0;
