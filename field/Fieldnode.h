@@ -1,5 +1,5 @@
-#ifndef FIELDPOINT_H
-#define FIELDPOINT_H
+#ifndef FIELDNODE_H
+#define FIELDNODE_H
 
 // Forward-declaration of alliance from ../game.h
 enum class Alliance;
@@ -19,9 +19,9 @@ typedef enum _fieldtype {
 } Fieldtype;
 
 // Class representing a point on the graph
-class Fieldpoint {
+class Fieldnode {
     protected:
-        Fieldpoint();
+        Fieldnode();
 
     public:
         // Type of point
@@ -46,35 +46,35 @@ class Fieldpoint {
         int index;
 
         /**
-         * Create a new Fieldpoint, which is automatically a neutral node
+         * Create a new Fieldnode, which is automatically a neutral node
          * - x: X location, inches from top-left
          * - y: Y location, inches from top-left
          */
-        Fieldpoint(int x, int y);
+        Fieldnode(int x, int y);
 
         /**
-         * Create a new Fieldpoint, which is automatically a node
+         * Create a new Fieldnode, which is automatically a node
          * - x: X location, inches from top-left
          * - y: Y location, inches from top-left
          * - a: The alliance the node belongs to
          */
-        Fieldpoint(int x, int y, Alliance a);
+        Fieldnode(int x, int y, Alliance a);
 
         /**
-         * Create a new Fieldpoint
+         * Create a new Fieldnode
          * - x: X location, inches from top-left
          * - y: Y location, inches from top-left
          * - a: The alliance the node belongs to
          * - t: The type of the point
          */
-        Fieldpoint(int x, int y, Alliance a, Type t);
+        Fieldnode(int x, int y, Alliance a, Type t);
 };
 
 /* 
  * Class representing the defenses
  * This also holds utility functions for determining defenses
 */
-class Defense: public Fieldpoint {
+class Defense: public Fieldnode {
     private: 
         // Value lost on cross
         static const int CROSS_VALUE = 5;
@@ -115,13 +115,13 @@ class Defense: public Fieldpoint {
         // Type of defense
         Defenses defType;
 
-        using Fieldpoint::Fieldpoint;
+        using Fieldnode::Fieldnode;
 };
 
-class Shotpoint: public Fieldpoint {
+class Shotpoint: public Fieldnode {
     public:
         int time;
-        using Fieldpoint::Fieldpoint;
+        using Fieldnode::Fieldnode;
 };
 
-#endif // !FIELDPOINT_H
+#endif // !FIELDNODE_H

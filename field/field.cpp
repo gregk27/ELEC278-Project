@@ -26,17 +26,17 @@ namespace Field {
     /**
      * RED NODES
      */
-    Fieldpoint redTowerTop = Fieldpoint(
+    Fieldnode redTowerTop = Fieldnode(
         RED_TOWER_X+TOWER_OFFSET_X, 
         RED_TOWER_Y+TOWER_OFFSET_Y,
         Alliance::RED, 
-        Fieldpoint::Type::TOWER
+        Fieldnode::Type::TOWER
     );
-    Fieldpoint redTowerBottom = Fieldpoint(
+    Fieldnode redTowerBottom = Fieldnode(
         RED_TOWER_X+TOWER_OFFSET_X, 
         RED_TOWER_Y-TOWER_OFFSET_Y,
         Alliance::RED, 
-        Fieldpoint::Type::TOWER
+        Fieldnode::Type::TOWER
     );
 
     Defense redDefenses[DEFENSE_COUNT] = {
@@ -44,96 +44,96 @@ namespace Field {
             DEFENSE_EDGE_OFFSET+DEFENSE_LENGTH/2,
             FIELD_WIDTH-(0*DEFENSE_WIDTH+DEFENSE_WIDTH/2),
             Alliance::RED,
-            Fieldpoint::Type::DEFENSE
+            Fieldnode::Type::DEFENSE
         ),
         Defense(
             DEFENSE_EDGE_OFFSET+DEFENSE_LENGTH/2,
             FIELD_WIDTH-(1*DEFENSE_WIDTH+DEFENSE_WIDTH/2),
             Alliance::RED,
-            Fieldpoint::Type::DEFENSE
+            Fieldnode::Type::DEFENSE
         ),
         Defense(
             DEFENSE_EDGE_OFFSET+DEFENSE_LENGTH/2,
             FIELD_WIDTH-(2*DEFENSE_WIDTH+DEFENSE_WIDTH/2),
             Alliance::RED,
-            Fieldpoint::Type::DEFENSE
+            Fieldnode::Type::DEFENSE
         ),
         Defense(
             DEFENSE_EDGE_OFFSET+DEFENSE_LENGTH/2,
             FIELD_WIDTH-(3*DEFENSE_WIDTH+DEFENSE_WIDTH/2),
             Alliance::RED,
-            Fieldpoint::Type::DEFENSE
+            Fieldnode::Type::DEFENSE
         ),
         Defense(
             DEFENSE_EDGE_OFFSET+DEFENSE_LENGTH/2,
             FIELD_WIDTH-(4*DEFENSE_WIDTH+DEFENSE_WIDTH/2),
             Alliance::RED,
-            Fieldpoint::Type::DEFENSE
+            Fieldnode::Type::DEFENSE
         )
     };
 
-    Fieldpoint redPassage[PASSAGE_COUNT] = {
-        Fieldpoint(
+    Fieldnode redPassage[PASSAGE_COUNT] = {
+        Fieldnode(
             FIELD_LENGTH-0*SECRET_PASSAGE_LENGTH/3,
             FIELD_WIDTH-SECRET_PASSAGE_WIDTH/2,
             Alliance::RED,
-            Fieldpoint::Type::RESTRICTED
+            Fieldnode::Type::RESTRICTED
         ),
-        Fieldpoint(
+        Fieldnode(
             FIELD_LENGTH-SECRET_PASSAGE_LENGTH/3,
             FIELD_WIDTH-SECRET_PASSAGE_WIDTH/2,
             Alliance::RED,
-            Fieldpoint::Type::RESTRICTED
+            Fieldnode::Type::RESTRICTED
         ),
-        Fieldpoint(
+        Fieldnode(
             FIELD_LENGTH-2*SECRET_PASSAGE_LENGTH/3,
             FIELD_WIDTH-SECRET_PASSAGE_WIDTH/2,
             Alliance::RED,
-            Fieldpoint::Type::RESTRICTED
+            Fieldnode::Type::RESTRICTED
         ),
-        Fieldpoint(
+        Fieldnode(
             FIELD_LENGTH-3*SECRET_PASSAGE_LENGTH/3,
             FIELD_WIDTH-SECRET_PASSAGE_WIDTH/2,
             Alliance::RED,
-            Fieldpoint::Type::RESTRICTED
+            Fieldnode::Type::RESTRICTED
         )
     };
 
-    Fieldpoint redCourtyard[COURTYARD_COUNT] = {
-        Fieldpoint(
+    Fieldnode redCourtyard[COURTYARD_COUNT] = {
+        Fieldnode(
             COURTYARD_OFFSET,
             redDefenses[1].y,
             Alliance::NEUTRAL,
-            Fieldpoint::Type::NODE
+            Fieldnode::Type::NODE
         ),
-        Fieldpoint(
+        Fieldnode(
             COURTYARD_OFFSET*1.5,
             RED_TOWER_Y,
             Alliance::NEUTRAL,
-            Fieldpoint::Type::NODE
+            Fieldnode::Type::NODE
         ),
-        Fieldpoint(
+        Fieldnode(
             COURTYARD_OFFSET,
             redDefenses[4].y,
             Alliance::NEUTRAL,
-            Fieldpoint::Type::NODE
+            Fieldnode::Type::NODE
         )
     };
 
     /**
      * BLUE NODES
      */
-    Fieldpoint blueTowerTop = Fieldpoint(
+    Fieldnode blueTowerTop = Fieldnode(
         BLUE_TOWER_X-TOWER_OFFSET_X,
         BLUE_TOWER_Y+TOWER_OFFSET_Y,
         Alliance::BLUE,
-        Fieldpoint::Type::TOWER
+        Fieldnode::Type::TOWER
     );
-    Fieldpoint blueTowerBottom = Fieldpoint(
+    Fieldnode blueTowerBottom = Fieldnode(
         BLUE_TOWER_X - TOWER_OFFSET_X,
         BLUE_TOWER_Y - TOWER_OFFSET_Y,
         Alliance::BLUE,
-        Fieldpoint::Type::TOWER
+        Fieldnode::Type::TOWER
     );
 
     Defense blueDefenses[DEFENSE_COUNT] = {
@@ -141,127 +141,127 @@ namespace Field {
             FIELD_LENGTH-DEFENSE_EDGE_OFFSET-DEFENSE_LENGTH/2,
             (0*DEFENSE_WIDTH+DEFENSE_WIDTH/2),
             Alliance::BLUE,
-            Fieldpoint::Type::DEFENSE
+            Fieldnode::Type::DEFENSE
         ),
         Defense(
             FIELD_LENGTH-DEFENSE_EDGE_OFFSET-DEFENSE_LENGTH/2,
             (1*DEFENSE_WIDTH+DEFENSE_WIDTH/2),
             Alliance::BLUE,
-            Fieldpoint::Type::DEFENSE
+            Fieldnode::Type::DEFENSE
         ),
         Defense(
             FIELD_LENGTH-DEFENSE_EDGE_OFFSET-DEFENSE_LENGTH/2,
             (2*DEFENSE_WIDTH+DEFENSE_WIDTH/2),
             Alliance::BLUE,
-            Fieldpoint::Type::DEFENSE
+            Fieldnode::Type::DEFENSE
         ),
         Defense(
             FIELD_LENGTH-DEFENSE_EDGE_OFFSET-DEFENSE_LENGTH/2,
             (3*DEFENSE_WIDTH+DEFENSE_WIDTH/2),
             Alliance::BLUE,
-            Fieldpoint::Type::DEFENSE
+            Fieldnode::Type::DEFENSE
         ),
         Defense(
             FIELD_LENGTH-DEFENSE_EDGE_OFFSET-DEFENSE_LENGTH/2,
             (4*DEFENSE_WIDTH+DEFENSE_WIDTH/2),
             Alliance::BLUE,
-            Fieldpoint::Type::DEFENSE
+            Fieldnode::Type::DEFENSE
         ),
     };
 
-    Fieldpoint bluePassage[PASSAGE_COUNT] = {
-        Fieldpoint(
+    Fieldnode bluePassage[PASSAGE_COUNT] = {
+        Fieldnode(
             0*SECRET_PASSAGE_LENGTH/3,
             SECRET_PASSAGE_WIDTH/2,
             Alliance::BLUE,
-            Fieldpoint::Type::RESTRICTED
+            Fieldnode::Type::RESTRICTED
         ),
-        Fieldpoint(
+        Fieldnode(
             SECRET_PASSAGE_LENGTH/3,
             SECRET_PASSAGE_WIDTH/2,
             Alliance::BLUE,
-            Fieldpoint::Type::RESTRICTED
+            Fieldnode::Type::RESTRICTED
         ),
-        Fieldpoint(
+        Fieldnode(
             2*SECRET_PASSAGE_LENGTH/3,
             SECRET_PASSAGE_WIDTH/2,
             Alliance::BLUE,
-            Fieldpoint::Type::RESTRICTED
+            Fieldnode::Type::RESTRICTED
         ),
-        Fieldpoint(
+        Fieldnode(
             3*SECRET_PASSAGE_LENGTH/3,
             SECRET_PASSAGE_WIDTH/2,
             Alliance::BLUE,
-            Fieldpoint::Type::RESTRICTED
+            Fieldnode::Type::RESTRICTED
         )
     };
 
-    Fieldpoint blueCourtyard[COURTYARD_COUNT] = {
-        Fieldpoint(
+    Fieldnode blueCourtyard[COURTYARD_COUNT] = {
+        Fieldnode(
             FIELD_LENGTH-COURTYARD_OFFSET,
             blueDefenses[1].y,
             Alliance::NEUTRAL,
-            Fieldpoint::Type::NODE
+            Fieldnode::Type::NODE
         ),
-        Fieldpoint(
+        Fieldnode(
             FIELD_LENGTH-COURTYARD_OFFSET*1.5,
             BLUE_TOWER_Y,
             Alliance::NEUTRAL,
-            Fieldpoint::Type::NODE
+            Fieldnode::Type::NODE
         ),
-        Fieldpoint(
+        Fieldnode(
             FIELD_LENGTH-COURTYARD_OFFSET,
             blueDefenses[4].y,
             Alliance::NEUTRAL,
-            Fieldpoint::Type::NODE
+            Fieldnode::Type::NODE
         )
     };
 
     /**
      * NEUTRAL
      */
-    Fieldpoint centreBalls[CENTRE_BALL_COUNT] = {
-        Fieldpoint(
+    Fieldnode centreBalls[CENTRE_BALL_COUNT] = {
+        Fieldnode(
             FIELD_LENGTH/2,
             FIELD_WIDTH/7*1,
             Alliance::NEUTRAL,
-            Fieldpoint::Type::NODE
+            Fieldnode::Type::NODE
         ),
-        Fieldpoint(
+        Fieldnode(
             FIELD_LENGTH/2,
             FIELD_WIDTH/7*2,
             Alliance::NEUTRAL,
-            Fieldpoint::Type::NODE
+            Fieldnode::Type::NODE
         ),
-        Fieldpoint(
+        Fieldnode(
             FIELD_LENGTH/2,
             FIELD_WIDTH/7*3,
             Alliance::NEUTRAL,
-            Fieldpoint::Type::NODE
+            Fieldnode::Type::NODE
         ),
-        Fieldpoint(
+        Fieldnode(
             FIELD_LENGTH/2,
             FIELD_WIDTH/7*4,
             Alliance::NEUTRAL,
-            Fieldpoint::Type::NODE
+            Fieldnode::Type::NODE
         ),
-        Fieldpoint(
+        Fieldnode(
             FIELD_LENGTH/2,
             FIELD_WIDTH/7*5,
             Alliance::NEUTRAL,
-            Fieldpoint::Type::NODE
+            Fieldnode::Type::NODE
         ),
-        Fieldpoint(
+        Fieldnode(
             FIELD_LENGTH/2,
             FIELD_WIDTH/7*6,
             Alliance::NEUTRAL,
-            Fieldpoint::Type::NODE
+            Fieldnode::Type::NODE
         )
     };
 
     /**
      * Initialise a graph of the field
-     * This will automatically build the graph from the various predefined fieldpoints
+     * This will automatically build the graph from the various predefined fieldnodes
      * 
      */
     Graph *initGraph(){
@@ -388,7 +388,7 @@ namespace Field {
         fprintf(f, "<graph id=\"G\" edgedefault=\"undirected\">\n");
         // Add nodes to the graph
         for(auto i : g->nodes){
-            Fieldpoint *p = i.data;
+            Fieldnode *p = i.data;
             fprintf(f, "\t<node id=\"%d\">\n", i.index);
             fprintf(f, "\t<data key=\"d5\">\n\t\t<y:RectD X=\"%d\" Y=\"%d\" Width=\"10\" Height=\"10\"/>\n\t</data>\n", p->x, p->y);
             // Set node colour based on ownership
@@ -457,19 +457,19 @@ namespace Field {
 
             // Set type letters
             switch(g->nodes[i]->type){
-                case Fieldpoint::Type::TOWER:
+                case Fieldnode::Type::TOWER:
                     out[x][y][1]='T';
                     out[x][y][2]='W';
                     break;
-                case Fieldpoint::Type::DEFENSE:
+                case Fieldnode::Type::DEFENSE:
                     out[x][y][1]='D';
                     out[x][y][2]='F';
                     break;
-                case Fieldpoint::Type::RESTRICTED:
+                case Fieldnode::Type::RESTRICTED:
                     out[x][y][1]='N';
                     out[x][y][2]='R';
                     break;
-                case Fieldpoint::Type::SHOTNODE:
+                case Fieldnode::Type::SHOTNODE:
                     out[x][y][1]='S';
                     out[x][y][2]='N';
                     break;

@@ -49,7 +49,7 @@ void Console::setEvents(LinkedList<Event> *e){
 void updateScores(LinkedList<Event>::Iterator::ListItem i, int *scoreVar){
     *scoreVar += i.data.points;
     // If it was crossing a defense, then remove the points
-    if(i.data.location->type == Fieldpoint::Type::DEFENSE){
+    if(i.data.location->type == Fieldnode::Type::DEFENSE){
         for(int j=0; j<5; j++){
             if(defenses[j].index == i.data.location->index){
                 defenses[j].value -= i.data.points;

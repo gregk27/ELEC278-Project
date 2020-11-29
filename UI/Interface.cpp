@@ -36,7 +36,7 @@ void drawGraph(Graph *g){
             LinkedList<Graph::Edge> *l = i.data;
             for(auto j : *l) {
                 Graph::Edge e = j.data;
-                if(e.end->type == Fieldpoint::Type::SHOTNODE || g->nodes[i.index]->type == Fieldpoint::Type::SHOTNODE){
+                if(e.end->type == Fieldnode::Type::SHOTNODE || g->nodes[i.index]->type == Fieldnode::Type::SHOTNODE){
                     SDL_SetRenderDrawColor(fieldRenderer, 185, 115, 255, SDL_ALPHA_OPAQUE);
                 } else {
                     SDL_SetRenderDrawColor(fieldRenderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
@@ -47,7 +47,7 @@ void drawGraph(Graph *g){
     }
 
     for(auto i : g->nodes){
-        Fieldpoint *p = i.data;
+        Fieldnode *p = i.data;
         // Set x and y, doubled because canavas is scaled up, subtract 10 to centre
         r.x = p->x*2-10;
         r.y = p->y*2-10;
@@ -62,7 +62,7 @@ void drawGraph(Graph *g){
                 SDL_SetRenderDrawColor(fieldRenderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
                 break;
         }
-        if(p->type == Fieldpoint::Type::SHOTNODE){
+        if(p->type == Fieldnode::Type::SHOTNODE){
             SDL_SetRenderDrawColor(fieldRenderer, 185, 115, 255, SDL_ALPHA_OPAQUE);
         }
         SDL_RenderFillRect(fieldRenderer,&r);

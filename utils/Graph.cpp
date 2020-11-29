@@ -1,11 +1,11 @@
 #include <math.h>
 #include "Graph.h"
 
-void Graph::addNode(Fieldpoint *f){
+void Graph::addNode(Fieldnode *f){
     f->index = nodes.push(f);
     adjacency.push(new LinkedList<Edge>);
     // If it's a defense being added, primary will be used for entry-only, second for exit-only
-    if(f->type == Fieldpoint::Type::DEFENSE){
+    if(f->type == Fieldnode::Type::DEFENSE){
         Defense *d = new Defense(f->x, f->y, f->alliance, f->type);
         d->defType = ((Defense *)f)->defType;
         d->value = 0;
@@ -14,7 +14,7 @@ void Graph::addNode(Fieldpoint *f){
     }
 }
 
-void Graph::addNodes(Fieldpoint f[], int count){
+void Graph::addNodes(Fieldnode f[], int count){
     for(int i=0; i<count; i++){
         addNode(&f[i]);
     }
@@ -26,11 +26,11 @@ void Graph::addNodes(Defense f[], int count){
     }
 }
 
-void Graph::addEdge(Fieldpoint *a, Fieldpoint *b){
+void Graph::addEdge(Fieldnode *a, Fieldnode *b){
     addEdge(a, b, sqrt(pow(a->x-b->x, 2)+pow(a->y-b->y, 2)));
 }
 
-void Graph::addEdge(Fieldpoint *a, Fieldpoint *b, int distance){
+void Graph::addEdge(Fieldnode *a, Fieldnode *b, int distance){
     Edge e;
     e.end = b;
     e.distance = distance;
@@ -39,18 +39,18 @@ void Graph::addEdge(Fieldpoint *a, Fieldpoint *b, int distance){
     adjacency[b->index]->push(e);
 }
 
-void Graph::addDirectedEdge(Fieldpoint *a, Fieldpoint *b){
+void Graph::addDirectedEdge(Fieldnode *a, Fieldnode *b){
     addDirectedEdge(a, b, sqrt(pow(a->x-b->x, 2)+pow(a->y-b->y, 2)));
 }
 
-void Graph::addDirectedEdge(Fieldpoint *a, Fieldpoint *b, int distance){
+void Graph::addDirectedEdge(Fieldnode *a, Fieldnode *b, int distance){
     Edge e;
     e.end = b;
     e.distance = distance;
     adjacency[a->index]->push(e);
 }
 
-void Graph::addDefenseEdge(Defense *d, Fieldpoint *f, bool crossing){
+void Graph::addDefenseEdge(Defense *d, Fieldnode *f, bool crossing){
     Edge e;
     e.distance = sqrt(pow(d->x-f->x, 2)+pow(d->y-f->y, 2));
     // If crossing is true, paths are from f>main, and alt>f
@@ -68,7 +68,7 @@ void Graph::addDefenseEdge(Defense *d, Fieldpoint *f, bool crossing){
     }
 }
 
-void Graph::addDefenseEdge(Fieldpoint *f, Defense *d, bool crossing){
+void Graph::addDefenseEdge(Fieldnode *f, Defense *d, bool crossing){
     addDefenseEdge(d, f, crossing);
 }
 

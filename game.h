@@ -2,11 +2,11 @@
 #define GAME_H
 #include <string>
 #include "utils/Graph.h"
-#include "Field/Fieldpoint.h"
+#include "Field/Fieldnode.h"
 
 // Forward declare classes as they are only used for pointers
 class Robot;
-class Fieldpoint;
+class Fieldnode;
 
 extern const int HIGH_POINTS;
 extern const int LOW_POINTS;
@@ -39,7 +39,7 @@ class Event {
         // Robot that made the event
         Robot *r;
         // Location of the event
-        Fieldpoint *location;
+        Fieldnode *location;
         // Type of the event
         Type type;
         // Point change from the event

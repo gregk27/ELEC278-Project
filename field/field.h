@@ -15,7 +15,7 @@
 #define FIELD_H
 #include <stdbool.h>
 #include <vector>
-#include "Fieldpoint.h"
+#include "Fieldnode.h"
 #include "../game.h"
 #include "../utils/LinkedList.h"
 #include "../utils/Graph.h"
@@ -73,9 +73,9 @@ namespace Field {
     */
     typedef struct {
         /**
-         * Fieldpoint at the end of the edge
+         * Fieldnode at the end of the edge
          */
-        Fieldpoint *end;
+        Fieldnode *end;
         /**
          * Distance between the nodes 
          */
@@ -83,29 +83,29 @@ namespace Field {
     } Edge;
 
     // Top goal of the red tower
-    extern Fieldpoint redTowerTop;
+    extern Fieldnode redTowerTop;
     // Bottom goal of the red tower
-    extern Fieldpoint redTowerBottom;
+    extern Fieldnode redTowerBottom;
     // Defenses crossed by red alliance
     extern Defense redDefenses[DEFENSE_COUNT];
     // Passage used by red alliance
-    extern Fieldpoint redPassage[PASSAGE_COUNT];
+    extern Fieldnode redPassage[PASSAGE_COUNT];
     // Courtyard used by red alliance
-    extern Fieldpoint redCourtyard[COURTYARD_COUNT];
+    extern Fieldnode redCourtyard[COURTYARD_COUNT];
 
     // Top goal of the blue tower
-    extern Fieldpoint blueTowerTop;
+    extern Fieldnode blueTowerTop;
     // Bottom goal of the blue tower
-    extern Fieldpoint blueTowerBottom;
+    extern Fieldnode blueTowerBottom;
     // Defenses crossed by blue alliance
     extern Defense blueDefenses[DEFENSE_COUNT];
     // Passage used by blue alliance
-    extern Fieldpoint bluePassage[PASSAGE_COUNT];
+    extern Fieldnode bluePassage[PASSAGE_COUNT];
     // Cortyard used by blue alliance
-    extern Fieldpoint blueCourtyard[COURTYARD_COUNT];
+    extern Fieldnode blueCourtyard[COURTYARD_COUNT];
 
     // Nodes at the centre of the map, placed over the pre-populated balls
-    extern Fieldpoint centreBalls[CENTRE_BALL_COUNT];
+    extern Fieldnode centreBalls[CENTRE_BALL_COUNT];
 
     /**
      * Create a new Graph instance from field data

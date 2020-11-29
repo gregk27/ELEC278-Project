@@ -25,7 +25,7 @@ class Robot {
          *  - target: Pointer to the target node
          * Returns: The DijkstraNode at the end of the found path
          */
-        Graph::DijkstraNode *getPath(Fieldpoint *target);
+        Graph::DijkstraNode *getPath(Fieldnode *target);
 
         struct EdgeData {
             float weight;
@@ -105,12 +105,12 @@ class Robot {
         
         // Navigation
 
-        // Fieldpoint with 0 length with all scoring positions, used as target for dijkstra
-        Fieldpoint *goalNode;
-        // Fieldpoint where robot will intake balls
-        Fieldpoint *intakeNode;
+        // Fieldnode with 0 length with all scoring positions, used as target for dijkstra
+        Fieldnode *goalNode;
+        // Fieldnode where robot will intake balls
+        Fieldnode *intakeNode;
         // Current location on the field
-        Fieldpoint *location;
+        Fieldnode *location;
         // Time at which the robot will have arrived
         float wakeTime = 0;
         // Flag indicating if the robot has a ball, defaults to true

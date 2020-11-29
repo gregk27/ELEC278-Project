@@ -1,35 +1,35 @@
-#include "Fieldpoint.h"
+#include "Fieldnode.h"
 #include "../robot.h"
 
-Fieldpoint::Fieldpoint(){
+Fieldnode::Fieldnode(){
     this->x = -1;
     this->y = -1;
     this->alliance = Alliance::NEUTRAL;
     this->type = Type::NODE;
 }
 
-Fieldpoint::Fieldpoint(int x, int y){
+Fieldnode::Fieldnode(int x, int y){
     this->x = x;
     this->y = y;
     this->alliance = Alliance::NEUTRAL;
     this->type = Type::NODE;
 }
 
-Fieldpoint::Fieldpoint(int x, int y, Alliance a){
+Fieldnode::Fieldnode(int x, int y, Alliance a){
     this->x = x;
     this->y = y;
     this->alliance = a;
     this->type = Type::NODE;
 }
 
-Fieldpoint::Fieldpoint(int x, int y, Alliance a, Type t){
+Fieldnode::Fieldnode(int x, int y, Alliance a, Type t){
     this->x = x;
     this->y = y;
     this->alliance = a;
     this->type = t;
 }
 
-Defense::Defense():Fieldpoint(){
+Defense::Defense():Fieldnode(){
     this->defType = LOW_BAR;
     this->value = MAX_VALUE;
 }

@@ -8,7 +8,7 @@
 #include "robot.h"
 #include "utils/utils.h"
 #include "field/field.h"
-#include "field/Fieldpoint.h"
+#include "field/Fieldnode.h"
 #include "utils/Heap.h"
 
 #define BUFF_SIZE 256
@@ -43,7 +43,7 @@ void Robot::initGraph(){
     }
 
     // Create goal node at the centre of the tower
-    goalNode = new Fieldpoint(RED_TOWER_X, RED_TOWER_Y, Alliance::RED);
+    goalNode = new Fieldnode(RED_TOWER_X, RED_TOWER_Y, Alliance::RED);
     
     // Initialise the graph with field nodes
     graph = Field::initGraph();
@@ -162,7 +162,7 @@ Shotpoint *Robot::getShotZone(int range, int angle){
         y = 0;
     }
 
-    return new Shotpoint(x, y, Alliance::NEUTRAL, Fieldpoint::Type::SHOTNODE);
+    return new Shotpoint(x, y, Alliance::NEUTRAL, Fieldnode::Type::SHOTNODE);
 }
 
 
@@ -182,15 +182,15 @@ Event Robot::getEvent(){
     e.r = this;
     e.time = wakeTime;
     switch(location->type){
-        case Fieldpoint::Type::TOWER:
+        case Fieldnode::Type::TOWER:
             e.type = Event::Type::SCORE_LOW;
             e.points = LOW_POINTS;
             break;
-        case Fieldpoint::Type::SHOTNODE:
+        case Fieldnode::Type::SHOTNODE:
             e.type = Event::Type::SCORE_HIGH;
             e.points = HIGH_POINTS;
             break;
-        case Fieldpoint::Type::DEFENSE:
+        case Fieldnode::Type::DEFENSE:
             e.type = Event::Type::CROSS;
             e.points = ((Defense *) location)->cross();
             break;
@@ -210,7 +210,7 @@ void Robot::navUpdate(LinkedList<Event> *events){
     events->push(getEvent());
 
     // If the robot has scored a ball, it now needs to get another
-    if(location->type == Fieldpoint::Type::TOWER || location->type == Fieldpoint::Type::SHOTNODE){
+    if(location->type == Fieldnode::Type::TOWER || location->type == Fieldnode::Type::SHOTNODE){
         hasBall = false;
         cyclesCompleted ++;
     } else if(location == intakeNode){
@@ -237,7 +237,7 @@ void Robot::navUpdate(LinkedList<Event> *events){
     wakeTime += n->time;
 }
 
-Graph::DijkstraNode *Robot::getPath(Fieldpoint *target){
+Graph::DijkstraNode *Robot::getPath(Fieldnode *target){
     Heap<Graph::DijkstraNode*> todo = Heap<Graph::DijkstraNode*>([](Graph::DijkstraNode *n1, Graph::DijkstraNode *n2)->bool{return n1->weight < n2->weight;}, [](Graph::DijkstraNode *d)->const char*{
         if(d == NULL) return "N,N";
         std::stringstream s;
@@ -322,11 +322,11 @@ Robot::EdgeData Robot::getWeight(Graph::DijkstraNode *n, Graph::Edge e){
         return out;
     }
     // Don't pathfind through shotnodes
-    if(n->node->type == Fieldpoint::Type::SHOTNODE && location != n->node){
+    if(n->node->type == Fieldnode::Type::SHOTNODE && location != n->node){
         out.weight = INT_MAX;
         return out;
     }
-    if(e.end->type == Fieldpoint::Type::DEFENSE){
+    if(e.end->type == Fieldnode::Type::DEFENSE){
         int cTime = crossTime((Defense *) e.end);
         if(cTime != 0){
             // Add cross time, subtract points for crossing
@@ -336,10 +336,10 @@ Robot::EdgeData Robot::getWeight(Graph::DijkstraNode *n, Graph::Edge e){
             out.weight = INT_MAX;
             return out;
         }
-    } else if (e.end->type == Fieldpoint::Type::SHOTNODE && hasBall){ // Add time taken to shoot ball
+    } else if (e.end->type == Fieldnode::Type::SHOTNODE && hasBall){ // Add time taken to shoot ball
         out.weight += ((Shotpoint *) e.end)->time - HIGH_POINTS*pointValue;
         out.time += ((Shotpoint *) e.end)->time;;
-    } else if (e.end->type == Fieldpoint::Type::TOWER && hasBall){
+    } else if (e.end->type == Fieldnode::Type::TOWER && hasBall){
         out.weight += lowTime - LOW_POINTS*pointValue;
         out.time += lowTime;
     }
