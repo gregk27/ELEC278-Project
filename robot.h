@@ -33,6 +33,11 @@ class Robot {
         };
 
         EdgeData getWeight(Graph::DijkstraNode *n, Graph::Edge e);
+
+        /**
+         * Temp for storing planned path to be passed to event
+         */
+        Graph::DijkstraNode *path;
     public:
         // Robot's unique ID (0-6)
         byte id;

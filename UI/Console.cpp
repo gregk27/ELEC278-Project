@@ -5,6 +5,8 @@
 
 #include "Console.h"
 #include "../game.h"
+#include "Interface.h"
+#include "../utils/LinkedList.h"
 
 #include <windows.h>
 
@@ -87,6 +89,10 @@ void Console::begin(){
     handle = GetStdHandle (STD_OUTPUT_HANDLE);
 
     system(CLEAR_COMMAND);
+    Interface::setEventList(events);
+    Node<Event> *e;
+    e = events->getNode(selected);
+    Interface::setEvent(e);
     redraw(selected);
     // setCursor(0,0);
     // printf(">");
@@ -104,7 +110,12 @@ void Console::begin(){
         }
         if(selected < 0) selected=0;
         if(selected >= events->size()) selected = events->size()-1;
+        e = events->getNode(selected);
+        Interface::setEvent(e);
         redraw(selected);
+        // Delay 100ms between keypresses
+        Sleep(100);
+        FlushConsoleInputBuffer(GetStdHandle(STD_INPUT_HANDLE));
     }
 }
 
