@@ -1,6 +1,5 @@
 #ifndef FIELDPOINT_H
 #define FIELDPOINT_H
-#include "../game.h"
 
 // Forward-declaration of alliance from ../game.h
 enum class Alliance;

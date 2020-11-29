@@ -1,6 +1,7 @@
 #ifndef GAME_H
 #define GAME_H
 #include <string>
+#include "utils/Graph.h"
 #include "Field/Fieldpoint.h"
 
 // Forward declare classes as they are only used for pointers
@@ -45,6 +46,8 @@ class Event {
         int points;
         // Timestamp of the event, in seconds
         float time;
+
+        Graph::DijkstraNode *n;
 
         std::string toString();
 };

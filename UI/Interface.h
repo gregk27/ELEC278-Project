@@ -1,6 +1,7 @@
 #ifndef INTERFACE_H
 #define INTERFACE_H
 #include "../SDL2/SDL.h"
+#include "../game.h"
 #include "../utils/utils.h"
 #include "../utils/Graph.h"
 #include "../utils/LinkedList.h"
