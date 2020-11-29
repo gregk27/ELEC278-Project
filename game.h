@@ -47,7 +47,7 @@ class Event {
         // Timestamp of the event, in seconds
         float time;
 
-        Graph::DijkstraNode *n;
+        Graph::DijkstraNode *path;
 
         std::string toString();
 };

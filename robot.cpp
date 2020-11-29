@@ -30,6 +30,7 @@ Robot::Robot(){
     this->centreAngle = 0;
     this->sideAngle = 0;
     this->lowTime = 0;
+    this->path = NULL;
 }
 
 void Robot::initGraph(){
@@ -174,6 +175,7 @@ int Robot::crossTime(Defense *d){
 Event Robot::getEvent(){
     Event e;
     e.location = location;
+    e.path = path;
     e.r = this;
     e.time = wakeTime;
     switch(location->type){
@@ -219,6 +221,8 @@ void Robot::navUpdate(LinkedList<Event> *events){
     } else {
         n = getPath(&Field::redPassage[0]);
     }
+
+    path = n;
 
     // Cycle back to find next node
     while(n->prev != NULL && n->prev->node!=location){

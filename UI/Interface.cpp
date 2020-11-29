@@ -60,6 +60,7 @@ void drawGraph(Graph *g){
     }
 
     if(event != NULL){
+        // Draw location indicator
         if(event->data.location != NULL){
             r.x = event->data.location->x*2-15;
             r.y = event->data.location->y*2-15;
@@ -73,6 +74,15 @@ void drawGraph(Graph *g){
             SDL_SetRenderDrawColor(fieldRenderer, 64, 128, 255, SDL_ALPHA_OPAQUE);
             SDL_RenderDrawLine(fieldRenderer, event->data.location->x*2, event->data.location->y*2, event->previous->data.location->x*2, event->previous->data.location->y*2);
 
+        }
+        // Draw planned path. This actually draws the path 1 event ahead due to how movement is handled
+        SDL_SetRenderDrawColor(fieldRenderer, 255, 128, 0, SDL_ALPHA_OPAQUE);
+        if(event->next != eventList->getNode(1)){
+            Graph::DijkstraNode *n = event->next->data.path;
+            while(n != NULL && n->prev != NULL){
+                SDL_RenderDrawLine(fieldRenderer, n->node->x*2, n->node->y*2, n->prev->node->x*2, n->prev->node->y*2);
+                n = n->prev;
+            }
         }
     }
 }
