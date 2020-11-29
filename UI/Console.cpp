@@ -18,6 +18,8 @@
 #define KEY_LEFT 75
 #define KEY_RIGHT 77
 #define KEY_ESC 27
+#define KEY_FIRST 102
+#define KEY_LAST 108
 
 #define HEIGHT 30
 #define LINES 25
@@ -59,7 +61,7 @@ void redraw(int selected){
     // Reset to top
     setCursor(0,0);
     // Print header
-    printf("  Time   Robot @Node    Desc\t\t\tPress ESC to exit\n");
+    printf("  Time   Robot @Node    Desc\n");
     
     int score = 0;
     // Initialise defenses
@@ -96,6 +98,8 @@ void redraw(int selected){
             printf("  %s", out.c_str());
         }
     }
+    setCursor(0, HEIGHT-2);
+    printf("\t\tUse Arrows to navigate\tF/L to jump to First/Last\tPress ESC to exit");
 
     // Print overview
     setCursor(80, 5);
@@ -144,7 +148,6 @@ void Console::begin(){
     int c = 0;
     // int y = 0;
     while((c=getch()) != 27){
-        printf(" ");
         switch (c) {
             case KEY_UP:
                 selected --;
@@ -152,6 +155,14 @@ void Console::begin(){
             case KEY_DOWN:
                 selected ++;
                 break;
+            case KEY_FIRST:
+                selected = 0;
+                break;
+            case KEY_LAST:
+                selected = events->size()-1;
+                break;
+            default:
+                continue;
         }
         if(selected < 0) selected=0;
         if(selected >= events->size()) selected = events->size()-1;
