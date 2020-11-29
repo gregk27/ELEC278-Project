@@ -1,3 +1,8 @@
+/**
+ * heaptest.cpp
+ * Small class used to test heap functionality while developing 
+ */
+
 #include <stdio.h>
 #include <sstream>
 #include "../utils/Heap.h"
