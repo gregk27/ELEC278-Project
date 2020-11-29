@@ -14,8 +14,6 @@
 
 int main(int argc, char *argv[]){
 
-    std::thread renderThread(Interface::init);
-
     // Get robot file from user
     std::string robotPath;
     printf("Path to robot file [./robots.csv]: ");
@@ -78,6 +76,7 @@ int main(int argc, char *argv[]){
         duration = 150;
     }
 
+    std::thread renderThread(Interface::init);
 
     // Event queue to be populated by simulation
     LinkedList<Event> events;
