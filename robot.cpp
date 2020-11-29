@@ -139,10 +139,10 @@ void Robot::initGraph(){
 
     // Connect tower and shotpoints to goal node with 0 distance
     graph->addNode(goalNode);
-    graph->addEdge(goalNode, &Field::redTowerTop, 0);
-    graph->addEdge(goalNode, &Field::redTowerBottom, 0);
+    graph->addDirectedEdge(&Field::redTowerTop, goalNode, 0);
+    graph->addDirectedEdge(&Field::redTowerBottom, goalNode, 0);
     for(auto i : shotpoints) {
-        this->graph->addEdge(goalNode, i.data, 0);
+        this->graph->addDirectedEdge(i.data, goalNode, 0);
     }
 
     // graph->printAdj();

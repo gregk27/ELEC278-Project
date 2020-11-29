@@ -39,6 +39,17 @@ void Graph::addEdge(Fieldpoint *a, Fieldpoint *b, int distance){
     adjacency[b->index]->push(e);
 }
 
+void Graph::addDirectedEdge(Fieldpoint *a, Fieldpoint *b){
+    addDirectedEdge(a, b, sqrt(pow(a->x-b->x, 2)+pow(a->y-b->y, 2)));
+}
+
+void Graph::addDirectedEdge(Fieldpoint *a, Fieldpoint *b, int distance){
+    Edge e;
+    e.end = b;
+    e.distance = distance;
+    adjacency[a->index]->push(e);
+}
+
 void Graph::addDefenseEdge(Defense *d, Fieldpoint *f, bool crossing){
     Edge e;
     e.distance = sqrt(pow(d->x-f->x, 2)+pow(d->y-f->y, 2));
