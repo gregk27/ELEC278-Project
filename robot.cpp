@@ -311,7 +311,6 @@ Graph::DijkstraNode *Robot::getPath(Fieldnode *target){
 }
 
 Robot::EdgeData Robot::getWeight(Graph::DijkstraNode *n, Graph::Edge e){
-    // TODO: Account for shooting
     Robot::EdgeData out;
     // Base weight is time in seconds, measure by previous plus d*v
     out.weight = e.distance/speed;
@@ -346,15 +345,6 @@ Robot::EdgeData Robot::getWeight(Graph::DijkstraNode *n, Graph::Edge e){
     return out;
 }
 
-// bool can_cross(Robot *r, Defenses d){
-//     // Mask the defenses to check
-//     return (r->defenses >> (int)d*4 & 0xF) != 0;
-// }
-
-/*
- * Parse a csv file containing robot information
- * Returns a pointer to the found robot
-*/
 Robot *Robot::parseCSV(std::string filename){
     // Open the file
     FILE *f = fopen(filename.c_str(), "r"); 
