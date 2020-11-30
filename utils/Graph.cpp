@@ -1,3 +1,10 @@
+/**
+ * Graph.cpp/h
+ * These files contain code to generate and manage a graph
+ * 
+ * The graphs are hard-coded to work with Fieldnode
+*/
+
 #include <math.h>
 #include "Graph.h"
 
