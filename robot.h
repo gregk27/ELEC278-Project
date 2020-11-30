@@ -1,3 +1,9 @@
+/**
+ * robot.ccp/h
+ * These files contain the code for managing robots
+ * This includes the bot's abilities (defense crossing, shot locations) and navigation (graph, location, dijkstra algorithm)
+ */
+
 #ifndef ROBOT_H
 #define ROBOT_H
 #include <stdbool.h>
@@ -13,8 +19,18 @@ typedef unsigned char byte;
  */
 class Robot {
     private:
+        /**
+         * Initialise the local graph instace
+         * This will create a graph with Field::initGraph(), then add robot-specific elements such as shotnodes and the goal node
+         */
         void initGraph();
-        Shotpoint *getShotZone(int range, int angle);
+        /**
+         * Get a ShotNode with a specific range and angle relative to the tower
+         * - range: The distance from the tower
+         * - angle: The angle relative to the horizontal, in degrees
+         * Returns: A shotnode at the specified location 
+         */
+        Shotnode *getShotZone(int range, int angle);
         /**
          * Get the event representing the robot's last action
          * Returns: Event representing robot's last action
@@ -25,13 +41,23 @@ class Robot {
          *  - target: Pointer to the target node
          * Returns: The DijkstraNode at the end of the found path
          */
-        Graph::DijkstraNode *getPath(Fieldpoint *target);
+        Graph::DijkstraNode *getPath(Fieldnode *target);
 
+        // Calculated data about an edge for dijkstra's algorthim
         struct EdgeData {
+            // The weight of the edge, rougly time - points
             float weight;
+            // Time taken to travel to the node, will not have reduction from points
             float time;
         };
 
+        /**
+         * Get the weight and time data for a particular edge
+         * This will calulate based on a variety of factors, notable time taken and points earned
+         * - n: The node being visited
+         * - e: The edge being calculated
+         * Returns: EdgeData with weight and time
+        */
         EdgeData getWeight(Graph::DijkstraNode *n, Graph::Edge e);
 
         /**
@@ -70,9 +96,10 @@ class Robot {
         // The graph used by this robot, will have different shooting points than others, otherwise identical
         Graph *graph;
 
-        LinkedList<Shotpoint *> shotpoints;
+        // List containing the created shotnodes
+        LinkedList<Shotnode *> shotnodes;
         
-        // Create an empty robot, 
+        // Create an empty robot
         Robot();
         
         /**
@@ -105,12 +132,12 @@ class Robot {
         
         // Navigation
 
-        // Fieldpoint with 0 length with all scoring positions, used as target for dijkstra
-        Fieldpoint *goalNode;
-        // Fieldpoint where robot will intake balls
-        Fieldpoint *intakeNode;
+        // Fieldnode with 0 length with all scoring positions, used as target for dijkstra
+        Fieldnode *goalNode;
+        // Fieldnode where robot will intake balls
+        Fieldnode *intakeNode;
         // Current location on the field
-        Fieldpoint *location;
+        Fieldnode *location;
         // Time at which the robot will have arrived
         float wakeTime = 0;
         // Flag indicating if the robot has a ball, defaults to true
@@ -119,6 +146,7 @@ class Robot {
         // Value of each point gained in seconds taken, used to determine which defense or scoring method is best
         float pointValue = 1;
 
+        // Number of cycles completed. A cycle is counted when a goal is scored
         int cyclesCompleted = 0;
 
         /**

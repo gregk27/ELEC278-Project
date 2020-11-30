@@ -1,3 +1,12 @@
+/**
+ * Linkedlist.h
+ * This file contains the code required to create and use a doubly-linked circular list
+ * The lists feature:
+ *  - [] operator
+ *  - for loop support
+ *  - negative indicies
+ *  - getting nodes, which have next/prev pointers
+*/
 #ifndef LINKEDLIST_H
 #define LINKEDLIST_H
 #include <stdlib.h>

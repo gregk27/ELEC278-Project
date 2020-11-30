@@ -1,6 +1,16 @@
+/**
+ * utils.cpp/h
+ * These files contain a few random utilities that did not belong elsewhere, but were too small for own files
+ */
+
 #ifndef UTILS_H
 #define UTILS_H
 
+/**
+ * Print the binary representation of a number
+ * - i:      The number to print
+ * - length: The number of binary digits to use
+*/
 void print_bin(int i, int length);
 
 // Base class to simplify custom exceptions

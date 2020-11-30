@@ -1,3 +1,8 @@
+/**
+ * Console.cpp/h
+ * These files contain the code used for displaying the events in the console
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <conio.h>
@@ -10,25 +15,36 @@
 #include "../utils/LinkedList.h"
 #include "../field/field.h"
 
+// This include was causing issues with others, so it was moved below
 #include <windows.h>
 
+// Console command to clear the screen
 #define CLEAR_COMMAND "cls"
+// Key code for the up arrow key
 #define KEY_UP 72
+// Key code for the down arrow key
 #define KEY_DOWN 80
-#define KEY_LEFT 75
-#define KEY_RIGHT 77
+// Key code for the escape key
 #define KEY_ESC 27
+// Key code for the first event key (F)
 #define KEY_FIRST 102
+// Key code for the last event key  (L)
 #define KEY_LAST 108
+// Key code for the show graph key  (G)
 #define KEY_GRAPH 103
 
+// Height of the console, in lines
 #define HEIGHT 30
+// Number of lines used for events
 #define LINES 25
 
+// Event list to be used
 LinkedList<Event> *events;
 
+// STD Handle used for windows console functions
 HANDLE handle;
 
+// Structs tracking stats for defenses
 Console::DefenseStat defenses[5];
 
 /** 
@@ -37,7 +53,11 @@ Console::DefenseStat defenses[5];
 */
 const std::string DEFENSE_NAMES[] = {"Low Bar", "Portcullis", "Cheval de Frise", "Moat", "Ramparts", "Drawbridge", "Sally Port", "Rock Wall", "Rough Terrain"};
 
-
+/**
+ * Set the cursor location in the console window
+ * - x: X position
+ * - y: Y position
+ */
 void setCursor(short x, short y){
     SetConsoleCursorPosition(handle, {x,y});
 }
@@ -46,10 +66,15 @@ void Console::setEvents(LinkedList<Event> *e){
     events = e;
 }
 
+/**
+ * Update score and defense stats with an event
+ * - i:         Event list listItem to use 
+ * - socreVar:  Pointer to the variable holding the score
+*/
 void updateScores(LinkedList<Event>::Iterator::ListItem i, int *scoreVar){
     *scoreVar += i.data.points;
     // If it was crossing a defense, then remove the points
-    if(i.data.location->type == Fieldpoint::Type::DEFENSE){
+    if(i.data.location->type == Fieldnode::Type::DEFENSE){
         for(int j=0; j<5; j++){
             if(defenses[j].index == i.data.location->index){
                 defenses[j].value -= i.data.points;
@@ -58,6 +83,10 @@ void updateScores(LinkedList<Event>::Iterator::ListItem i, int *scoreVar){
     }
 }
 
+/**
+ * Redraw the console
+ * - selected: The index of the currently selected event
+ */
 void redraw(int selected){
     // Reset to top
     setCursor(0,0);
@@ -99,8 +128,10 @@ void redraw(int selected){
             printf("  %s", out.c_str());
         }
     }
+
+    // Print controls
     setCursor(0, HEIGHT-2);
-    printf("\t\tUse Arrows to navigate\tF/L to jump to First/Last\tPress ESC to exit");
+    printf("\tUse Arrows to navigate\tF/L to jump to First/Last\tG to change graph visibility\tPress ESC to exit");
 
     // Print overview
     setCursor(80, 5);
@@ -124,9 +155,6 @@ void redraw(int selected){
 }
 
 void Console::begin(){
-    printf("Hello World\n");
-    printf("Printed a thing!\n");
-
     // Initialise defenses
     for(int i=0; i<5; i++){
         defenses[i].index = Field::redDefenses[i].index;
@@ -138,17 +166,19 @@ void Console::begin(){
     int score = 0;
     handle = GetStdHandle (STD_OUTPUT_HANDLE);
 
+    // Clear simulation output
     system(CLEAR_COMMAND);
+    // Set the GUI's event list
     Interface::setEventList(events);
+    
     Node<Event> *e;
     e = events->getNode(selected);
     Interface::setEvent(e);
     redraw(selected);
-    // setCursor(0,0);
-    // printf(">");
+    
     int c = 0;
-    // int y = 0;
-    while((c=getch()) != 27){
+    // Loop until escape pressed
+    while((c=getch()) != KEY_ESC){
         switch (c) {
             case KEY_UP:
                 selected --;
@@ -168,8 +198,10 @@ void Console::begin(){
             default:
                 continue;
         }
+        // Make sure list not exceeded
         if(selected < 0) selected=0;
         if(selected >= events->size()) selected = events->size()-1;
+        // Get the new event and redraw
         e = events->getNode(selected);
         Interface::setEvent(e);
         redraw(selected);

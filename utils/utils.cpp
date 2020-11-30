@@ -1,3 +1,8 @@
+/**
+ * utils.cpp/h
+ * These files contain a few random utilities that did not belong elsewhere, but were too small for own files
+ */
+
 #include <stdio.h>
 #include <string>
 #include "utils.h"

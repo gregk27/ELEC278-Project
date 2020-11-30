@@ -1,36 +1,35 @@
-#ifndef FIELDPOINT_H
-#define FIELDPOINT_H
+/**
+ * Fieldnode.cpp/h
+ * These files contains the the code used represent field nodes
+ * 
+ * Includes subclasses for Defenses and Shotnodes
+ */
 
-// Forward-declaration of alliance from ../game.h
+#ifndef FIELDNODE_H
+#define FIELDNODE_H
+
+// Forward-declarations from ../game.h, prevents circular dependancy
 enum class Alliance;
-
 extern const int CROSS_POINTS;
 extern const int BASE_POINTS;
 
-typedef enum _fieldtype {
-    // Generic travel node
-    NODE,
-    // Node representing a defense, points awarded for crossing
-    DEFENSE,
-    // Node representing the centre of the tower
-    TOWER,
-    // Node restricted to the owning alliance
-    RESTRICTED
-} Fieldtype;
-
-// Class representing a point on the graph
-class Fieldpoint {
+// Class representing a node on the graph
+class Fieldnode {
     protected:
-        Fieldpoint();
+        Fieldnode();
 
     public:
         // Type of point
         enum class Type {
             // Generic travel node
             NODE, 
+            // Node representing a defense, points awarded for crossing
             DEFENSE, 
+            // Node representing the centre of the tower
             TOWER, 
+            // Node restricted to the owning alliance
             RESTRICTED,
+            // Node created by robot as location to shoot high goals
             SHOTNODE
         };
 
@@ -46,35 +45,35 @@ class Fieldpoint {
         int index;
 
         /**
-         * Create a new Fieldpoint, which is automatically a neutral node
+         * Create a new Fieldnode, which is automatically a neutral node
          * - x: X location, inches from top-left
          * - y: Y location, inches from top-left
          */
-        Fieldpoint(int x, int y);
+        Fieldnode(int x, int y);
 
         /**
-         * Create a new Fieldpoint, which is automatically a node
+         * Create a new Fieldnode, which is automatically a node
          * - x: X location, inches from top-left
          * - y: Y location, inches from top-left
          * - a: The alliance the node belongs to
          */
-        Fieldpoint(int x, int y, Alliance a);
+        Fieldnode(int x, int y, Alliance a);
 
         /**
-         * Create a new Fieldpoint
+         * Create a new Fieldnode
          * - x: X location, inches from top-left
          * - y: Y location, inches from top-left
          * - a: The alliance the node belongs to
          * - t: The type of the point
          */
-        Fieldpoint(int x, int y, Alliance a, Type t);
+        Fieldnode(int x, int y, Alliance a, Type t);
 };
 
 /* 
  * Class representing the defenses
  * This also holds utility functions for determining defenses
 */
-class Defense: public Fieldpoint {
+class Defense: public Fieldnode {
     private: 
         // Value lost on cross
         static const int CROSS_VALUE = 5;
@@ -115,13 +114,18 @@ class Defense: public Fieldpoint {
         // Type of defense
         Defenses defType;
 
-        using Fieldpoint::Fieldpoint;
+        using Fieldnode::Fieldnode;
 };
 
-class Shotpoint: public Fieldpoint {
+/**
+ * Class representing a node used for shooting high goals
+ * These are added by robots to their member graphs
+ */
+class Shotnode: public Fieldnode {
     public:
+        // Time taken for the shot
         int time;
-        using Fieldpoint::Fieldpoint;
+        using Fieldnode::Fieldnode;
 };
 
-#endif // !FIELDPOINT_H
+#endif // !FIELDNODE_H

@@ -1,3 +1,8 @@
+/**
+ * Console.cpp/h
+ * These files contain the code used for displaying the GUI
+ */
+
 #include <string>
 #include <stdbool.h>
 #include "interface.h"
@@ -10,13 +15,21 @@
 
 using namespace Interface;
 
+// Window for displaying field
 SDL_Window *fieldWindow;
+// Renderer for fieldWindow
 SDL_Renderer *fieldRenderer;
+// Texture holding field image
 SDL_Texture *fieldImage;
+// The graph to display
 Graph *activeGraph;
+// List of events from sim
 LinkedList<Event> *eventList;
+// Currently selected event
 Node<Event> *event;
+// Flag to exit lop
 bool running = false;
+
 /**
  * Flag indicating graph visibility
  * 0 -> Hidden
@@ -25,6 +38,11 @@ bool running = false;
  */
 int graphVis = 0;
 
+/**
+ * Function to draw the graph to the fieldRendered
+ * Will draw nodes and edges depending on graphVis variable
+ * - g: Pointer to the graph to draw
+*/
 void drawGraph(Graph *g){
     SDL_Rect r;
     r.h=20;
@@ -36,7 +54,7 @@ void drawGraph(Graph *g){
             LinkedList<Graph::Edge> *l = i.data;
             for(auto j : *l) {
                 Graph::Edge e = j.data;
-                if(e.end->type == Fieldpoint::Type::SHOTNODE || g->nodes[i.index]->type == Fieldpoint::Type::SHOTNODE){
+                if(e.end->type == Fieldnode::Type::SHOTNODE || g->nodes[i.index]->type == Fieldnode::Type::SHOTNODE){
                     SDL_SetRenderDrawColor(fieldRenderer, 185, 115, 255, SDL_ALPHA_OPAQUE);
                 } else {
                     SDL_SetRenderDrawColor(fieldRenderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
@@ -47,7 +65,7 @@ void drawGraph(Graph *g){
     }
 
     for(auto i : g->nodes){
-        Fieldpoint *p = i.data;
+        Fieldnode *p = i.data;
         // Set x and y, doubled because canavas is scaled up, subtract 10 to centre
         r.x = p->x*2-10;
         r.y = p->y*2-10;
@@ -62,13 +80,17 @@ void drawGraph(Graph *g){
                 SDL_SetRenderDrawColor(fieldRenderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
                 break;
         }
-        if(p->type == Fieldpoint::Type::SHOTNODE){
+        if(p->type == Fieldnode::Type::SHOTNODE){
             SDL_SetRenderDrawColor(fieldRenderer, 185, 115, 255, SDL_ALPHA_OPAQUE);
         }
         SDL_RenderFillRect(fieldRenderer,&r);
     }
 }
 
+/**
+ * Draw information pertaining to the bot at the selected event to the screen
+ * Will draw location, line from last location, and planned path for that event
+ */
 void drawBot(){
     SDL_Rect r;
     if(event != NULL){
