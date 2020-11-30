@@ -1,3 +1,8 @@
+/**
+ * game.cpp/h
+ * These files contain constants used for game behaviour and the Event class
+ */
+
 #ifndef GAME_H
 #define GAME_H
 #include <string>
@@ -8,14 +13,24 @@
 class Robot;
 class Fieldnode;
 
+// Points earned for high goal
 extern const int HIGH_POINTS;
+// Points earned for low goa;
 extern const int LOW_POINTS;
 
+// Points earned for crossing a defense
 extern const int CROSS_POINTS;
+// Initial points available from the defense
 extern const int BASE_POINTS;
 
+// Enum representing alliance affiliation
 enum class Alliance {
-    RED, BLUE, NEUTRAL
+    // Affiliated with red alliance
+    RED, 
+    // Affiliated with blue alliance
+    BLUE, 
+    // Affiliated with neither alliance
+    NEUTRAL
 };
 
 // Structure represnting a simulation event
@@ -47,8 +62,15 @@ class Event {
         // Timestamp of the event, in seconds
         float time;
 
+        // Last DijsktraNode in the planned following the event
         Graph::DijkstraNode *path;
 
+        /**
+         * Get a string representation of the event
+         * The format is designed for use with the console event list.
+         * 
+         * Returns: String representation of event
+         */
         std::string toString();
 };
 

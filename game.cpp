@@ -1,3 +1,8 @@
+/**
+ * game.cpp/h
+ * These files contain constants used for game behaviour and the Event class
+ */
+
 #include <string>
 #include <sstream>
 #include <iomanip>
@@ -15,10 +20,15 @@ using namespace std;
 string Event::toString(){
     stringstream s, msg;
     // s.precision(3);
-    s << setw(5) << (int) time 
-        << setw(7) << r->team 
+    // Add time info
+    s << setw(5) << (int) time
+        // Add team number
+        << setw(7) << r->team
+        // Add location 
         << " @" << setw(3) << location->index 
+        // Add space for message
         << ":\t" << left << setw(50);
+    // Create event description depending on tepy
     switch(type){
         case Type::SCORE_LOW:
             msg << "Score ball in low goal for " << points << " points";
@@ -35,6 +45,7 @@ string Event::toString(){
         default:
             msg << "Drive through node " << location->index;
     }
+    // Add description to string
     s << msg.str() << "\n";
     return s.str();
 }
