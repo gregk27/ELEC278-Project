@@ -32,7 +32,8 @@ Information related to robot performance (such a speed, defenses, etc) is read f
 |side_angle         |unsigned char  |Angle for shot at side goal [degrees]                                                                          |0-40
 |low_time           |unsigned char  |Time needed to store in low goal 0 indicates unable [seconds]                                                  |0-255
 |defenses           |long int (hex) |Hex value representing time to cross defenses , `0` means cannot cross and `F` means it takes 15s [seconds]    |See below
-|speed              |unsigned char  |Robot's speed [fpm]                                                                                            |1-255
+|speed              |float          |Robot's speed [fps]                                                                                            |>0
+|point_value        |float          |How many seconds of weight are removed per point scored, higher numbers means more defense crossing            |0-9999
 
 ### Defense Configuration
 |Category   |Defense        |ID |Position  

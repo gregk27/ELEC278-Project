@@ -364,7 +364,7 @@ Robot *Robot::parseCSV(std::string filename){
     // Read robot line
     fgets (line, BUFF_SIZE, f);
     // Data order: team,can_low,shot_range,centre_shot_time,side_shot_time,centre_angle,side_angle,low_time,defenses,speed
-    int result = sscanf(line, "%d,%d,%d,%d,%d,%d,%d,%d,%lx,%f", 
+    int result = sscanf(line, "%d,%d,%d,%d,%d,%d,%d,%d,%lx,%f,%f", 
         &(bot->team),
         &(bot->canLowbar),
         &(bot->shotRange),
@@ -374,17 +374,18 @@ Robot *Robot::parseCSV(std::string filename){
         &(bot->sideAngle),
         &(bot->lowTime),
         &(bot->defenses),
-        &(bot->speed));
+        &(bot->speed), 
+        &(bot->pointValue));
     
     // Validate input
     // If less values are read than expected, something went wrong
-    if(result != 10){
+    if(result != 11){
         std::stringstream s;
-        s << "Error while parsing robot " << bot->team << ". Read " << result << " values.";
+        s << "Error while parsing robot " << bot->team << ". Read " << result << " values of 11.";
         throw csv_parsing_exception(s.str());
     }
     // If the bot's speed is 0, then it can't go anywhere and there is no point in simulating
-    if(!bot->speed) throw invalid_parameter_exception("Robot's speed is zero, this would prevent any motion. Speed must be at least 1.");
+    if(bot->speed <= 0) throw invalid_parameter_exception("Robot's speed is negative or zero, this would prevent any motion. Speed must be a positive nonzero number.");
     // If the bot cannot cross any defenses, then there is no point in simulating
     if(!bot->defenses && !bot->canLowbar) throw invalid_parameter_exception("Robot cannot cross any defenses, this would prevent any gameplay. Robot must be able to cross at least one defense");
     // If the bot can't score, then tehre is no point in simulating

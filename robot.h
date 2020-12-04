@@ -144,7 +144,7 @@ class Robot {
         bool hasBall = true;
 
         // Value of each point gained in seconds taken, used to determine which defense or scoring method is best
-        float pointValue = 1;
+        float pointValue;
 
         // Number of cycles completed. A cycle is counted when a goal is scored
         int cyclesCompleted = 0;
