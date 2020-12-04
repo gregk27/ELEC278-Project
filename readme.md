@@ -7,6 +7,7 @@ Due to it's dependancy on SDL2 and Windows.h, it can only be run on Windows.
 
 Graphics are run with the SDL2 library, which is used under the [zlib license](https://www.zlib.net/zlib_license.html). A copy of the [license from the website](https://www.libsdl.org/license.php) can be found in the SDL2 folder. SDL2 source code can be found in ther [Mercurial repository](https://wiki.libsdl.org/SourceCode).
 
+When run, a file named `out.graphml` is generated showing the current graph with edge directions and node indices. This is designed to be viewed using the online viewer at https://www.yworks.com/yed-live/.
 # Building
 The source code includes the rquired SDL2 headers, libraries, and required dll file to build and run the application on Windows.
 
@@ -52,6 +53,7 @@ Upon running the code, you will be asked to provide the following inputs:
  - Config File: Path to the config file, defaults to `../robots.csv`
  - Defense configuration: IDs for defenses to use, in order of position. Input should include one defense from each categotry. Defaults to `0 2 4 6`
  - Simulation length: The number of seconds of match time to be simulated, defaults to `150`
+ - Starting node index: The index of the node where the robot should start. To get indices refer to the generated graphml.
 
 ## Simulation
 After inputs are provided, robot will be loaded and simulation will begin. This will take a shot amount of time to complete, depending on sim duration.

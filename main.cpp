@@ -28,8 +28,6 @@ int main(int argc, char *argv[]){
     r->alliance = Alliance::RED;
     // Balls are entered into play at the end of the passage
     r->intakeNode = &Field::redPassage[0];
-    // The robot should start at the top-centre    
-    r->location = &Field::centreBalls[1];
 
     // Initialise defenses
     printf("Enter defense configuration for positions 2-5, enter the IDs with spaces between.\n");
@@ -75,6 +73,16 @@ int main(int argc, char *argv[]){
     if(in == -1){
         duration = 150;
     }
+
+    printf("Starting node index [%d (top-centre)]: ", Field::centreBalls[1].index);
+    int loc;
+    fgets(buf, 16, stdin);
+    in = sscanf(buf, " %d", &loc);
+    if(in == -1){
+        loc = Field::centreBalls[1].index;
+    }
+    // Place robot in requested location    
+    r->location = r->graph->nodes[loc];
 
     std::thread renderThread(Interface::init);
 
