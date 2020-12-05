@@ -209,6 +209,8 @@ void Console::begin(){
         Sleep(100);
         FlushConsoleInputBuffer(GetStdHandle(STD_INPUT_HANDLE));
     }
+
+    system(CLEAR_COMMAND);
 }
 
 

@@ -11,12 +11,15 @@ When run, a file named `out.graphml` is generated showing the current graph with
 # Building
 The source code includes the rquired SDL2 headers, libraries, and required dll file to build and run the application on Windows.
 
+## batch script
+Included is `_run.bat`, which will automatically compile and run the project. Additionally, it will set console size to the ideal for use with the application. This is the recommended way of running.
+
 ## makefile
 There is a makefile in the root directory that can be used to build the executable.
 ## g++/gcc
 The program can be built using g++ with the following command from the project root:
 ```
-g++ main.cpp robot.cpp utils/graph.cpp field/fieldnode.cpp game.cpp utils/utils.cpp field/field.cpp ui/console.cpp ui/interface.cpp -o "main.exe"  -ISDL2 -LSDL2 -lmingw32 -lSDL2main -lSDL2
+g++ StrongholdSim.cpp robot.cpp utils/graph.cpp field/fieldnode.cpp game.cpp utils/utils.cpp field/field.cpp ui/console.cpp ui/interface.cpp -o "main.exe"  -ISDL2 -LSDL2 -lmingw32 -lSDL2main -lSDL2
 ```
 
 # Running
