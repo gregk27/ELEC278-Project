@@ -83,9 +83,9 @@ void Robot::initGraph(){
             graph->addDefenseEdge(s, &Field::redDefenses[1], false);
             graph->addDefenseEdge(s, &Field::redDefenses[2], false);
 
-            // If the centre angle is higher than 40° soft limit
+            // If the centre angle is higher than 40deg soft limit
             if(centreAngle > 40){
-                warning << "\tCentre angle of " << (int)centreAngle << "° exceeds recommended limit of 40°\n";
+                warning << "\tCentre angle of " << (int)centreAngle << "deg exceeds recommended limit of 40deg\n";
             }
         }
         // If the cetre shot time is more than 20 seconds, there may be input issues
@@ -114,9 +114,9 @@ void Robot::initGraph(){
         graph->addDefenseEdge(s, &Field::redDefenses[0], false);
         graph->addDefenseEdge(s, &Field::redDefenses[1], false);
 
-        // If the side angle is higher than 40° soft limit
+        // If the side angle is higher than 40deg soft limit
         if(sideAngle > 40){
-            warning << "\tSide angle of " << (int)sideAngle << "° exceeds recommended limit of 40°\n";
+            warning << "\tSide angle of " << (int)sideAngle << "deg exceeds recommended limit of 40deg\n";
         }
         // If the side shot time is more than 20 seconds, there may be input issues
         if(sideShotTime > 20){
