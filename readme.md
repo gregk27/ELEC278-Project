@@ -12,7 +12,7 @@ When run, a file named `out.graphml` is generated showing the current graph with
 The source code includes the rquired SDL2 headers, libraries, and required dll file to build and run the application on Windows.
 
 ## batch script
-Included is `_run.bat`, which will automatically compile and run the project. Additionally, it will set console size to the ideal for use with the application. This is the recommended way of running.
+Included is `_run.bat`, which will automatically compile if the exe is missing and run the project. Additionally, it will set console size to the ideal for use with the application. This is the recommended way of running.
 
 ## makefile
 There is a makefile in the root directory that can be used to build the executable.
