@@ -139,8 +139,11 @@ void Robot::initGraph(){
 
     // Connect tower and shotnodes to goal node with 0 distance
     graph->addNode(goalNode);
-    graph->addDirectedEdge(&Field::redTowerTop, goalNode, 0);
-    graph->addDirectedEdge(&Field::redTowerBottom, goalNode, 0);
+    // If the low time is 0 then the bot can't score there
+    if(lowTime != 0){
+        graph->addDirectedEdge(&Field::redTowerTop, goalNode, 0);
+        graph->addDirectedEdge(&Field::redTowerBottom, goalNode, 0);
+    }
     for(auto i : shotnodes) {
         this->graph->addDirectedEdge(i.data, goalNode, 0);
     }
