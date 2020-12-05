@@ -80,3 +80,27 @@ Press escape at any time to exit
 The Field GUI is a complimentary window which shows an image of the field with a marker at the robot's currrent location, a line to it's previous, and a line showing the planned path, all with respect to the currently selected node.
 
 By pressing `g` in the console window, the graph will cylce between hidden, nodes only, and nodes + edges.
+
+# Test Configurations
+There are a variety of robot configurations available for testing the application's behaviour.
+## Input Validation
+A variety of input files have been included under the tests folder to test various elements of input validation. These files are all derived from the same functional dataset, with deviations added to trigger specific behaviour. Most files only check one error as many result in termination of the program.
+|File Path	   | Error  	                | Expected Behaviour
+|--------------|----------------------------|--------------------
+|tests/bd1.csv | shot_range entry missing	| csv_parsing, missing values
+|tests/bd2.csv | Duplicate team names	    | invalid_parameter, duplicate teams
+|tests/bd3.csv | Zero speed	                | invalid_parameter, speed 0
+|tests/bd4.csv | Cannot cross defenses	    | invalid_parameter, cannot cross defenses
+|tests/bd5.csv | Cannot score	            | invalid_parameter, cannot score
+|tests/bd6.csv | Centre+side angle, time and range tolerances exceeded	| Tolerance warnings for all listed On override, graph generation with interesting properties
+
+## Simulation
+Similarly, to input validation, configurations have been provided to test various simulation behaviours. These have been provided in the form of teams in the configuration file.
+| Team  | Input variance	                                                   |Expected Behaviour
+|-------|-------------------                                                   |------------------- 
+| 2708  | Control data, designed to demo everything                            | Robot navigates field using most elements
+| 901	| Can only score low goal, times boosted to reduce advantage over high | Only scores in low goal, follows general navigation rules
+| 902	| Can only score high goal, times boosted to reduce advantage over low | Only scores in high goal, follows general navigation rules
+| 903	| Can only cross defense default in pos 5. Cross time boosted to discourage crossing | Only crosses farthest defense (assuming defaults)
+| 904	| Can only cross low bar, cannot score centre high                     | Only crosses low bar, only scores in low or side high
+| 905	| Can only use centre goal from straight on and in close               | Only scores from specified node close to goal
