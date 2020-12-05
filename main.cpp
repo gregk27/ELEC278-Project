@@ -21,9 +21,47 @@ int main(int argc, char *argv[]){
     if(robotPath == "")
         robotPath = "./robots.csv";
 
-    // Initialise the robot from
-    Robot *r;
-    r = Robot::parseCSV(robotPath);
+    LinkedList<Robot *> bots = Robot::parseCSV(robotPath);
+    // If there are no robots in the list, stop
+    if(bots.size()==0){
+        printf("No robots found\n");
+        exit(0);
+    }
+    printf("Loaded robots:");
+    for(auto b : bots){
+        printf(" %4d", b.data->team);
+    }
+    printf("\n");
+
+
+    // Declare robot variable
+    Robot *r = NULL;
+
+    int num;
+    char buf[16];
+    while(1){
+        printf("Team number [%d]: ", bots[0]->team);
+        fgets(buf, 16, stdin);
+        int in = sscanf(buf, " %d", &num);
+        if(in == -1){
+            r = bots[0];
+            break;
+        } else {
+            for(auto b : bots) {
+                if(b.data -> team == num){
+                    r = b.data;
+                    break;
+                }
+            }
+            if(r != NULL){
+                break;
+            }
+            printf("Invalid team number.\n");
+        }
+    }
+
+    // Initialise the robot's graph
+    r->initGraph();
     // Initialise the robot on red alliance
     r->alliance = Alliance::RED;
     // Balls are entered into play at the end of the passage
@@ -67,7 +105,6 @@ int main(int argc, char *argv[]){
 
     printf("Simulation length (seconds) [150]: ");
     int duration;
-    char buf[16];
     fgets(buf, 16, stdin);
     int in = sscanf(buf, " %d", &duration);
     if(in == -1){

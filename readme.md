@@ -22,6 +22,8 @@ g++ main.cpp robot.cpp utils/graph.cpp field/fieldnode.cpp game.cpp utils/utils.
 # Running
 ## Configuration
 Information related to robot performance (such a speed, defenses, etc) is read from a confugraion file. This file is a CSV with the below columns. If the values exceed limits which would prevent simulation, errors are thrown. If values exceed limits which would hinder results, warnings are thrown which can be overriden.
+
+Multiple robot configurations can be listed, and the user will be prompted to select one by robot number.
 | Name              | Type          | Description                                                                                                   |Values
 |------             |------         |------------                                                                                                   |------
 |team               |int            |Team number, used in output                                                                                    |0-9999
@@ -51,6 +53,7 @@ Information related to robot performance (such a speed, defenses, etc) is read f
 ## Inputs
 Upon running the code, you will be asked to provide the following inputs:
  - Config File: Path to the config file, defaults to `../robots.csv`
+ - Team number: Number of the team to be used for the simulation. Must be one listed in `robots.csv`
  - Defense configuration: IDs for defenses to use, in order of position. Input should include one defense from each categotry. Defaults to `0 2 4 6`
  - Simulation length: The number of seconds of match time to be simulated, defaults to `150`
  - Starting node index: The index of the node where the robot should start. To get indices refer to the generated graphml.

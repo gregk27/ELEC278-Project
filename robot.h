@@ -20,11 +20,6 @@ typedef unsigned char byte;
 class Robot {
     private:
         /**
-         * Initialise the local graph instace
-         * This will create a graph with Field::initGraph(), then add robot-specific elements such as shotnodes and the goal node
-         */
-        void initGraph();
-        /**
          * Get a ShotNode with a specific range and angle relative to the tower
          * - range: The distance from the tower
          * - angle: The angle relative to the horizontal, in degrees
@@ -103,6 +98,11 @@ class Robot {
         Robot();
         
         /**
+         * Initialise the local graph instace
+         * This will create a graph with Field::initGraph(), then add robot-specific elements such as shotnodes and the goal node
+         */
+        void initGraph();
+        /**
          *  Get the time which the robot tales to cross the defense
          *  - d: Pointer to the defense
          *  Returns: The time in seconds, from 1-15. If the robot cannot cross 0 is returned.
@@ -113,7 +113,7 @@ class Robot {
         * Parse a csv file containing robot information
         * Returns a pointer to the found robot
         */
-        static Robot *parseCSV(std::string filename);
+        static LinkedList<Robot *> parseCSV(std::string filename);
 
         // Exception thrown when CSV file not found
         struct file_open_exception : public ExceptionBase {

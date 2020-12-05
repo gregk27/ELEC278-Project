@@ -345,7 +345,8 @@ Robot::EdgeData Robot::getWeight(Graph::DijkstraNode *n, Graph::Edge e){
     return out;
 }
 
-Robot *Robot::parseCSV(std::string filename){
+LinkedList<Robot *> Robot::parseCSV(std::string filename){
+    LinkedList<Robot *> bots;
     // Open the file
     FILE *f = fopen(filename.c_str(), "r"); 
     if(f == NULL){
@@ -357,49 +358,61 @@ Robot *Robot::parseCSV(std::string filename){
     // Buffer for read lines. No line following the correct format will exceed 64 characters
     char line[BUFF_SIZE];
 
-    Robot *bot = new Robot();
 
     // Remove header line
     fgets (line, BUFF_SIZE, f);
-    // Read robot line
-    fgets (line, BUFF_SIZE, f);
-    // Data order: team,can_low,shot_range,centre_shot_time,side_shot_time,centre_angle,side_angle,low_time,defenses,speed
-    int result = sscanf(line, "%d,%d,%d,%d,%d,%d,%d,%d,%lx,%f,%f", 
-        &(bot->team),
-        &(bot->canLowbar),
-        &(bot->shotRange),
-        &(bot->centreShotTime),
-        &(bot->sideShotTime),
-        &(bot->centreAngle),
-        &(bot->sideAngle),
-        &(bot->lowTime),
-        &(bot->defenses),
-        &(bot->speed), 
-        &(bot->pointValue));
-    
-    // Validate input
-    // If less values are read than expected, something went wrong
-    if(result != 11){
-        std::stringstream s;
-        s << "Error while parsing robot " << bot->team << ". Read " << result << " values of 11.";
-        throw csv_parsing_exception(s.str());
-    }
-    // If the bot's speed is 0, then it can't go anywhere and there is no point in simulating
-    if(bot->speed <= 0) throw invalid_parameter_exception("Robot's speed is negative or zero, this would prevent any motion. Speed must be a positive nonzero number.");
-    // If the bot cannot cross any defenses, then there is no point in simulating
-    if(!bot->defenses && !bot->canLowbar) throw invalid_parameter_exception("Robot cannot cross any defenses, this would prevent any gameplay. Robot must be able to cross at least one defense");
-    // If the bot can't score, then tehre is no point in simulating
-    if(!bot->centreShotTime && !bot->sideShotTime && !bot->lowTime) throw invalid_parameter_exception("Robot cannot score, this prevents any gameplay. One scoring time must be nonzero");
-    
-    // Finish setup
-    // Convert from the fps input to ips for internal use
-    bot->speed *= 12;
-    // Set the bot's alliance. Currently this is hardcoded to red but may change in the future
-    bot->alliance = Alliance::RED;
-    // Set the bot's id. Currently hardcoded but this may change in the future
-    bot->id = 0;
-    // Initialise the bot's internal field graph
-    bot->initGraph();
 
-    return bot;
+    // Read all robots in file
+    while(fgets (line, BUFF_SIZE, f) != NULL){
+        Robot *bot = new Robot();
+        // Read robot line
+        // Data order: team,can_low,shot_range,centre_shot_time,side_shot_time,centre_angle,side_angle,low_time,defenses,speed
+        int result = sscanf(line, "%d,%d,%d,%d,%d,%d,%d,%d,%lx,%f,%f", 
+            &(bot->team),
+            &(bot->canLowbar),
+            &(bot->shotRange),
+            &(bot->centreShotTime),
+            &(bot->sideShotTime),
+            &(bot->centreAngle),
+            &(bot->sideAngle),
+            &(bot->lowTime),
+            &(bot->defenses),
+            &(bot->speed), 
+            &(bot->pointValue));
+        
+        // Validate input
+        // If less values are read than expected, something went wrong
+        if(result != 11){
+            std::stringstream s;
+            s << "Error while parsing robot " << bot->team << ". Read " << result << " values of 11.";
+            throw csv_parsing_exception(s.str());
+        }
+
+        // Check that team number is unique
+        for(auto r : bots){
+            if(r.data->team == bot->team){
+                std::stringstream s;
+                s << "Duplicate team number " << bot->team << ". Please change one.";
+                throw invalid_parameter_exception(s.str());
+            }
+        }
+
+        // If the bot's speed is 0, then it can't go anywhere and there is no point in simulating
+        if(bot->speed <= 0) throw invalid_parameter_exception("Robot's speed is negative or zero, this would prevent any motion. Speed must be a positive nonzero number.");
+        // If the bot cannot cross any defenses, then there is no point in simulating
+        if(!bot->defenses && !bot->canLowbar) throw invalid_parameter_exception("Robot cannot cross any defenses, this would prevent any gameplay. Robot must be able to cross at least one defense");
+        // If the bot can't score, then tehre is no point in simulating
+        if(!bot->centreShotTime && !bot->sideShotTime && !bot->lowTime) throw invalid_parameter_exception("Robot cannot score, this prevents any gameplay. One scoring time must be nonzero");
+        
+        // Finish setup
+        // Convert from the fps input to ips for internal use
+        bot->speed *= 12;
+        // Set the bot's alliance. Currently this is hardcoded to red but may change in the future
+        bot->alliance = Alliance::RED;
+        // Set the bot's id. Currently hardcoded but this may change in the future
+        bot->id = 0;
+        bots.push(bot);
+    }
+
+    return bots;
 }
