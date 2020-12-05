@@ -169,13 +169,18 @@ Shotnode *Robot::getShotZone(int range, int angle){
 }
 
 
-int Robot::crossTime(Defense *d){
+int Robot::crossTime(int id){
     // If it's the low bar, then it is impossible or 1 second
-    if(d->defType == Defense::LOW_BAR){
+    if(id == Defense::LOW_BAR){
         return canLowbar;
     }
     //Shift the current defense into lower 4 bits, then mask
-    return (defenses >> (d->defType*4)) & 0xF;
+    return (defenses >> (id*4)) & 0xF;
+}
+
+
+int Robot::crossTime(Defense *d){
+    return crossTime(d->defType);
 }
 
 Event Robot::getEvent(){

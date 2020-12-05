@@ -81,6 +81,12 @@ int main(int argc, char *argv[]){
             continue;
         }
 
+        // If the robot cannot cross any defenses, then re-prompt
+        if(!r->canLowbar && !r->crossTime(d1) && !r->crossTime(d2) && !r->crossTime(d3) && !r->crossTime(d4)){
+            printf("Robot cannot cross any selected defense, please change selection.\n");
+            continue;
+        }
+
         // Divide each by 2 to get 1,2,3,4 for categories.
         // If all different categories, average will be (1+2+3+4)/4 = 2.5\
         // If there are duplicates/same category, prompt before proceeding

@@ -102,10 +102,18 @@ class Robot {
          * This will create a graph with Field::initGraph(), then add robot-specific elements such as shotnodes and the goal node
          */
         void initGraph();
+
+        /**
+         *  Get the time which the robot tales to cross the defense
+         *  - d: Defense ID corresponding to the defense
+         *  Returns: The time in seconds, from 1-15. If the robot cannot cross 0 is returned.
+         */
+        int crossTime(int id);
         /**
          *  Get the time which the robot tales to cross the defense
          *  - d: Pointer to the defense
          *  Returns: The time in seconds, from 1-15. If the robot cannot cross 0 is returned.
+         *  See: crossTime(int id)
          */
         int crossTime(Defense *d);
         
