@@ -60,13 +60,6 @@ int main(int argc, char *argv[]){
         }
     }
 
-    // Initialise the robot's graph
-    r->initGraph();
-    // Initialise the robot on red alliance
-    r->alliance = Alliance::RED;
-    // Balls are entered into play at the end of the passage
-    r->intakeNode = &Field::redPassage[0];
-
     // Initialise defenses
     printf("Enter defense configuration for positions 2-5, enter the IDs with spaces between.\n");
     // Get input from user
@@ -102,6 +95,13 @@ int main(int argc, char *argv[]){
     Field::redDefenses[2].defType = static_cast<Defense::Defenses>(d2);
     Field::redDefenses[3].defType = static_cast<Defense::Defenses>(d3);
     Field::redDefenses[4].defType = static_cast<Defense::Defenses>(d4);
+
+    // Initialise the robot's graph
+    r->initGraph();
+    // Initialise the robot on red alliance
+    r->alliance = Alliance::RED;
+    // Balls are entered into play at the end of the passage
+    r->intakeNode = &Field::redPassage[0];
 
     printf("Simulation length (seconds) [150]: ");
     int duration;
