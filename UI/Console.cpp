@@ -26,12 +26,18 @@
 #define KEY_DOWN 80
 // Key code for the escape key
 #define KEY_ESC 27
+// Key code for the first event key (Ff)
+#define KEY_FIRST_LOWER 102
 // Key code for the first event key (F)
-#define KEY_FIRST 102
+#define KEY_FIRST_UPPER 70
 // Key code for the last event key  (L)
-#define KEY_LAST 108
+#define KEY_LAST_LOWER 108
+// Key code for the last event key  (l)
+#define KEY_LAST_UPPER 76
+// Key code for the show graph key  (g)
+#define KEY_GRAPH_LOWER 103
 // Key code for the show graph key  (G)
-#define KEY_GRAPH 103
+#define KEY_GRAPH_UPPER 71
 
 // Height of the console, in lines
 #define HEIGHT 30
@@ -186,13 +192,16 @@ void Console::begin(){
             case KEY_DOWN:
                 selected ++;
                 break;
-            case KEY_FIRST:
+            case KEY_FIRST_LOWER:
+            case KEY_FIRST_UPPER:
                 selected = 0;
                 break;
-            case KEY_LAST:
+            case KEY_LAST_LOWER:
+            case KEY_LAST_UPPER:
                 selected = events->size()-1;
                 break;
-            case KEY_GRAPH:
+            case KEY_GRAPH_LOWER:
+            case KEY_GRAPH_UPPER:
                 Interface::toggleGraph();
                 break;
             default:
