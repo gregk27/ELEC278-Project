@@ -1,15 +1,15 @@
 # Stronghold Sim
 Stronghold Sim is an application designed as my final project for ELEC278 2020F at Queen's University.
 
-It simulates a single robot playing the 2016 FIRST Robotics Compeition game, Stronghold. After the simulation is complete, users can navigate the list of events that occured during the simulation, alongisde a graphical representation of the field.
+It simulates a single robot playing the 2016 FIRST Robotics Competition game, Stronghold. After the simulation is complete, users can navigate the list of events that occurred during the simulation, alongside a graphical representation of the field.
 
-Due to it's dependancy on SDL2 and Windows.h, it can only be run on Windows.
+Due to it's dependency on SDL2 and Windows.h, it can only be run on Windows.
 
-Graphics are run with the SDL2 library, which is used under the [zlib license](https://www.zlib.net/zlib_license.html). A copy of the [license from the website](https://www.libsdl.org/license.php) can be found in the SDL2 folder. SDL2 source code can be found in ther [Mercurial repository](https://wiki.libsdl.org/SourceCode).
+Graphics are run with the SDL2 library, which is used under the [zlib license](https://www.zlib.net/zlib_license.html). A copy of the [license from the website](https://www.libsdl.org/license.php) can be found in the SDL2 folder. SDL2 source code can be found in their [Mercurial repository](https://wiki.libsdl.org/SourceCode).
 
 When run, a file named `out.graphml` is generated showing the current graph with edge directions and node indices. This is designed to be viewed using the online viewer at https://www.yworks.com/yed-live/.
 # Building
-The source code includes the rquired SDL2 headers, libraries, and required dll file to build and run the application on Windows.
+The source code includes the required SDL2 headers, libraries, and required dll file to build and run the application on Windows.
 
 ## batch script
 Included is `_run.bat`, which will automatically compile if the exe is missing and run the project. Additionally, it will set console size to the ideal for use with the application. This is the recommended way of running.
@@ -24,7 +24,7 @@ g++ StrongholdSim.cpp robot.cpp utils/graph.cpp field/fieldnode.cpp game.cpp uti
 
 # Running
 ## Configuration
-Information related to robot performance (such a speed, defenses, etc) is read from a confugraion file. This file is a CSV with the below columns. If the values exceed limits which would prevent simulation, errors are thrown. If values exceed limits which would hinder results, warnings are thrown which can be overriden.
+Information related to robot performance (such a speed, defenses, etc) is read from a configuration file. This file is a CSV with the below columns. If the values exceed limits which would prevent simulation, errors are thrown. If values exceed limits which would hinder results, warnings are thrown which can be overridden.
 
 Multiple robot configurations can be listed, and the user will be prompted to select one by robot number.
 | Name              | Type          | Description                                                                                                   |Values
@@ -57,7 +57,7 @@ Multiple robot configurations can be listed, and the user will be prompted to se
 Upon running the code, you will be asked to provide the following inputs:
  - Config File: Path to the config file, defaults to `../robots.csv`
  - Team number: Number of the team to be used for the simulation. Must be one listed in `robots.csv`
- - Defense configuration: IDs for defenses to use, in order of position. Input should include one defense from each categotry. Defaults to `0 2 4 6`
+ - Defense configuration: IDs for defenses to use, in order of position. Input should include one defense from each category. Defaults to `0 2 4 6`
  - Simulation length: The number of seconds of match time to be simulated, defaults to `150`
  - Starting node index: The index of the node where the robot should start. To get indices refer to the generated graphml.
 
@@ -65,7 +65,7 @@ Upon running the code, you will be asked to provide the following inputs:
 After inputs are provided, robot will be loaded and simulation will begin. This will take a shot amount of time to complete, depending on sim duration.
 
 ## Event View
-Once the simulation is complete, you will be able to see the list of events that occured during the math. Events include driving between nodes, crossing defense, intaking a ball, and scoring goals.
+Once the simulation is complete, you will be able to see the list of events that occurred during the math. Events include driving between nodes, crossing defense, intaking a ball, and scoring goals.
 
 ### Console
 The console is the primary UI component. It shows the complete event list, with time, robot, location and a description for each event. 
@@ -77,9 +77,9 @@ On the right, the time, score, and defense stats at the selected event can be se
 Press escape at any time to exit
 
 ### Field GUI
-The Field GUI is a complimentary window which shows an image of the field with a marker at the robot's currrent location, a line to it's previous, and a line showing the planned path, all with respect to the currently selected node.
+The Field GUI is a complimentary window which shows an image of the field with a marker at the robot's current location, a line to it's previous, and a line showing the planned path, all with respect to the currently selected node.
 
-By pressing `g` in the console window, the graph will cylce between hidden, nodes only, and nodes + edges.
+By pressing `g` in the console window, the graph will cycle between hidden, nodes only, and nodes + edges.
 
 # Test Configurations
 There are a variety of robot configurations available for testing the application's behaviour.
