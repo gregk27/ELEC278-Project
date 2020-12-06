@@ -65,6 +65,23 @@ class LinkedList{
         }
 
         /**
+         * Destructor
+         * Deletes all nodes created by the list
+        */
+        ~LinkedList(){
+            Node<T> *n = first;
+            if(size() == 0){
+                return;
+            }
+            // Loop around and delete all nodes
+            while(n->next != first){
+                n = n->next;
+                delete n->previous;
+            }
+            delete n;
+        }
+
+        /**
          * Get the size of the list
          * Returns: The number of nodes in the list
          */
