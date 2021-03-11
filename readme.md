@@ -1,5 +1,5 @@
 # Stronghold Sim
-Stronghold Sim is an application designed as my final project for ELEC278 2020F at Queen's University.
+Stronghold Sim is an application designed as my final project for a second-year course at Queen's University.
 
 It simulates a single robot playing the 2016 FIRST Robotics Competition game, Stronghold. After the simulation is complete, users can navigate the list of events that occurred during the simulation, alongside a graphical representation of the field.
 
